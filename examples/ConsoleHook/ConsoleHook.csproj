@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DetectCombinations.cs" />
+    <Compile Include="DetectChord.cs" />
     <Compile Include="DetectSequences.cs" />
     <Compile Include="LogEvents.cs" />
     <Compile Include="Program.cs" />

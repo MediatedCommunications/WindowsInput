@@ -127,12 +127,22 @@ namespace WindowsInput.EventSources {
                 : null
                 ;
 
+            var ClickHold = true
+                && Down != default
+                && LastButtonClickInput.TryGetValue(Down.Button, out var LastClick_ClickHold)
+                && e.Timestamp - LastClick_ClickHold.Timestamp <= DoubleClickDuration
+                && Math.Abs(LastClick_ClickHold.Data.X - e.Data.X) < DragThresholdX
+                && Math.Abs(LastClick_ClickHold.Data.Y - e.Data.Y) < DragThresholdY
+                ? new ButtonClickHold(e.Data.Button)
+                : null
+                ;
+
             var DoubleClick = true
                 && Click != default 
-                && LastButtonClickInput.TryGetValue(Up.Button, out var LastClick) 
-                && e.Timestamp - LastClick.Timestamp <= DoubleClickDuration 
-                && Math.Abs(LastClick.Data.X - e.Data.X) < DragThresholdX 
-                && Math.Abs(LastClick.Data.Y - e.Data.Y) < DragThresholdY
+                && LastButtonClickInput.TryGetValue(Up.Button, out var LastClick_DoubleClick) 
+                && e.Timestamp - LastClick_DoubleClick.Timestamp <= DoubleClickDuration 
+                && Math.Abs(LastClick_DoubleClick.Data.X - e.Data.X) < DragThresholdX 
+                && Math.Abs(LastClick_DoubleClick.Data.Y - e.Data.Y) < DragThresholdY
                 ? new ButtonDoubleClick(e.Data.Button)
                 : null
                 ;
@@ -158,9 +168,9 @@ namespace WindowsInput.EventSources {
                 LastButtonClickInput[Click.Button] = e;
             }
 
-            var Data = new MouseEvent(Wait, Move, Scroll, Down, Up, Click, DoubleClick, DragStarted, DragFinished);
+            var Data = new MouseEvent(Wait, Move, Scroll, Down, Up, Click, ClickHold, DoubleClick, DragStarted, DragFinished);
 
-            var ret = new EventSourceEventArgs<MouseEvent>(e.Timestamp, false, Data);
+            var ret = new EventSourceEventArgs<MouseEvent>(e.Timestamp, Data);
 
             return ret;
         }

@@ -9,21 +9,22 @@ namespace WindowsInput.Events {
 
     public static class KeyCodeExtensions {
 
-        /*
+        
         public static KeyCode Normalize(this KeyCode key) {
             var ret = key;
             
-            if(key.HasFlag(KeyCode.LControl) || key.HasFlag(KeyCode.RControl)) {
-                ret = KeyCode.ControlModifier;
-            } else if (key.HasFlag(KeyCode.LShift) || key.HasFlag(KeyCode.RShift)) {
-                ret = KeyCode.ShiftModifier;
-            } else if (key.HasFlag(KeyCode.LMenu) || key.HasFlag(KeyCode.RMenu)) {
-                ret = KeyCode.AltModifier;
+            if(key == KeyCode.LControl || key == KeyCode.RControl) {
+                ret = KeyCode.Control;
+
+            } else if (key == KeyCode.LShift || key == KeyCode.RShift) {
+                ret = KeyCode.Shift;
+
+            } else if (key == KeyCode.LAlt || key == KeyCode.RAlt ) {
+                ret = KeyCode.Alt;
             }
 
             return ret;
         }
-        */
 
         private static HashSet<KeyCode> ExtendedKeys = new HashSet<KeyCode>() {
                 KeyCode.RAlt

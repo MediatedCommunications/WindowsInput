@@ -27,7 +27,7 @@ namespace ConsoleHook
             {
                 {"1. Record and Playback Keyboard Events", ()=>LogEvents.Start(true, false)},
                 {"2. Record and Playback Mouse Events", ()=>LogEvents.Start(false, true)},
-                {"3. Detect key combinations", DetectCombinations.Do},
+                {"3. Detect key combinations", DetectChord.Do},
                 {"4. Detect key sequences", DetectSequences.Do},
                 {"Q. Quit", Exit}
             };

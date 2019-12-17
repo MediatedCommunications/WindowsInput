@@ -30,7 +30,7 @@ namespace WindowsInput.EventSources {
             var e = GetInputEventArgs(Message, keyboardHookStruct);
 
             var Input = e.Data;
-            var Wait = State.LastInputDate != null ? new Wait(e.Timestamp - State.LastInputDate.Value) : null;
+            var Wait = new Wait(e.Timestamp - State.LastInputDate);
             State.LastInputDate = e.Timestamp;
 
             var KeyDown = Input.Status == KeyStatus.Pressed
@@ -45,21 +45,12 @@ namespace WindowsInput.EventSources {
 
             var TextClick = GetTextClick(Message, keyboardHookStruct);
 
-            var KeyEvent = new KeyboardEvent(Wait, KeyDown, KeyUp, TextClick);
+            var KeyEvent = new KeyboardEvent(Wait, KeyDown, TextClick, KeyUp);
 
-            var Handled = InvokeEvent(
-                () => InvokeEvent(KeyEvent, e.Timestamp),
+            var ret = InvokeMany(KeyEvent, e.Timestamp);
 
-                () => InvokeEvent(Wait, e.Timestamp),
-
-                () => InvokeEvent(KeyDown, e.Timestamp),
-                () => InvokeEvent(TextClick, e.Timestamp),
-                () => InvokeEvent(KeyUp, e.Timestamp)
-            );
-
-            return !Handled;
+            return ret.Next_Hook_Enabled;
         }
-
 
         protected EventSourceEventArgs<KeyInput> GetInputEventArgs(GlobalKeyboardMessage Message, KeyboardHookStruct keyboardHookStruct) {
 
@@ -73,7 +64,7 @@ namespace WindowsInput.EventSources {
             var Status = KeyStatusValue.Compute(isKeyDown, isKeyUp);
 
             var Data = new KeyInput(keyData, isExtendedKey, keyboardHookStruct.ScanCode, Status);
-            var ret = EventSourceEventArgs.Create(keyboardHookStruct.Time, false, Data);
+            var ret = EventSourceEventArgs.Create(keyboardHookStruct.Time, Data);
 
             return ret;
         }

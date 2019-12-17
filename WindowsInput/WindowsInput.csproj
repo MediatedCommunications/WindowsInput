@@ -19,11 +19,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="EventSources\Mouse\CurrentThreadMouseEventSource.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="EventSources\Mouse\CurrentThreadMouseEventSource.cs" />
     <None Include="EventSources\Factories\CurrentThreadEventSourceFactory.cs" />
-    <None Include="EventSources\Keyboard\CurrentThreadKeyboardEventSource.cs" />
   </ItemGroup>
 </Project>

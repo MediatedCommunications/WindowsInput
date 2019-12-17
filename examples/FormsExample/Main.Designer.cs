@@ -30,28 +30,34 @@
         {
             this.checkBoxSuppressMouse = new System.Windows.Forms.CheckBox();
             this.panelSeparator = new System.Windows.Forms.Panel();
-            this.radioGlobal = new System.Windows.Forms.RadioButton();
-            this.radioApplication = new System.Windows.Forms.RadioButton();
             this.labelWheel = new System.Windows.Forms.Label();
             this.labelMousePosition = new System.Windows.Forms.Label();
             this.textBoxLog = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.rbMouseNone = new System.Windows.Forms.RadioButton();
+            this.rbMouseGlobal = new System.Windows.Forms.RadioButton();
+            this.rbMouseApp = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbKeyNone = new System.Windows.Forms.RadioButton();
+            this.rbKeyGlobal = new System.Windows.Forms.RadioButton();
+            this.rbKeyApp = new System.Windows.Forms.RadioButton();
             this.clearLogButton = new System.Windows.Forms.Button();
             this.checkBoxSupressMouseWheel = new System.Windows.Forms.CheckBox();
-            this.radioNone = new System.Windows.Forms.RadioButton();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBoxSuppressMouse
             // 
             this.checkBoxSuppressMouse.AutoSize = true;
-            this.checkBoxSuppressMouse.Location = new System.Drawing.Point(211, 49);
+            this.checkBoxSuppressMouse.Location = new System.Drawing.Point(211, 128);
             this.checkBoxSuppressMouse.Name = "checkBoxSuppressMouse";
             this.checkBoxSuppressMouse.Size = new System.Drawing.Size(159, 17);
             this.checkBoxSuppressMouse.TabIndex = 13;
             this.checkBoxSuppressMouse.Text = "Suppress Right Mouse Click";
             this.checkBoxSuppressMouse.UseVisualStyleBackColor = true;
-            this.checkBoxSuppressMouse.CheckedChanged += new System.EventHandler(this.checkBoxSuppressMouse_CheckedChanged);
             // 
             // panelSeparator
             // 
@@ -60,38 +66,10 @@
             this.panelSeparator.BackColor = System.Drawing.Color.White;
             this.panelSeparator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelSeparator.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panelSeparator.Location = new System.Drawing.Point(6, 37);
+            this.panelSeparator.Location = new System.Drawing.Point(6, 116);
             this.panelSeparator.Name = "panelSeparator";
             this.panelSeparator.Size = new System.Drawing.Size(584, 1);
             this.panelSeparator.TabIndex = 11;
-            // 
-            // radioGlobal
-            // 
-            this.radioGlobal.AutoSize = true;
-            this.radioGlobal.BackColor = System.Drawing.Color.White;
-            this.radioGlobal.Checked = true;
-            this.radioGlobal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioGlobal.Location = new System.Drawing.Point(127, 13);
-            this.radioGlobal.Name = "radioGlobal";
-            this.radioGlobal.Size = new System.Drawing.Size(87, 17);
-            this.radioGlobal.TabIndex = 10;
-            this.radioGlobal.TabStop = true;
-            this.radioGlobal.Text = "Global hooks";
-            this.radioGlobal.UseVisualStyleBackColor = false;
-            this.radioGlobal.CheckedChanged += new System.EventHandler(this.radioGlobal_CheckedChanged);
-            // 
-            // radioApplication
-            // 
-            this.radioApplication.AutoSize = true;
-            this.radioApplication.BackColor = System.Drawing.Color.White;
-            this.radioApplication.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioApplication.Location = new System.Drawing.Point(12, 13);
-            this.radioApplication.Name = "radioApplication";
-            this.radioApplication.Size = new System.Drawing.Size(109, 17);
-            this.radioApplication.TabIndex = 9;
-            this.radioApplication.Text = "Application hooks";
-            this.radioApplication.UseVisualStyleBackColor = false;
-            this.radioApplication.CheckedChanged += new System.EventHandler(this.radioApplication_CheckedChanged);
             // 
             // labelWheel
             // 
@@ -99,7 +77,7 @@
             this.labelWheel.AutoSize = true;
             this.labelWheel.BackColor = System.Drawing.Color.White;
             this.labelWheel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelWheel.Location = new System.Drawing.Point(9, 76);
+            this.labelWheel.Location = new System.Drawing.Point(9, 155);
             this.labelWheel.Name = "labelWheel";
             this.labelWheel.Size = new System.Drawing.Size(89, 13);
             this.labelWheel.TabIndex = 6;
@@ -111,7 +89,7 @@
             this.labelMousePosition.AutoSize = true;
             this.labelMousePosition.BackColor = System.Drawing.Color.White;
             this.labelMousePosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelMousePosition.Location = new System.Drawing.Point(9, 50);
+            this.labelMousePosition.Location = new System.Drawing.Point(9, 129);
             this.labelMousePosition.Name = "labelMousePosition";
             this.labelMousePosition.Size = new System.Drawing.Size(125, 13);
             this.labelMousePosition.TabIndex = 2;
@@ -119,29 +97,29 @@
             // 
             // textBoxLog
             // 
+            this.textBoxLog.AcceptsReturn = true;
             this.textBoxLog.BackColor = System.Drawing.Color.White;
             this.textBoxLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxLog.Location = new System.Drawing.Point(0, 106);
+            this.textBoxLog.Location = new System.Drawing.Point(0, 204);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ReadOnly = true;
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLog.Size = new System.Drawing.Size(602, 233);
+            this.textBoxLog.Size = new System.Drawing.Size(602, 230);
             this.textBoxLog.TabIndex = 8;
             this.textBoxLog.WordWrap = false;
             // 
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.Color.White;
+            this.groupBox2.Controls.Add(this.groupBox3);
+            this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.clearLogButton);
             this.groupBox2.Controls.Add(this.checkBoxSupressMouseWheel);
-            this.groupBox2.Controls.Add(this.radioNone);
             this.groupBox2.Controls.Add(this.checkBoxSuppressMouse);
             this.groupBox2.Controls.Add(this.panelSeparator);
-            this.groupBox2.Controls.Add(this.radioGlobal);
-            this.groupBox2.Controls.Add(this.radioApplication);
             this.groupBox2.Controls.Add(this.labelWheel);
             this.groupBox2.Controls.Add(this.labelMousePosition);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -149,13 +127,119 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(602, 106);
+            this.groupBox2.Size = new System.Drawing.Size(602, 204);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.rbMouseNone);
+            this.groupBox3.Controls.Add(this.rbMouseGlobal);
+            this.groupBox3.Controls.Add(this.rbMouseApp);
+            this.groupBox3.Location = new System.Drawing.Point(304, 12);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(276, 49);
+            this.groupBox3.TabIndex = 10;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Mouse";
+            // 
+            // rbMouseNone
+            // 
+            this.rbMouseNone.AutoSize = true;
+            this.rbMouseNone.BackColor = System.Drawing.Color.White;
+            this.rbMouseNone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbMouseNone.Location = new System.Drawing.Point(214, 19);
+            this.rbMouseNone.Name = "rbMouseNone";
+            this.rbMouseNone.Size = new System.Drawing.Size(51, 17);
+            this.rbMouseNone.TabIndex = 24;
+            this.rbMouseNone.Text = "None";
+            this.rbMouseNone.UseVisualStyleBackColor = false;
+            this.rbMouseNone.CheckedChanged += new System.EventHandler(this.Mouse_Changed);
+            // 
+            // rbMouseGlobal
+            // 
+            this.rbMouseGlobal.AutoSize = true;
+            this.rbMouseGlobal.BackColor = System.Drawing.Color.White;
+            this.rbMouseGlobal.Checked = true;
+            this.rbMouseGlobal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbMouseGlobal.Location = new System.Drawing.Point(121, 19);
+            this.rbMouseGlobal.Name = "rbMouseGlobal";
+            this.rbMouseGlobal.Size = new System.Drawing.Size(87, 17);
+            this.rbMouseGlobal.TabIndex = 23;
+            this.rbMouseGlobal.TabStop = true;
+            this.rbMouseGlobal.Text = "Global hooks";
+            this.rbMouseGlobal.UseVisualStyleBackColor = false;
+            this.rbMouseGlobal.CheckedChanged += new System.EventHandler(this.Mouse_Changed);
+            // 
+            // rbMouseApp
+            // 
+            this.rbMouseApp.AutoSize = true;
+            this.rbMouseApp.BackColor = System.Drawing.Color.White;
+            this.rbMouseApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbMouseApp.Location = new System.Drawing.Point(6, 19);
+            this.rbMouseApp.Name = "rbMouseApp";
+            this.rbMouseApp.Size = new System.Drawing.Size(109, 17);
+            this.rbMouseApp.TabIndex = 22;
+            this.rbMouseApp.Text = "Application hooks";
+            this.rbMouseApp.UseVisualStyleBackColor = false;
+            this.rbMouseApp.CheckedChanged += new System.EventHandler(this.Mouse_Changed);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rbKeyNone);
+            this.groupBox1.Controls.Add(this.rbKeyGlobal);
+            this.groupBox1.Controls.Add(this.rbKeyApp);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(286, 49);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Keyboard";
+            // 
+            // rbKeyNone
+            // 
+            this.rbKeyNone.AutoSize = true;
+            this.rbKeyNone.BackColor = System.Drawing.Color.White;
+            this.rbKeyNone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbKeyNone.Location = new System.Drawing.Point(217, 19);
+            this.rbKeyNone.Name = "rbKeyNone";
+            this.rbKeyNone.Size = new System.Drawing.Size(51, 17);
+            this.rbKeyNone.TabIndex = 17;
+            this.rbKeyNone.Text = "None";
+            this.rbKeyNone.UseVisualStyleBackColor = false;
+            this.rbKeyNone.CheckedChanged += new System.EventHandler(this.Keyboard_Changed);
+            // 
+            // rbKeyGlobal
+            // 
+            this.rbKeyGlobal.AutoSize = true;
+            this.rbKeyGlobal.BackColor = System.Drawing.Color.White;
+            this.rbKeyGlobal.Checked = true;
+            this.rbKeyGlobal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbKeyGlobal.Location = new System.Drawing.Point(124, 19);
+            this.rbKeyGlobal.Name = "rbKeyGlobal";
+            this.rbKeyGlobal.Size = new System.Drawing.Size(87, 17);
+            this.rbKeyGlobal.TabIndex = 16;
+            this.rbKeyGlobal.TabStop = true;
+            this.rbKeyGlobal.Text = "Global hooks";
+            this.rbKeyGlobal.UseVisualStyleBackColor = false;
+            this.rbKeyGlobal.CheckedChanged += new System.EventHandler(this.Keyboard_Changed);
+            // 
+            // rbKeyApp
+            // 
+            this.rbKeyApp.AutoSize = true;
+            this.rbKeyApp.BackColor = System.Drawing.Color.White;
+            this.rbKeyApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbKeyApp.Location = new System.Drawing.Point(9, 19);
+            this.rbKeyApp.Name = "rbKeyApp";
+            this.rbKeyApp.Size = new System.Drawing.Size(109, 17);
+            this.rbKeyApp.TabIndex = 15;
+            this.rbKeyApp.Text = "Application hooks";
+            this.rbKeyApp.UseVisualStyleBackColor = false;
+            this.rbKeyApp.CheckedChanged += new System.EventHandler(this.Keyboard_Changed);
+            // 
             // clearLogButton
             // 
-            this.clearLogButton.Location = new System.Drawing.Point(515, 72);
+            this.clearLogButton.Location = new System.Drawing.Point(515, 151);
             this.clearLogButton.Name = "clearLogButton";
             this.clearLogButton.Size = new System.Drawing.Size(75, 23);
             this.clearLogButton.TabIndex = 16;
@@ -166,38 +250,28 @@
             // checkBoxSupressMouseWheel
             // 
             this.checkBoxSupressMouseWheel.AutoSize = true;
-            this.checkBoxSupressMouseWheel.Location = new System.Drawing.Point(211, 72);
+            this.checkBoxSupressMouseWheel.Location = new System.Drawing.Point(211, 151);
             this.checkBoxSupressMouseWheel.Name = "checkBoxSupressMouseWheel";
             this.checkBoxSupressMouseWheel.Size = new System.Drawing.Size(139, 17);
             this.checkBoxSupressMouseWheel.TabIndex = 15;
             this.checkBoxSupressMouseWheel.Text = "Suppress Mouse Wheel";
             this.checkBoxSupressMouseWheel.UseVisualStyleBackColor = true;
-            this.checkBoxSupressMouseWheel.CheckedChanged += new System.EventHandler(this.checkBoxSupressMouseWheel_CheckedChanged);
-            // 
-            // radioNone
-            // 
-            this.radioNone.AutoSize = true;
-            this.radioNone.BackColor = System.Drawing.Color.White;
-            this.radioNone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioNone.Location = new System.Drawing.Point(220, 13);
-            this.radioNone.Name = "radioNone";
-            this.radioNone.Size = new System.Drawing.Size(51, 17);
-            this.radioNone.TabIndex = 14;
-            this.radioNone.Text = "None";
-            this.radioNone.UseVisualStyleBackColor = false;
-            this.radioNone.CheckedChanged += new System.EventHandler(this.radioNone_CheckedChanged);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 339);
+            this.ClientSize = new System.Drawing.Size(602, 434);
             this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.groupBox2);
             this.Name = "Main";
             this.Text = "Mouse and Keyboard Hooks Demo";
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,15 +281,20 @@
 
         private System.Windows.Forms.CheckBox checkBoxSuppressMouse;
         private System.Windows.Forms.Panel panelSeparator;
-        private System.Windows.Forms.RadioButton radioGlobal;
-        private System.Windows.Forms.RadioButton radioApplication;
         private System.Windows.Forms.Label labelWheel;
         private System.Windows.Forms.Label labelMousePosition;
         private System.Windows.Forms.TextBox textBoxLog;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RadioButton radioNone;
         private System.Windows.Forms.CheckBox checkBoxSupressMouseWheel;
         private System.Windows.Forms.Button clearLogButton;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton rbMouseNone;
+        private System.Windows.Forms.RadioButton rbMouseGlobal;
+        private System.Windows.Forms.RadioButton rbMouseApp;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rbKeyNone;
+        private System.Windows.Forms.RadioButton rbKeyGlobal;
+        private System.Windows.Forms.RadioButton rbKeyApp;
     }
 }
 

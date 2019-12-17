@@ -6,6 +6,6 @@ using System;
 
 namespace WindowsInput.EventSources {
     public class KeyboardEventSourceState {
-        public DateTimeOffset? LastInputDate { get; set; }
+        public DateTimeOffset LastInputDate { get; set; } = DateTimeOffset.Now;
     }
 }

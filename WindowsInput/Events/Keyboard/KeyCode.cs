@@ -40,7 +40,7 @@ namespace WindowsInput.Events {
         //
         // Summary:
         //     The BACKSPACE key.
-        Back = 0x8,
+        Backspace = 0x8,
         //
         // Summary:
         //     The TAB key.

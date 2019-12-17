@@ -22,13 +22,6 @@ namespace WindowsInput.Native {
 
     public static class MouseCallbackDataExtensions {
 
-        internal static EventSourceEventArgs<MouseInput> ToAppMouseEventArgs(this CallbackData data) {
-            var wParam = data.WParam;
-            var lParam = data.LParam;
-
-            var marshalledMouseStruct = Marshal.PtrToStructure<AppMouseStruct>(lParam);
-            return ToMouseEventArgs(wParam, marshalledMouseStruct.ToMouseStruct());
-        }
 
         internal static EventSourceEventArgs<MouseInput> ToGlobalMouseEventArgs(this CallbackData data) {
             var wParam = data.WParam;
@@ -101,7 +94,7 @@ namespace WindowsInput.Native {
                     button = ButtonCode.Middle;
                     clickCount = 2;
                     break;
-                case WindowMessage.WM_MOUSEWHEEL:
+                case WindowMessage.WM_MOUSEWHEEL_V:
                     button = ButtonCode.VScroll;
                     mouseDelta = mouseInfo.MouseDataValue;
                     break;
@@ -129,7 +122,7 @@ namespace WindowsInput.Native {
                     clickCount = 2;
                     break;
 
-                case WindowMessage.WM_MOUSEHWHEEL:
+                case WindowMessage.WM_MOUSEWHEEL_H:
                     button = ButtonCode.HScroll;
                     mouseDelta = mouseInfo.MouseDataValue;
                     break;
@@ -137,7 +130,7 @@ namespace WindowsInput.Native {
 
             var Status = ButtonStatusValue.Compute(isMouseButtonDown, isMouseButtonUp, mouseDelta);
 
-            var ret = EventSourceEventArgs.Create(mouseInfo.Timestamp, false, new MouseInput(button, mouseInfo.Point, mouseDelta, Status));
+            var ret = EventSourceEventArgs.Create(mouseInfo.Timestamp, new MouseInput(button, mouseInfo.Point, mouseDelta, Status));
 
             return ret;
         }

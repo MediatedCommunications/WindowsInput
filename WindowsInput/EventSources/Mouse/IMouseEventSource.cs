@@ -20,6 +20,7 @@ namespace WindowsInput.EventSources {
         event EventHandler<EventSourceEventArgs<ButtonDown>> ButtonDown;
         event EventHandler<EventSourceEventArgs<ButtonUp>> ButtonUp;
         event EventHandler<EventSourceEventArgs<ButtonScroll>> ButtonScroll;
+        event EventHandler<EventSourceEventArgs<ButtonClickHold>> ButtonClickHold;
         event EventHandler<EventSourceEventArgs<ButtonDoubleClick>> ButtonDoubleClick;
 
         event EventHandler<EventSourceEventArgs<IReadOnlyCollection<DragStart>>> DragStarted;

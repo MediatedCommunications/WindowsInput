@@ -22,8 +22,12 @@ namespace WindowsInput.EventSources {
 
         }
 
-        protected override EventSourceEventArgs<MouseInput> GetEventArgs(CallbackData data) {
-            return data.ToGlobalMouseEventArgs();
+        protected override bool Callback(CallbackData data) {
+            var e = data.ToGlobalMouseEventArgs();
+            var Events = State.GetEventArgs(e);
+            var ret = InvokeMany(Events.Data, Events.Timestamp);
+
+            return ret.Next_Hook_Enabled;
         }
     }
 }

@@ -3,24 +3,152 @@
 // See license.txt or https://mit-license.org/
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using WindowsInput.Events;
 using WindowsInput.Native;
 
 namespace WindowsInput.EventSources {
     public class CurrentThreadMouseEventSource : MouseEventSource {
 
-        protected override WindowsHookHandle Subscribe() {
+        protected override HookHandle Subscribe() {
 
-            return WindowsHookHandle.Create(
-                WindowsHookType.Mouse,
+            return HookHandle.Create(
+                HookType.AppMouse,
                 HookProcedure,
                 IntPtr.Zero,
                 ThreadNativeMethods.GetCurrentThreadId());
 
         }
 
+        protected override bool Callback(CallbackData data) {
+            var Timestamp = DateTimeOffset.UtcNow;
 
-        protected override MouseInput GetEventArgs(CallbackData data) {
-            return data.ToAppMouseEventArgs();
+            var wParam = data.WParam;
+            var lParam = data.LParam;
+
+            var MouseData1 = Marshal.PtrToStructure<MOUSEHOOKSTRUCTEX>(lParam);
+
+            var Message = (WindowMessage)wParam;
+
+            var Button = default(ButtonCode);
+            var Location = default(POINT);
+            var Scroll = default(int);
+            var Status = default(ButtonStatus);
+
+            Location.X = MouseData1.Point.X;
+            Location.Y = MouseData1.Point.Y;
+
+            switch (Message) {
+                case WindowMessage.WM_MOUSEMOVE:
+                case WindowMessage.WM_MOUSEMOVE_NC:
+                    break;
+
+                case WindowMessage.WM_LBUTTONDOWN:
+                case WindowMessage.WM_LBUTTONDOWN_NC:
+                    Button = ButtonCode.Left;
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_RBUTTONDOWN:
+                case WindowMessage.WM_RBUTTONDOWN_NC:
+                    Button = ButtonCode.Right;
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_MBUTTONDOWN:
+                case WindowMessage.WM_MBUTTONDOWN_NC:
+                    Button = ButtonCode.Middle;
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_LBUTTONUP:
+                case WindowMessage.WM_LBUTTONUP_NC:
+                    Button = ButtonCode.Left;
+                    Status = ButtonStatus.Released;
+                    break;
+
+                case WindowMessage.WM_RBUTTONUP:
+                case WindowMessage.WM_RBUTTONUP_NC:
+                    Button = ButtonCode.Right;
+                    Status = ButtonStatus.Released;
+                    break;
+
+                case WindowMessage.WM_MBUTTONUP:
+                case WindowMessage.WM_MBUTTONUP_NC:
+                    Button = ButtonCode.Middle;
+                    Status = ButtonStatus.Released;
+                    break;
+
+                case WindowMessage.WM_LBUTTONDBLCLK:
+                case WindowMessage.WM_LBUTTONDBLCLK_NC:
+                    Button = ButtonCode.Left;
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_RBUTTONDBLCLK:
+                case WindowMessage.WM_RBUTTONDBLCLK_NC:
+                    Button = ButtonCode.Right;
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_MBUTTONDBLCLK:
+                case WindowMessage.WM_MBUTTONDBLCLK_NC:
+                    Button = ButtonCode.Middle;
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_MOUSEWHEEL_H:
+                    Button = ButtonCode.HScroll;
+                    Status = ButtonStatus.Scrolled;
+                    Scroll = MouseData1.MouseData.HiWord;
+                    break;
+                case WindowMessage.WM_MOUSEWHEEL_V:
+                    Button = ButtonCode.VScroll;
+                    Status = ButtonStatus.Scrolled;
+                    Scroll = MouseData1.MouseData.HiWord;
+                    break;
+
+                case WindowMessage.WM_XBUTTONDOWN:
+                case WindowMessage.WM_XBUTTONDOWN_NC:
+                    Button = XButton(MouseData1);
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                case WindowMessage.WM_XBUTTONUP:
+                case WindowMessage.WM_XBUTTONUP_NC:
+                    Button = XButton(MouseData1);
+                    Status = ButtonStatus.Released;
+                    break;
+
+                case WindowMessage.WM_XBUTTONDBLCLK:
+                case WindowMessage.WM_XBUTTONDBLCLK_NC:
+                    Button = XButton(MouseData1);
+                    Status = ButtonStatus.Pressed;
+                    break;
+
+                default:
+                    break;
+            }
+
+            var e = new EventSourceEventArgs<MouseInput>(Timestamp, new MouseInput(Button, Location, Scroll, Status));
+            var Events = State.GetEventArgs(e);
+            var ret = InvokeMany(Events.Data, Events.Timestamp);
+
+            return ret.Next_Hook_Enabled;
         }
+
+        private ButtonCode XButton(MOUSEHOOKSTRUCTEX Value) {
+            var ret = ButtonCode.None;
+            if (Value.MouseData.HiWord == 1) {
+                ret = ButtonCode.XButton1;
+            } else if (Value.MouseData.HiWord == 2) {
+                ret = ButtonCode.XButton2;
+            }
+
+            return ret;
+        }
+
+        
     }
 }

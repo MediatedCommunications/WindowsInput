@@ -11,17 +11,16 @@ namespace WindowsInput.Tests
         public async Task OpenWindowsExplorer()
         {
             var sim = await EventBuilder.Create()
-                .Click(KeyCode.LWin, KeyCode.E)
+                .ClickChord(KeyCode.LWin, KeyCode.E)
                 .Invoke()
                 ;
         }
 
         [Test]
         [Explicit]
-        public async Task SayHello()
-        {
-            var sim = EventBuilder.Create()
-               .Click(KeyCode.LWin, KeyCode.R)
+        public async Task SayHello() {
+            var sim = Simulate.Events()
+               .ClickChord(KeyCode.LWin, KeyCode.R)
                .Wait(1000)
                .Click("notepad")
                .Wait(1000)
@@ -47,7 +46,7 @@ namespace WindowsInput.Tests
             sim
                 .Click(KeyCode.Return)
                 .Wait(1000)
-                .Click(KeyCode.Alt, KeyCode.F4)
+                .ClickChord(KeyCode.Alt, KeyCode.F4)
                 .Click(KeyCode.N)
                 ;
 
@@ -61,7 +60,7 @@ namespace WindowsInput.Tests
         {
             var sim = new EventBuilder()
                 .Click(KeyCode.Space)
-                .Click(KeyCode.LWin, KeyCode.R)
+                .ClickChord(KeyCode.LWin, KeyCode.R)
                 .Wait(1000)
                 .Click("mspaint")
                 .Wait(1000)

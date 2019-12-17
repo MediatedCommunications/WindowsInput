@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+using WindowsInput.Events;
+
+namespace WindowsInput.EventSources {
+
+    public class KeyChordEventArgs : EventArgs {
+        public EventSourceEventArgs<KeyboardEvent> Input { get; set; }
+        public ChordClick Chord { get; set; }
+    }
+
+
+    public class KeyChordEventSource : KeyboardMonitoringEventSource {
+        public event EventHandler<KeyChordEventArgs> Triggered;
+
+        public ChordClick Chord { get; private set; }
+
+        public KeyChordEventSource(IKeyboardEventSource Monitor, ChordClick Chord) : base(Monitor) {
+            this.Chord = Chord;
+        }
+
+        protected override void Enable() {
+            base.Enable();
+            Monitor.KeyEvent += this.Monitor_KeyEvent;
+        }
+
+        protected override void Disable() {
+            base.Disable();
+            Monitor.KeyEvent -= Monitor_KeyEvent;
+            
+        }
+
+        private ChordEventSourceStateMachine State;
+        protected override void Reset() {
+            base.Reset();
+            State = new ChordEventSourceStateMachine(Chord);
+        }
+
+        private void Monitor_KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e) {
+            if (State.Next(e.Data) == StateMachineResult.Complete) {
+                var args = new KeyChordEventArgs() {
+                    Input = e,
+                    Chord = Chord
+                };
+                Triggered?.Invoke(this, args);
+            }
+        }
+    }
+
+    public class ChordEventSourceStateMachine : StateMachine<KeyboardEvent, StateMachineResult> {
+        public ChordClick Chord { get; private set; }
+        public int MaxSequentialTriggers { get; private set; }
+
+        public ChordEventSourceStateMachine(ChordClick Chord) : this(Chord, 1) {
+
+        }
+
+        public ChordEventSourceStateMachine(ChordClick Chord, int MaxSequentialTriggers) {
+            this.Chord = Chord;
+            this.MaxSequentialTriggers = MaxSequentialTriggers;
+        }
+
+        protected override IEnumerable<StateMachineResult> Next(Value Input) {
+            var Expected = new HashSet<KeyCode>(Chord.Keys);
+
+            var SequentialTriggers = 0;
+
+            while (true) {
+                var Down = new HashSet<KeyCode>();
+
+                //Each time that we get an input that is a KeyDown
+                while (Input.Current is { } Current) {
+
+                    System.Diagnostics.Debug.WriteLine(Input.Current);
+
+                    if (Current.KeyDown is { } V1) {
+                        var Key = PotentiallyNormalize(V1.Key, Expected);
+
+                        Down.Add(Key);
+                        if (Expected.IsSubsetOf(Down)) {
+                            SequentialTriggers += 1;
+                            if(SequentialTriggers <= MaxSequentialTriggers) {
+                                yield return StateMachineResult.Complete;
+                            } else {
+                                yield return StateMachineResult.Rejected;
+                            }
+                        } else {
+                            SequentialTriggers = 0;
+                            yield return StateMachineResult.Rejected;
+                        }
+
+                    } else if (Current.KeyUp is { } V2) {
+                        var Key = PotentiallyNormalize(V2.Key, Expected);
+
+                        Down.Remove(Key);
+                        SequentialTriggers = 0;
+                        yield return StateMachineResult.Rejected;
+                    } else {
+                        SequentialTriggers = 0;
+                        yield return StateMachineResult.Rejected;
+                    }
+
+                }
+            }
+        }
+
+        private KeyCode PotentiallyNormalize(KeyCode key, HashSet<KeyCode> expected) {
+            var ret = key;
+
+            var Normalized = key.Normalize();
+            if (expected.Contains(Normalized)) {
+                ret = Normalized;
+            }
+
+
+            return ret;
+            
+        }
+    }
+
+}

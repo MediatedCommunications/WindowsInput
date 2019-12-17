@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using WindowsInput.Events;
 using WindowsInput.Native;
 
@@ -13,7 +14,7 @@ namespace WindowsInput.EventSources {
         protected override HookHandle Subscribe() {
 
             return HookHandle.Create(
-                HookType.Keyboard,
+                HookType.AppKeyboard,
                 HookProcedure,
                 IntPtr.Zero,
                 ThreadNativeMethods.GetCurrentThreadId());
@@ -21,100 +22,59 @@ namespace WindowsInput.EventSources {
         }
 
         protected override bool Callback(CallbackData data) {
-            return false;
-        }
+            var timestamp = DateTimeOffset.UtcNow;
+            var Wait = new Wait(timestamp - State.LastInputDate);
+            State.LastInputDate = DateTimeOffset.UtcNow;
 
 
+            var Key = (KeyCode)data.WParam;
 
-        protected IEnumerable<EventSourceEventArgs<KeyPressData>> GetPressEventArgs(CallbackData data) {
-            return ToAppKeypressEventArgs(data);
-        }
+            var lparam = (uint)data.LParam;
 
-        protected EventSourceEventArgs<KeyInput> GetDownUpEventArgs(CallbackData data) {
-            return ToAppKeyEventArgs(data);
-        }
+            const uint maskScanCode = 0xFF_0000; // for bit 23-16
+            var ScanCode = (lparam & maskScanCode) >> 16;
 
-        IEnumerable<EventSourceEventArgs<KeyPressData>> ToAppKeypressEventArgs(CallbackData data) {
-            var wParam = data.WParam;
-            var lParam = data.LParam;
+            const uint ExtendedMask = 0b_1_00000000_00000000_00000000;
+            var IsExtended = (lparam & ExtendedMask) != 0;
 
-            //http://msdn.microsoft.com/en-us/library/ms644984(v=VS.85).aspx
+            const uint RepeatMask = 0xFF;
+            var RepeatCount = lparam & RepeatMask;
 
-            const uint maskKeydown = 0x40000000; // for bit 30
-            const uint maskKeyup = 0x80000000; // for bit 31
-            const uint maskScanCode = 0xff0000; // for bit 23-16
+            const uint WasDownMask = 0b_01000000_00000000_00000000_00000000;
+            var WasDown = (lparam & WasDownMask) != 0;
 
-            var flags = (uint)lParam.ToInt64();
-
-            //bit 30 Specifies the previous key state. The value is 1 if the key is down before the message is sent; it is 0 if the key is up.
-            var wasKeyDown = (flags & maskKeydown) > 0;
-            //bit 31 Specifies the transition state. The value is 0 if the key is being pressed and 1 if it is being released.
-            var isKeyReleased = (flags & maskKeyup) > 0;
-
-            if (!wasKeyDown && !isKeyReleased)
-                yield break;
-
-            var virtualKeyCode = (int)wParam;
-            var scanCode = checked((int)(flags & maskScanCode));
-            const int fuState = 0;
+            const uint NowReleasedMask = 0b_10000000_00000000_00000000_00000000;
+            var NowReleased = (lparam & NowReleasedMask) != 0;
 
 
-            if (KeyboardNativeMethods.TryGetCharFromKeyboardState(virtualKeyCode, scanCode, fuState, out var chars)) {
-                foreach (var ch in chars) {
+            var KeyDown = !NowReleased
+                ? new KeyDown(Key, IsExtended)
+                : null
+                ;
 
-                    var Data = new KeyPressData(ch);
-                    var ret = EventSourceEventArgs.Create(DateTimeOffset.Now, false, Data);
-
-                    yield return ret;
+            var TextClick = default(TextClick);
+            if (KeyboardNativeMethods.TryGetCharFromKeyboardState((int)Key, (int) ScanCode, 0, out var chars)) {
+                var Text = new StringBuilder();
+                for (int i = 0; i < RepeatCount; i++) {
+                    Text.Append(chars);
+                }
+                if(Text.Length > 0) {
+                    TextClick = new TextClick(Text.ToString());
                 }
             }
+            
+            var KeyUp = WasDown && NowReleased
+                ? new KeyUp(Key, IsExtended)
+                : null
+                ;
+
+            var Data = new KeyboardEvent(Wait, KeyDown, TextClick, KeyUp);
+
+
+            var ret = InvokeMany(Data, timestamp);
+
+            return ret.Next_Hook_Enabled; 
         }
-
-        EventSourceEventArgs<KeyInput> ToAppKeyEventArgs(CallbackData data) {
-            var wParam = data.WParam;
-            var lParam = data.LParam;
-
-            //http://msdn.microsoft.com/en-us/library/ms644984(v=VS.85).aspx
-
-            const uint maskKeydown = 0x4000_0000; // for bit 30
-            const uint maskKeyup = 0x8000_0000; // for bit 31
-            const uint maskExtendedKey = 0x100_0000; // for bit 24
-
-            var timestamp = Environment.TickCount;
-
-            var flags = (uint)lParam.ToInt64();
-
-            //bit 30 Specifies the previous key state. The value is 1 if the key is down before the message is sent; it is 0 if the key is up.
-            var wasKeyDown = (flags & maskKeydown) > 0;
-            //bit 31 Specifies the transition state. The value is 0 if the key is being pressed and 1 if it is being released.
-            var isKeyReleased = (flags & maskKeyup) > 0;
-            //bit 24 Specifies the extended key state. The value is 1 if the key is an extended key, otherwise the value is 0.
-            var isExtendedKey = (flags & maskExtendedKey) > 0;
-
-
-            var keyData = (KeyCode)wParam;
-            var scanCode = (int)(((flags & 0x1_0000) | (flags & 0x2_0000) | (flags & 0x4_0000) | (flags & 0x8_0000) |
-                                   (flags & 0x10_0000) | (flags & 0x20_0000) | (flags & 0x400000) | (flags & 0x80_0000)) >>
-                                  16);
-            var scanCode2 = ((int)flags & 0xFF_0000) >> 16;
-
-            if (scanCode2 != scanCode) {
-
-            }
-
-
-            var isKeyDown = !isKeyReleased;
-            var isKeyUp = wasKeyDown && isKeyReleased;
-
-            var Status = KeyStatusValue.Compute(isKeyDown, isKeyUp);
-
-
-            var Data = new KeyInput(keyData, isExtendedKey, scanCode, Status);
-            var ret = EventSourceEventArgs.Create(timestamp, false, Data);
-
-            return ret;
-        }
-
 
     }
 

@@ -9,30 +9,32 @@ using System.Runtime.InteropServices;
 using WindowsInput.Native;
 
 namespace WindowsInput.EventSources {
-    public abstract class EventSource {
+    public abstract class HookEventSource : IEventSource {
 
 
         protected abstract HookHandle Subscribe();
         protected abstract bool Callback(CallbackData data);
 
-
+        public event EventHandler<EnabledChangedEventArgs> EnabledChanged;
         public bool Enabled {
             get {
                 return Handle != null;
             }
             set {
-                if (value) {
-                    Enable();
-                } else {
-                    Disable();
+                if (value != Enabled) {
+                    if (value) {
+                        Enable();
+                    } else {
+                        Disable();
+                    }
                 }
-
             }
         }
 
-        public void Enable() {
+        protected void Enable() {
             if (Handle == default) {
                 EnableInternal();
+                EnabledChanged?.Invoke(this, new EnabledChangedEventArgs(true));
             }
         }
 
@@ -41,9 +43,12 @@ namespace WindowsInput.EventSources {
         }
 
 
-        public void Disable() {
-            Handle?.Dispose();
-            Handle = null;
+        protected void Disable() {
+            if (Handle != default) {
+                Handle?.Dispose();
+                Handle = null;
+                EnabledChanged?.Invoke(this, new EnabledChangedEventArgs(false));
+            }
         }
 
 
@@ -51,7 +56,7 @@ namespace WindowsInput.EventSources {
         protected HookHandle Handle { get; set; }
 
         public void Dispose() {
-            Handle?.Dispose();
+            Disable();
         }
 
         protected IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam) {
@@ -66,6 +71,8 @@ namespace WindowsInput.EventSources {
 
                 if (continueProcessing) {
                     ret = CallNextHookEx(nCode, wParam, lParam);
+                } else {
+
                 }
             }
 
@@ -77,24 +84,34 @@ namespace WindowsInput.EventSources {
         }
 
 
-        protected bool InvokeEvent(params Func<bool>[] Actions) {
-            var ret = false;
+        protected EventSourceEventArgs InvokeMany(params Func<EventSourceEventArgs, EventSourceEventArgs>[] Actions) {
+            var ret = new EventSourceEventArgs(DateTimeOffset.UtcNow); ;
             foreach (var item in Actions) {
-                ret = ret || item();
+                if (ret.Next_Event_Enabled) {
+                    var tret = item(ret);
+                    ret.Next_Event_Enabled = tret.Next_Event_Enabled;
+                    ret.Next_Hook_Enabled = tret.Next_Hook_Enabled;
+                }
             }
 
             return ret;
         }
 
-        protected bool InvokeEvent<T>(EventHandler<EventSourceEventArgs<T>> Event, T Data, DateTimeOffset Timestamp) {
-            var ret = false;
+        protected EventSourceEventArgs InvokeEvent<T>(EventSourceEventArgs args, EventHandler<EventSourceEventArgs<T>> Event, T Data, DateTimeOffset Timestamp) {
+            var ret = new EventSourceEventArgs(Timestamp);
+            ret.Next_Event_Enabled = args.Next_Event_Enabled;
+            ret.Next_Hook_Enabled = args.Next_Hook_Enabled;
 
             if (!EqualityComparer<T>.Default.Equals(Data, default)) {
-                var Args = new EventSourceEventArgs<T>(Timestamp, false, Data);
+                var Args = new EventSourceEventArgs<T>(Timestamp, Data) {
+                    Next_Event_Enabled = args.Next_Event_Enabled,
+                    Next_Hook_Enabled = args.Next_Hook_Enabled,
+                };
 
                 Event?.Invoke(this, Args);
 
-                ret = Args.Handled;
+                ret.Next_Event_Enabled = Args.Next_Event_Enabled;
+                ret.Next_Hook_Enabled = Args.Next_Hook_Enabled;
             }
 
             return ret;

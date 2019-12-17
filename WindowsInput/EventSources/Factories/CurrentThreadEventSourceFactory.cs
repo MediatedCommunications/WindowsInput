@@ -7,8 +7,7 @@ namespace WindowsInput.EventSources {
         }
 
         protected override IMouseEventSource MouseInternal() {
-            //return new CurrentThreadMouseEventSource();
-            throw new NotImplementedException();
+            return new CurrentThreadMouseEventSource();
         }
 
     }

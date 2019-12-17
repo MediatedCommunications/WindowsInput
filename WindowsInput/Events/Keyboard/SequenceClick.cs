@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WindowsInput.Events {
-    public class CombinationClick : AggregateEvent {
+    public class SequenceClick : AggregateEvent {
 
         public IReadOnlyCollection<KeyCode> Keys { get; private set; }
 
         protected override string DebuggerDisplay => $@"{this.GetType().Name}: {String.Join("+", Keys)}";
 
-        public CombinationClick(params KeyCode[] Keys) : base(CreateChildren(Keys)) {
+        public SequenceClick(params KeyCode[] Keys) : base(CreateChildren(Keys)) {
             this.Keys = Keys;
         }
 
@@ -20,11 +20,7 @@ namespace WindowsInput.Events {
             var ret = new List<IEvent>();
 
             foreach (var item in Keys) {
-                ret.Add(new KeyDown(item));
-            }
-
-            foreach (var item in Keys.Reverse()) {
-                ret.Add(new KeyUp(item));
+                ret.Add(new KeyClick(item));
             }
 
             return ret;

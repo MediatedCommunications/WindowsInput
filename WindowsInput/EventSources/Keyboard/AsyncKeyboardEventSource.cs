@@ -15,13 +15,16 @@ namespace WindowsInput.EventSources {
             AsyncObject?.Dispose();
         }
 
+        public event EventHandler<EnabledChangedEventArgs> EnabledChanged {
+            add => AsyncObject.Instance.EnabledChanged += value;
+            remove => AsyncObject.Instance.EnabledChanged -= value;
+        }
+
         public bool Enabled {
             get => AsyncObject.Instance.Enabled;
             set => AsyncObject.Instance.Enabled = value;
         }
 
-        public void Enable() => AsyncObject.Instance.Enable();
-        public void Disable() => AsyncObject.Instance.Disable();
 
         public event EventHandler<EventSourceEventArgs<KeyboardEvent>> KeyEvent {
             add => AsyncObject.Instance.KeyEvent += value;

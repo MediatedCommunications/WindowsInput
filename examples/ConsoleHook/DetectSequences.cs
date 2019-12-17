@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WindowsInput;
+using WindowsInput.EventSources;
 
 namespace ConsoleHook
 {
@@ -14,25 +15,41 @@ namespace ConsoleHook
     {
         public static Task Do()
         {
-            Console.WriteLine("NOT IMPLEMENTED!");
+            using (var Keyboard = WindowsInput.Capture.Global.KeyboardAsync()) {
+
+                var Listener = new WindowsInput.EventSources.TextSequenceEventSource(Keyboard, new WindowsInput.Events.TextClick("aaa"));
+                Listener.Triggered += (x, y) => Listener_Triggered(Keyboard, x, y); ;
+                Listener.Enabled = true;
+
+                Console.WriteLine("The keyboard is now listening for sequences.  Try typing 'aaa' in notepad.");
+
+                Console.WriteLine("Press enter to quit...");
+                Console.ReadLine();
+
+            }
+
+                
             return Task.CompletedTask;
-            /*
-            var map = new Dictionary<Sequence, Action>
-            {
-                {Sequence.FromString("Control+Z,B"), Console.WriteLine},
-                {Sequence.FromString("Control+Z,Z"), Console.WriteLine},
-                //{Sequence.FromString("Escape,Escape,Escape"), quit}
-            };
-
-            Console.WriteLine("Detecting following combinations:");
-            foreach (var sequence in map.Keys)
-                Console.WriteLine("\t{0}", sequence);
-            Console.WriteLine("Press 3 x ESC (three times) to exit.");
-
-            //Actual loop
-            Hook.GlobalKeyboard.OnSequence(map);
-
-    */
         }
+
+
+
+        private static async void Listener_Triggered(IKeyboardEventSource Keyboard, object sender, WindowsInput.EventSources.TextSequenceEventArgs e) {
+            e.Input.Next_Hook_Enabled = false;
+
+            var ToSend = WindowsInput.Simulate.Events();
+            for (int i = 1; i < e.Sequence.Text.Length; i++) {
+                ToSend.Click(WindowsInput.Events.KeyCode.Backspace);
+            }
+
+            ToSend.Click("Always ask albert!");
+
+            //We suspend keyboard events because we don't want to accidently trigger a recursive loop if our
+            //sending text actually had 'aaa' in it.
+            using (Keyboard.Suspend()) {
+                await ToSend.Invoke();
+            }
+        }
+
     }
 }

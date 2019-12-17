@@ -8,25 +8,24 @@ using WindowsInput.Native;
 namespace WindowsInput.EventSources {
 
     public class EventSourceEventArgs {
-        public bool Handled { get; set; }
+        public bool Next_Hook_Enabled { get; set; } = true;
+        public bool Next_Event_Enabled { get; set; } = true;
         public DateTimeOffset Timestamp { get; private set; }
 
-        public EventSourceEventArgs(DateTimeOffset Timestamp, bool Handled = false) {
+        public EventSourceEventArgs(DateTimeOffset Timestamp) {
             this.Timestamp = Timestamp;
-            this.Handled = Handled;
         }
 
-        public EventSourceEventArgs(int Timestamp, bool Handled = false) {
+        public EventSourceEventArgs(int Timestamp) {
             this.Timestamp = BootTime.Value.AddMilliseconds(Timestamp);
-            this.Handled = Handled;
         }
 
-        public static EventSourceEventArgs<TData> Create<TData>(DateTimeOffset Timestamp, bool Handled, TData Data) {
-            return new EventSourceEventArgs<TData>(Timestamp, Handled, Data);
+        public static EventSourceEventArgs<TData> Create<TData>(DateTimeOffset Timestamp, TData Data) {
+            return new EventSourceEventArgs<TData>(Timestamp, Data);
         }
 
-        public static EventSourceEventArgs<TData> Create<TData>(int Timestamp, bool Handled, TData Data) {
-            return new EventSourceEventArgs<TData>(Timestamp, Handled, Data);
+        public static EventSourceEventArgs<TData> Create<TData>(int Timestamp, TData Data) {
+            return new EventSourceEventArgs<TData>(Timestamp, Data);
         }
 
     }
@@ -35,11 +34,11 @@ namespace WindowsInput.EventSources {
     
         public TData Data { get; private set; }
 
-        public EventSourceEventArgs(DateTimeOffset Timestamp, bool Handled, TData Data) : base(Timestamp, Handled) {
+        public EventSourceEventArgs(DateTimeOffset Timestamp, TData Data) : base(Timestamp) {
             this.Data = Data;
         }
 
-        public EventSourceEventArgs(int Timestamp, bool Handled, TData Data) : base(Timestamp, Handled) {
+        public EventSourceEventArgs(int Timestamp, TData Data) : base(Timestamp) {
             this.Data = Data;
         }
 

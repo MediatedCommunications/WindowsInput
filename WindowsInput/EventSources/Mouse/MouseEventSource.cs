@@ -11,7 +11,7 @@ using WindowsInput.Events;
 
 namespace WindowsInput.EventSources {
 
-    public abstract class MouseEventSource : EventSource, IMouseEventSource {
+    public abstract class MouseEventSource : HookEventSource, IMouseEventSource {
         protected MouseEventSourceState State { get; private set; } = new MouseEventSourceState();
 
         protected override void EnableInternal() {
@@ -32,47 +32,44 @@ namespace WindowsInput.EventSources {
         public event EventHandler<EventSourceEventArgs<ButtonDown>> ButtonDown;
         public event EventHandler<EventSourceEventArgs<ButtonUp>> ButtonUp;
         public event EventHandler<EventSourceEventArgs<ButtonScroll>> ButtonScroll;
+        public event EventHandler<EventSourceEventArgs<ButtonClickHold>> ButtonClickHold;
         public event EventHandler<EventSourceEventArgs<ButtonDoubleClick>> ButtonDoubleClick;
 
         public event EventHandler<EventSourceEventArgs<IReadOnlyCollection<DragStart>>> DragStarted;
         public event EventHandler<EventSourceEventArgs<IReadOnlyCollection<DragDrop>>> DragFinished;
 
-        protected override bool Callback(CallbackData data) {
-            var e = GetEventArgs(data);
+        protected EventSourceEventArgs InvokeMany(MouseEvent Event, DateTimeOffset Timestamp) {
+            var ret = InvokeMany(
+                x => InvokeEvent(x, Event, Timestamp),
 
-            var Events = State.GetEventArgs(e);
-            var Handled = InvokeEvent(
-                () => InvokeEvent(Events.Data, e.Timestamp),
+                x => InvokeEvent(x, Event.Wait, Timestamp),
+                x => InvokeEvent(x, Event.Move, Timestamp),
+                x => InvokeEvent(x, Event.ButtonScroll, Timestamp),
+                x => InvokeEvent(x, Event.ButtonDown, Timestamp),
+                x => InvokeEvent(x, Event.DragStart, Timestamp),
+                x => InvokeEvent(x, Event.DragStop, Timestamp),
+                x => InvokeEvent(x, Event.ButtonUp, Timestamp),
 
-                () => InvokeEvent(Events.Data.Wait, e.Timestamp),
-                () => InvokeEvent(Events.Data.Move, e.Timestamp),
-                () => InvokeEvent(Events.Data.ButtonScroll, e.Timestamp),
-                () => InvokeEvent(Events.Data.ButtonDown, e.Timestamp),
-                () => InvokeEvent(Events.Data.DragStart, e.Timestamp),
-                () => InvokeEvent(Events.Data.DragStop, e.Timestamp),
-                () => InvokeEvent(Events.Data.ButtonUp, e.Timestamp),
-                
-                () => InvokeEvent(Events.Data.ButtonClick, e.Timestamp),
-                () => InvokeEvent(Events.Data.ButtonDoubleClick, e.Timestamp)
-                );
+                x => InvokeEvent(x, Event.ButtonClick, Timestamp),
+                x => InvokeEvent(x, Event.ButtonClickHold, Timestamp),
+                x => InvokeEvent(x, Event.ButtonDoubleClick, Timestamp)
+            );
 
-            return !e.Handled;
+            return ret;
         }
 
-        protected abstract EventSourceEventArgs<MouseInput> GetEventArgs(CallbackData data);
 
-
-
-        protected bool InvokeEvent(MouseEvent Data, DateTimeOffset Timestamp) => InvokeEvent(MouseEvent, Data, Timestamp);
-        protected bool InvokeEvent(Wait Data, DateTimeOffset Timestamp) => InvokeEvent(Wait, Data, Timestamp);
-        protected bool InvokeEvent(MouseMove Data, DateTimeOffset Timestamp) => InvokeEvent(MouseMove, Data, Timestamp);
-        protected bool InvokeEvent(ButtonScroll Data, DateTimeOffset Timestamp) => InvokeEvent(ButtonScroll, Data, Timestamp);
-        protected bool InvokeEvent(ButtonDown Data, DateTimeOffset Timestamp) => InvokeEvent(ButtonDown, Data, Timestamp);
-        protected bool InvokeEvent(IReadOnlyCollection<DragStart> Data, DateTimeOffset Timestamp) => InvokeEvent(DragStarted, Data, Timestamp);
-        protected bool InvokeEvent(IReadOnlyCollection<DragDrop> Data, DateTimeOffset Timestamp) => InvokeEvent(DragFinished, Data, Timestamp);
-        protected bool InvokeEvent(ButtonUp Data, DateTimeOffset Timestamp) => InvokeEvent(ButtonUp, Data, Timestamp);
-        protected bool InvokeEvent(ButtonClick Data, DateTimeOffset Timestamp) => InvokeEvent(ButtonClick, Data, Timestamp);
-        protected bool InvokeEvent(ButtonDoubleClick Data, DateTimeOffset Timestamp) => InvokeEvent(ButtonDoubleClick, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, MouseEvent Data, DateTimeOffset Timestamp) => InvokeEvent(args, MouseEvent, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, Wait Data, DateTimeOffset Timestamp) => InvokeEvent(args, Wait, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, MouseMove Data, DateTimeOffset Timestamp) => InvokeEvent(args, MouseMove, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, ButtonScroll Data, DateTimeOffset Timestamp) => InvokeEvent(args, ButtonScroll, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, ButtonDown Data, DateTimeOffset Timestamp) => InvokeEvent(args, ButtonDown, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, IReadOnlyCollection<DragStart> Data, DateTimeOffset Timestamp) => InvokeEvent(args, DragStarted, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, IReadOnlyCollection<DragDrop> Data, DateTimeOffset Timestamp) => InvokeEvent(args, DragFinished, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, ButtonUp Data, DateTimeOffset Timestamp) => InvokeEvent(args, ButtonUp, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, ButtonClick Data, DateTimeOffset Timestamp) => InvokeEvent(args, ButtonClick, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, ButtonClickHold Data, DateTimeOffset Timestamp) => InvokeEvent(args, ButtonClickHold, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, ButtonDoubleClick Data, DateTimeOffset Timestamp) => InvokeEvent(args, ButtonDoubleClick, Data, Timestamp);
 
 
 

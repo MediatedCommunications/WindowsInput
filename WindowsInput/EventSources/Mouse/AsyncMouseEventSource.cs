@@ -21,8 +21,10 @@ namespace WindowsInput.EventSources {
             set => AsyncObject.Instance.Enabled = value;
         }
 
-        public void Enable() => AsyncObject.Instance.Enable();
-        public void Disable() => AsyncObject.Instance.Disable();
+        public event EventHandler<EnabledChangedEventArgs> EnabledChanged {
+            add => AsyncObject.Instance.EnabledChanged += value;
+            remove => AsyncObject.Instance.EnabledChanged -= value;
+        }
 
         public event EventHandler<EventSourceEventArgs<MouseEvent>> MouseEvent {
             add => AsyncObject.Instance.MouseEvent += value;
@@ -57,6 +59,11 @@ namespace WindowsInput.EventSources {
         public event EventHandler<EventSourceEventArgs<ButtonScroll>> ButtonScroll {
             add => AsyncObject.Instance.ButtonScroll += value;
             remove => AsyncObject.Instance.ButtonScroll -= value;
+        }
+
+        public event EventHandler<EventSourceEventArgs<ButtonClickHold>> ButtonClickHold {
+            add => AsyncObject.Instance.ButtonClickHold += value;
+            remove => AsyncObject.Instance.ButtonClickHold -= value;
         }
 
         public event EventHandler<EventSourceEventArgs<ButtonDoubleClick>> ButtonDoubleClick {
