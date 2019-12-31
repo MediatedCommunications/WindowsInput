@@ -14,10 +14,9 @@ namespace WindowsInput.EventSources {
     public abstract class MouseEventSource : HookEventSource, IMouseEventSource {
         protected MouseEventSourceState State { get; private set; } = new MouseEventSourceState();
 
-        protected override void EnableInternal() {
-            base.EnableInternal();
-
+        protected override void Enable() {
             this.State = new MouseEventSourceState();
+            base.Enable();
         }
 
         protected MouseEventSource() {

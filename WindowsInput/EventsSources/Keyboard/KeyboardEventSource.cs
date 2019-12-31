@@ -25,10 +25,10 @@ namespace WindowsInput.EventSources {
 
         protected KeyboardEventSourceState State { get; private set; } = new KeyboardEventSourceState();
 
-        protected override void EnableInternal() {
-            base.EnableInternal();
-
+        protected override void Enable() {
             State = new KeyboardEventSourceState();
+            base.Enable();
+           
         }
 
         protected EventSourceEventArgs InvokeMany(KeyboardEvent Event, DateTimeOffset Timestamp) {

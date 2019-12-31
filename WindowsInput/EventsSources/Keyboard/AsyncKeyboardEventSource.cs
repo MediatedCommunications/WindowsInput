@@ -22,7 +22,7 @@ namespace WindowsInput.EventSources {
 
         public bool Enabled {
             get => AsyncObject.Instance.Enabled;
-            set => AsyncObject.Instance.Enabled = value;
+            set => AsyncObject.Dispatcher.Invoke(() => AsyncObject.Instance.Enabled = value);
         }
 
 

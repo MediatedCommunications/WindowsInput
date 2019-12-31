@@ -1,29 +1,38 @@
 ﻿using System;
 using System.Threading;
-using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace WindowsInput.EventSources {
     public class MessagePumpingObject<T> : IDisposable {
+
+        public event EventHandler Shutdown;
 
         public MessagePumpingObject(Func<T> Creator) {
             var Created = new ManualResetEventSlim(false);
 
             Thread = new System.Threading.Thread(() => {
-                this.AC = new System.Windows.Forms.ApplicationContext();
-                
-                Instance = Creator();
+                Thread.Name = $@"{nameof(MessagePumpingObject<T>)}";
+                this.Dispatcher = Dispatcher.CurrentDispatcher;
+                this.Instance = Creator();
                 Created.Set();
-                System.Windows.Forms.Application.Run(AC);
+                Dispatcher.Run();
+
+                Shutdown?.Invoke(this, null);
             });
 
+            Thread.SetApartmentState(ApartmentState.STA);
             Thread.Start();
 
             Created.Wait();
 
+            if(this.Dispatcher == default) {
+                throw new InvalidOperationException();
+            }
+
         }
 
         public T Instance { get; private set; }
-        private ApplicationContext AC { get; set; }
+        public Dispatcher Dispatcher { get; private set; }
         private Thread Thread { get; set; }
 
         public void Dispose() {
@@ -32,7 +41,7 @@ namespace WindowsInput.EventSources {
                 V1.Dispose();
             }
 
-            AC?.ExitThread();
+            Dispatcher?.InvokeShutdown();
 
         }
     }

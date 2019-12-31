@@ -12,20 +12,28 @@ namespace WindowsInput.Events {
 
         protected override string DebuggerDisplay => $@"{this.GetType().Name}: {String.Join("+", Keys)}";
 
-        public SequenceClick(params KeyCode[] Keys) : base(CreateChildren(Keys)) {
-            this.Keys = Keys;
+        public SequenceClick(IEnumerable<KeyCode> Keys) {
+            var NewKeys = new List<KeyCode>();
+            if(Keys != default) {
+                NewKeys.AddRange(Keys);
+            }
+            this.Keys = NewKeys;
+
+            Initialize(CreateChildren());
         }
 
-        private static IEnumerable<IEvent> CreateChildren(params KeyCode[] Keys) {
-            var ret = new List<IEvent>();
+        public SequenceClick(params KeyCode[] Keys) : this((IEnumerable<KeyCode>)Keys) {
+            
+        }
+
+        private IEnumerable<IEvent> CreateChildren() {
 
             foreach (var item in Keys) {
-                ret.Add(new KeyClick(item));
+                yield return new KeyClick(item);
             }
-
-            return ret;
         }
 
 
     }
 }
+

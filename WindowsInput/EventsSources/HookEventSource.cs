@@ -9,55 +9,27 @@ using System.Runtime.InteropServices;
 using WindowsInput.Native;
 
 namespace WindowsInput.EventSources {
-    public abstract class HookEventSource : IEventSource {
+    public abstract class HookEventSource : EventSourceBase {
 
 
         protected abstract HookHandle Subscribe();
         protected abstract bool Callback(CallbackData data);
 
-        public event EventHandler<EnabledChangedEventArgs> EnabledChanged;
-        public bool Enabled {
-            get {
-                return Handle != null;
-            }
-            set {
-                if (value != Enabled) {
-                    if (value) {
-                        Enable();
-                    } else {
-                        Disable();
-                    }
-                }
-            }
-        }
 
-        protected void Enable() {
-            if (Handle == default) {
-                EnableInternal();
-                EnabledChanged?.Invoke(this, new EnabledChangedEventArgs(true));
-            }
-        }
-
-        protected virtual void EnableInternal() {
+        protected override void Enable() {
             Handle = Subscribe();
         }
 
-
-        protected void Disable() {
+        protected override void Disable() {
             if (Handle != default) {
                 Handle?.Dispose();
                 Handle = null;
-                EnabledChanged?.Invoke(this, new EnabledChangedEventArgs(false));
             }
         }
 
 
 
         protected HookHandle Handle { get; set; }
-
-        public void Dispose() {
-            Disable();
-        }
 
         protected IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam) {
             var ret = new IntPtr(-1);

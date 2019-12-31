@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/TonyValenti/WindowsInput</PackageProjectUrl>
-    <AssemblyVersion>6.0.0.0</AssemblyVersion>
-    <FileVersion>6.0.0.0</FileVersion>
+    <AssemblyVersion>6.1.0.0</AssemblyVersion>
+    <FileVersion>6.1.0.0</FileVersion>
     <Authors>Tony Valenti, George Mamaladze, Michael Noonan</Authors>
     <Company />
-    <Version>6.0.0</Version>
+    <Version>6.1.0</Version>
     <Copyright>(c) 2000-2020 - Multiple Holders</Copyright>
     <RepositoryUrl>https://github.com/TonyValenti/WindowsInput</RepositoryUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/TonyValenti/WindowsInput/master/mouse-keyboard-hook-logo64x64.png</PackageIconUrl>
@@ -19,6 +19,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="EventSources\Factories\CurrentThreadEventSourceFactory.cs" />
+    <None Include="EventsSources\Factories\CurrentThreadEventSourceFactory.cs" />
   </ItemGroup>
 </Project>

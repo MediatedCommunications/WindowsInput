@@ -12,22 +12,30 @@ namespace WindowsInput.Events {
 
         protected override string DebuggerDisplay => $@"{this.GetType().Name}: {String.Join("+", Keys)}";
 
-        public ChordClick(params KeyCode[] Keys) : base(CreateChildren(Keys)) {
-            this.Keys = Keys;
+        public ChordClick(IEnumerable<KeyCode> Keys) {
+            var NewKeys = new List<KeyCode>();
+            if (Keys != default) {
+                NewKeys.AddRange(Keys);
+            }
+            this.Keys = NewKeys;
+
+            Initialize(CreateChildren());
         }
 
-        private static IEnumerable<IEvent> CreateChildren(params KeyCode[] Keys) {
-            var ret = new List<IEvent>();
+        public ChordClick(params KeyCode[] Keys) : this((IEnumerable<KeyCode>)Keys) {
+            
+        }
+
+        private IEnumerable<IEvent> CreateChildren() {
 
             foreach (var item in Keys) {
-                ret.Add(new KeyDown(item));
+                yield return new KeyDown(item);
             }
 
             foreach (var item in Keys.Reverse()) {
-                ret.Add(new KeyUp(item));
+                yield return new KeyUp(item);
             }
 
-            return ret;
         }
 
 

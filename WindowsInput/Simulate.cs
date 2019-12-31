@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindowsInput.Events;
+using WindowsInput.Native;
 
 namespace WindowsInput {
     public static class Simulate {
@@ -27,7 +28,7 @@ namespace WindowsInput {
         }
 
         /// <inheritdoc cref="Events(InvokeOptions, IEnumerable{IEvent})"/>
-        public static Task<bool> Events(InvokeOptions Options, params IEvent[] IEvents ) {
+        public static Task<bool> Events(InvokeOptions Options, params IEvent[] IEvents) {
             return Events(Options, (IEnumerable<IEvent>)IEvents);
         }
 
@@ -41,45 +42,114 @@ namespace WindowsInput {
             Options = Options ?? new InvokeOptions();
             var ret = true;
 
-            if (IEvents != null) {
-                foreach (var item in IEvents) {
-                    if (Options.Cancellation.Token.IsCancellationRequested) {
-                        if (Options.Cancellation.ThowWhenCanceled) {
-                            Options.Cancellation.Token.ThrowIfCancellationRequested();
-                        } else {
-                            break;
-                        }
+            var EventList = new List<IEvent>();
+
+            if(IEvents != default) {
+                EventList.AddRange(IEvents);
+            }
+
+            if (Options.SendInput.Aggregate) {
+                EventList = EventList.SendInput_Flatten();
+            }
+
+
+            foreach (var item in EventList) {
+                if (Options.Cancellation.Token.IsCancellationRequested) {
+                    if (Options.Cancellation.ThowWhenCanceled) {
+                        Options.Cancellation.Token.ThrowIfCancellationRequested();
+                    } else {
+                        break;
                     }
+                }
 
-                    if (item != default) {
+                if (item != default) {
 
-                        try {
-                            var tret = await item.Invoke(Options)
-                                .DefaultAwait()
-                                ;
+                    try {
+                        var tret = await item.Invoke(Options)
+                            .DefaultAwait()
+                            ;
 
-                            if (tret == false) {
-                                throw new InvokeFailedException();
-                            }
+                        if (tret == false) {
+                            throw new InvokeFailedException();
+                        }
 
-                        } catch {
-                            ret = false;
+                    } catch {
+                        ret = false;
 
-                            if (Options.Failure.Throw) {
-                                throw;
-                            } else if (!Options.Failure.Continue) {
-                                break;
-                            }
-
+                        if (Options.Failure.Throw) {
+                            throw;
+                        } else if (!Options.Failure.Continue) {
+                            break;
                         }
 
                     }
 
                 }
+
+
             }
 
             return ret;
 
         }
+
+
+
+        private static List<IEvent> SendInput_Flatten(this IEnumerable<IEvent> This) {
+            var Linear = new List<IEvent>();
+
+            var CurrentEvents = new List<IEvent>();
+            var CurrentInputs = new List<IReadOnlyCollection<INPUT>>();
+
+            void WrapUp() {
+                if(CurrentEvents.Count > 0) {
+                    var InputList = CurrentInputs.SelectMany(x => x).ToArray();
+
+                    Linear.Add(new RawInputAggregate(CurrentEvents, InputList));
+                    CurrentEvents = new List<IEvent>();
+                    CurrentInputs = new List<IReadOnlyCollection<INPUT>>();
+                }
+            }
+
+            foreach (var item in This) {
+                if (item is IEnumerable<IEvent> E) {
+                    var RecursiveChildren = E.RecursiveChildren().ToList();
+                    if (RecursiveChildren.TrueForAll(x=> x is RawInput)) {
+                        CurrentEvents.Add(item);
+                        CurrentInputs.AddRange(RecursiveChildren.OfType<RawInput>().Select(x => x.Data));
+                    } else {
+                        WrapUp();
+                        Linear.Add(item);
+                    }
+                } else {
+                    WrapUp();
+                    Linear.Add(item);
+                }
+            }
+
+            WrapUp();
+
+
+            return Linear;
+        }
+
+        private static IEnumerable<IEvent> RecursiveChildren(this IEnumerable<IEvent> This) {
+
+            foreach (var child in This) {
+                if(child is IEnumerable<IEvent> E) {
+                    foreach (var descendant in E.RecursiveChildren()) {
+                        yield return descendant;
+                    }
+
+                } else {
+                    yield return child;
+                }
+            }
+
+        }
+
     }
+
+
+
 }

@@ -53,6 +53,10 @@ namespace WindowsInput.Events {
         /// Hold and release the specified keycodes.  Keys will be held in order and released in reverse order.
         /// </summary>
         public EventBuilder ClickChord(params KeyCode[] Keys) {
+            return ClickChord((IEnumerable<KeyCode>)Keys);
+        }
+
+        public EventBuilder ClickChord(IEnumerable<KeyCode> Keys) {
             return Add(new ChordClick(Keys));
         }
 
@@ -60,8 +64,13 @@ namespace WindowsInput.Events {
         /// Hold and release the specified keycodes.
         /// </summary>
         public EventBuilder Click(params KeyCode[] Keys) {
+            return Click((IEnumerable<KeyCode>)Keys);
+        }
+
+        public EventBuilder Click(IEnumerable<KeyCode> Keys) {
             return Add(new SequenceClick(Keys));
         }
+
 
         /// <summary>
         /// Hold and release the characters associated with the specified text while optionally waiting the specified time between characters.
@@ -154,12 +163,22 @@ namespace WindowsInput.Events {
             return Add(new Wait(DurationInMs));
         }
 
+
+        /// <summary>
+        /// Wait until the specified window becomes responsive.
+        /// </summary>
+        public EventBuilder WaitUntilResponsive(IntPtr hWnd, TimeSpan? Timeout = default) {
+            var TV = Timeout ?? TimeSpan.FromSeconds(5);
+            return WaitUntilResponsive(hWnd, TV);
+        }
+
         /// <summary>
         /// Wait until the specified window becomes responsive.
         /// </summary>
         public EventBuilder WaitUntilResponsive(IntPtr hWnd, TimeSpan Timeout) {
             return Add(new WaitUntilResponsive(hWnd, Timeout));
         }
+
 
         /// <summary>
         /// Wait long enough to prevent two consecutive clicks from triggering a doubleclick event.

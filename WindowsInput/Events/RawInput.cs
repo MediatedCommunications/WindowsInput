@@ -8,39 +8,70 @@ using WindowsInput.Native;
 
 namespace WindowsInput.Events {
 
+    public class RawInputAggregate : RawInput {
+        public IReadOnlyCollection<IEvent> Sources { get; private set; }
+
+        public RawInputAggregate(IList<IEvent> Sources, IList<INPUT> Data) : base(Data) {
+            this.Sources = new System.Collections.ObjectModel.ReadOnlyCollection<IEvent>(Sources);
+        }
+
+        protected override string DebuggerDisplay {
+            get {
+                var ret = $@"{base.DebuggerDisplay} ({Sources.Count} Children)";
+
+                if(Sources.Count == 1) {
+                    ret = Sources.FirstOrDefault().ToString();
+                }
+
+
+                return ret;
+            }
+        }
+    }
+
     public class RawInput : EventBase {
-        public INPUT Data { get; private set; }
+        public IReadOnlyCollection<INPUT> Data { get; private set; }
 
         protected override string DebuggerDisplay => $@"{base.DebuggerDisplay}: See '{nameof(Data)}' Property";
 
-        public RawInput(INPUT Data) {
+        public RawInput(params INPUT[] Data) {
             this.Data = Data;
         }
 
+        public RawInput(IEnumerable<INPUT> Data) {
+            this.Data = Data.ToArray();
+        }
+
         public RawInput(MOUSEINPUT Data) {
-            this.Data = new INPUT() {
-                Type = INPUTTYPE.Mouse,
-                Data = new INPUTUNION() {
-                    Mouse = Data
-                },
+            this.Data = new[]{ 
+                new INPUT() {
+                    Type = INPUTTYPE.Mouse,
+                    Data = new INPUTUNION() {
+                        Mouse = Data
+                    }
+                }
             };
         }
 
         public RawInput(KEYBDINPUT Data) {
-            this.Data = new INPUT() {
-                Type = INPUTTYPE.Keyboard,
-                Data = new INPUTUNION() {
-                    Keyboard = Data
-                },
+            this.Data = new[]{
+                new INPUT() {
+                    Type = INPUTTYPE.Keyboard,
+                    Data = new INPUTUNION() {
+                        Keyboard = Data
+                    }
+                }
             };
         }
 
         public RawInput(HARDWAREINPUT Data) {
-            this.Data = new INPUT() {
-                Type = INPUTTYPE.Hardware,
-                Data = new INPUTUNION() {
-                    Hardware = Data
-                },
+            this.Data = this.Data = new[]{
+                new INPUT() {
+                    Type = INPUTTYPE.Hardware,
+                    Data = new INPUTUNION() {
+                        Hardware = Data
+                    }
+                }
             };
         }
 
@@ -49,9 +80,10 @@ namespace WindowsInput.Events {
 
             if (!Options.Cancellation.Token.IsCancellationRequested) {
 
-                var Results = INPUTDispatcher.SendInput(Data);
+                var AData = Data.ToArray();
+                var Results = INPUTDispatcher.SendInput(AData);
 
-                if (Results != 1) {
+                if (Results != AData.Length) {
                     ret = false;
 
                     if (Options.Failure.Throw) {
@@ -70,6 +102,7 @@ namespace WindowsInput.Events {
             return Task.FromResult(ret);
         }
     }
+
 
 
 }

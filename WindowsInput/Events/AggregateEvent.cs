@@ -51,20 +51,20 @@ namespace WindowsInput.Events {
             this.Children = SubCommands.AsReadOnly();
         }
         
-        protected override Task<bool> Invoke(InvokeOptions Options) {
+        protected sealed override Task<bool> Invoke(InvokeOptions Options) {
             return Simulate.Events(Options, Children);
         }
 
-
-        public System.Collections.ObjectModel.ReadOnlyCollection<IEvent> Children { get; private set; }
-
         public IEnumerator<IEvent> GetEnumerator() {
-            return Children.GetEnumerator();
+            return ((IEnumerable<IEvent>)this.Children).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
+            return ((IEnumerable<IEvent>)this.Children).GetEnumerator();
         }
+
+        public System.Collections.ObjectModel.ReadOnlyCollection<IEvent> Children { get; private set; }
+
 
     }
 
