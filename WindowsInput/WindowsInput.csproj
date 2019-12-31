@@ -11,14 +11,27 @@
     <Version>6.1.0</Version>
     <Copyright>(c) 2000-2020 - Multiple Holders</Copyright>
     <RepositoryUrl>https://github.com/TonyValenti/WindowsInput</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/TonyValenti/WindowsInput/master/mouse-keyboard-hook-logo64x64.png</PackageIconUrl>
-    <PackageReleaseNotes>Unified the amazing work of George Mamaladze and Michael Noonan into a singular capture/simulate library.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added many performance and optimizations tweaks</PackageReleaseNotes>
     <Description>Capture and simulate Window's Keyboard and Mouse events across any application such as:
 * Mouse ButtonUp / ButtonDown / Click / DoubleClick
 * Keyboard KeyUp / KeyDown / KeyPress</Description>
     <LangVersion>latest</LangVersion>
+    <PackageIcon>mouse-keyboard-hook-logo.png</PackageIcon>
+    <PackageIconUrl />
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".nuget\mouse-keyboard-hook-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE.txt" Link=".nuget\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include=".nuget\mouse-keyboard-hook-logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="EventsSources\Factories\CurrentThreadEventSourceFactory.cs" />
   </ItemGroup>
 </Project>
