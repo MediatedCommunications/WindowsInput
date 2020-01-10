@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace WindowsInput.Events {
     public class TextClick : AggregateEvent {
         public string Text { get; private set; }
-        public IEvent BetweenCharacters { get; private set; }
+        public IReadOnlyCollection<string> NewLines { get; private set; }
 
-        public TextClick(IEnumerable<char> Keys, IEvent BetweenCharacters = default) {
+        private static string[] DefaultNewLines = new[] {
+            "\r\n",
+            "\r",
+            "\n",
+        };
+
+        public TextClick(IEnumerable<char> Keys) : this(Keys, DefaultNewLines) {
+
+        }
+
+        public TextClick(IEnumerable<char> Keys, params string[] NewLines) {
             var Value = "";
             {
                 
@@ -25,24 +37,23 @@ namespace WindowsInput.Events {
             }
 
             this.Text = Value;
-            this.BetweenCharacters = BetweenCharacters;
-
+            this.NewLines = NewLines.ToList().AsReadOnly();
             Initialize(CreateChildren());
         }
 
         private IEnumerable<IEvent> CreateChildren() {
-            if(Text?.Length > 0) {
-                var First = true;
-                foreach (var item in Text) {
-
-                    if (!First && BetweenCharacters != null) {
-                        yield return BetweenCharacters;
-                    }
-
-                    yield return new CharacterClick(item);
-
-                    First = false;
+            var Lines = Text.Split(NewLines.ToArray(), StringSplitOptions.None);
+            for (int i = 0; i < Lines.Length; i++) {
+                if (i != 0) {
+                    yield return new KeyClick(KeyCode.Enter);
                 }
+
+                var Line = Lines[i];
+
+                foreach (var item in Line) {
+                    yield return new CharacterClick(item);
+                }
+
             }
 
         }

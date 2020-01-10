@@ -43,7 +43,6 @@ namespace WindowsInput.Native {
         private static EventSourceEventArgs<MouseInput> ToMouseEventArgs(IntPtr wParam, MouseStruct mouseInfo) {
             var button = ButtonCode.None;
             short mouseDelta = 0;
-            var clickCount = 0;
 
             var isMouseButtonDown = false;
             var isMouseButtonUp = false;
@@ -52,47 +51,38 @@ namespace WindowsInput.Native {
                 case WindowMessage.WM_LBUTTONDOWN:
                     isMouseButtonDown = true;
                     button = ButtonCode.Left;
-                    clickCount = 1;
                     break;
                 case WindowMessage.WM_LBUTTONUP:
                     isMouseButtonUp = true;
                     button = ButtonCode.Left;
-                    clickCount = 1;
                     break;
                 case WindowMessage.WM_LBUTTONDBLCLK:
                     isMouseButtonDown = true;
                     button = ButtonCode.Left;
-                    clickCount = 2;
                     break;
                 case WindowMessage.WM_RBUTTONDOWN:
                     isMouseButtonDown = true;
                     button = ButtonCode.Right;
-                    clickCount = 1;
                     break;
                 case WindowMessage.WM_RBUTTONUP:
                     isMouseButtonUp = true;
                     button = ButtonCode.Right;
-                    clickCount = 1;
                     break;
                 case WindowMessage.WM_RBUTTONDBLCLK:
                     isMouseButtonDown = true;
                     button = ButtonCode.Right;
-                    clickCount = 2;
                     break;
                 case WindowMessage.WM_MBUTTONDOWN:
                     isMouseButtonDown = true;
                     button = ButtonCode.Middle;
-                    clickCount = 1;
                     break;
                 case WindowMessage.WM_MBUTTONUP:
                     isMouseButtonUp = true;
                     button = ButtonCode.Middle;
-                    clickCount = 1;
                     break;
                 case WindowMessage.WM_MBUTTONDBLCLK:
                     isMouseButtonDown = true;
                     button = ButtonCode.Middle;
-                    clickCount = 2;
                     break;
                 case WindowMessage.WM_MOUSEWHEEL_V:
                     button = ButtonCode.VScroll;
@@ -103,7 +93,6 @@ namespace WindowsInput.Native {
                         ? ButtonCode.XButton1
                         : ButtonCode.XButton2;
                     isMouseButtonDown = true;
-                    clickCount = 1;
                     break;
 
                 case WindowMessage.WM_XBUTTONUP:
@@ -111,7 +100,6 @@ namespace WindowsInput.Native {
                         ? ButtonCode.XButton1
                         : ButtonCode.XButton2;
                     isMouseButtonUp = true;
-                    clickCount = 1;
                     break;
 
                 case WindowMessage.WM_XBUTTONDBLCLK:
@@ -119,7 +107,6 @@ namespace WindowsInput.Native {
                     button = mouseInfo.MouseData == MouseData.XButton1_Click
                         ? ButtonCode.XButton1
                         : ButtonCode.XButton2;
-                    clickCount = 2;
                     break;
 
                 case WindowMessage.WM_MOUSEWHEEL_H:

@@ -28,11 +28,29 @@ namespace WindowsInput.Events {
             return Add(new KeyDown(Key, Extended));
         }
 
+        public EventBuilder Hold(params KeyCode[] Keys) {
+            return Hold((IEnumerable<KeyCode>) Keys);
+        }
+
+        public EventBuilder Hold(IEnumerable<KeyCode> Keys) {
+            return Add(new KeysDown(Keys));
+        }
+
+
+
         /// <summary>
         /// Release the specifed keyboard key.
         /// </summary>
         public EventBuilder Release(KeyCode Key, bool? Extended = default) {
             return Add(new KeyUp(Key, Extended));
+        }
+
+        public EventBuilder Release(params KeyCode[] Keys) {
+            return Release((IEnumerable<KeyCode>)Keys);
+        }
+
+        public EventBuilder Release(IEnumerable<KeyCode> Keys) {
+            return Add(new KeysUp(Keys));
         }
 
         /// <summary>
@@ -75,8 +93,15 @@ namespace WindowsInput.Events {
         /// <summary>
         /// Hold and release the characters associated with the specified text while optionally waiting the specified time between characters.
         /// </summary>
-        public EventBuilder Click(IEnumerable<char> Keys, IEvent BetweenCharacters = default) {
-            return Add(new TextClick(Keys, BetweenCharacters));
+        public EventBuilder Click(IEnumerable<char> Keys) {
+            return Add(new TextClick(Keys));
+        }
+
+        /// <summary>
+        /// Hold and release the characters associated with the specified text while optionally waiting the specified time between characters.
+        /// </summary>
+        public EventBuilder Click(IEnumerable<char> Keys, params string[] NewLines) {
+            return Add(new TextClick(Keys, NewLines));
         }
 
         /// <summary>

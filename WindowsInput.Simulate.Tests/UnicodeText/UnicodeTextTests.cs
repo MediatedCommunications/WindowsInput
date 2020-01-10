@@ -66,7 +66,7 @@ namespace WindowsInput.Tests.UnicodeText
 
 
                     var Sim = EventBuilder.Create()
-                        .Click(Chars, new Wait(Delay))
+                        .Click(Chars)
                         ;
 
                     await Sim.Invoke();

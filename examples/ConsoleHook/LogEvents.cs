@@ -29,10 +29,11 @@ namespace ConsoleHook
                 .Add(Value.KeyDown)
                 .Add(Value.KeyUp)
                 ;
-
+            
             var ToShow = new List<IEvent>() {
                 Value.Wait,
                 Value.KeyDown,
+                Value.TextClick,
                 Value.KeyUp
             };
 
