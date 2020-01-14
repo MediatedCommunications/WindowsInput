@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WindowsInput;
-using WindowsInput.EventSources;
+using WindowsInput.Events.Sources;
 
 namespace ConsoleHook
 {
@@ -17,7 +17,7 @@ namespace ConsoleHook
         {
             using (var Keyboard = WindowsInput.Capture.Global.KeyboardAsync()) {
 
-                var Listener = new WindowsInput.EventSources.TextSequenceEventSource(Keyboard, new WindowsInput.Events.TextClick("aaa"));
+                var Listener = new TextSequenceEventSource(Keyboard, new WindowsInput.Events.TextClick("aaa"));
                 Listener.Triggered += (x, y) => Listener_Triggered(Keyboard, x, y); ;
                 Listener.Enabled = true;
 
@@ -34,7 +34,7 @@ namespace ConsoleHook
 
 
 
-        private static async void Listener_Triggered(IKeyboardEventSource Keyboard, object sender, WindowsInput.EventSources.TextSequenceEventArgs e) {
+        private static async void Listener_Triggered(IKeyboardEventSource Keyboard, object sender, TextSequenceEventArgs e) {
             e.Input.Next_Hook_Enabled = false;
 
             var ToSend = WindowsInput.Simulate.Events();

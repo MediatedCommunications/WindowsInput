@@ -8,8 +8,11 @@ using System.Linq;
 using WindowsInput.Native;
 using WindowsInput;
 using WindowsInput.Events;
+using System.Runtime.InteropServices;
 
 namespace WindowsInput.Native {
+
+
     /// <summary>
     ///     Contains a snapshot of a keyboard state at certain moment and provides methods
     ///     of querying whether specific keys are pressed or locked.
@@ -20,6 +23,32 @@ namespace WindowsInput.Native {
     /// </remarks>
     public class KeyboardState {
         public KeyboardKeyState[] State { get; } = new KeyboardKeyState[256];
+
+        public IDictionary<KeyCode, KeyboardKeyState> ToDictionary() {
+            var ret = new Dictionary<KeyCode, KeyboardKeyState>();
+            for (int i = 0; i < State.Length; i++) {
+                if(State[i] != KeyboardKeyState.Default) {
+                    ret[(KeyCode)i] = State[i];
+                }
+            }
+
+            return ret;
+        }
+
+        public KeyboardKeyState this[byte index] {
+            get => State[index];
+            set => State[index] = value;
+        }
+
+        public KeyboardKeyState this[int index] {
+            get => State[index];
+            set => State[index] = value;
+        }
+
+        public KeyboardKeyState this[KeyCode index] {
+            get => State[(int)index];
+            set => State[(int)index] = value;
+        }
 
 
         public KeyboardState Clone() {
@@ -37,7 +66,7 @@ namespace WindowsInput.Native {
         public static KeyboardState Current() {
             var ret = new KeyboardState();
 
-            KeyboardNativeMethods.GetKeyboardState(ret.State);
+            var RVal = GetKeyboardState(ret.State);
 
             return ret;
         }
@@ -107,6 +136,24 @@ namespace WindowsInput.Native {
 
             return ret;
         }
+
+        /// <summary>
+        ///     The GetKeyboardState function copies the status of the 256 virtual keys to the
+        ///     specified buffer.
+        /// </summary>
+        /// <param name="pbKeyState">
+        ///     [in] Pointer to a 256-byte array that contains keyboard key states.
+        /// </param>
+        /// <returns>
+        ///     If the function succeeds, the return value is nonzero.
+        ///     If the function fails, the return value is zero. To get extended error information, call GetLastError.
+        /// </returns>
+        /// <remarks>
+        ///     http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/keyboardinput/keyboardinputreference/keyboardinputfunctions/toascii.asp
+        /// </remarks>
+        [DllImport("user32.dll")]
+        protected static extern int GetKeyboardState(KeyboardKeyState[] pbKeyState);
+
 
     }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WindowsInput.Native;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     public class EventSourceEventArgs {
         public bool Next_Hook_Enabled { get; set; } = true;

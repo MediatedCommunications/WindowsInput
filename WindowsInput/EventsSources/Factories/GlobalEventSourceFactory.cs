@@ -1,6 +1,6 @@
-﻿using WindowsInput.EventSources;
+﻿using WindowsInput.Events.Sources;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class GlobalEventSourceFactory : EventSourceFactory {
         protected override IKeyboardEventSource KeyboardInternal() {
             return new GlobalKeyboardEventSource();

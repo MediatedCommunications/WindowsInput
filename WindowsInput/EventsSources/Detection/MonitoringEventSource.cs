@@ -1,4 +1,4 @@
-﻿namespace WindowsInput.EventSources {
+﻿namespace WindowsInput.Events.Sources {
     public abstract class MonitoringEventSource<TMonitor> : EventSourceBase where TMonitor : IEventSource {
         protected TMonitor Monitor { get; private set; }
 

@@ -2,7 +2,7 @@
 
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class AsyncKeyboardEventSource : IKeyboardEventSource {
 
         private MessagePumpingObject<IKeyboardEventSource> AsyncObject;

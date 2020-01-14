@@ -5,7 +5,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using WindowsInput.EventSources;
+using WindowsInput.Events.Sources;
 
 namespace Demo
 {

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using WindowsInput.Events;
-using WindowsInput.EventSources;
+using WindowsInput.Events.Sources;
 
 namespace WindowsInput.Native {
     public struct CallbackData {

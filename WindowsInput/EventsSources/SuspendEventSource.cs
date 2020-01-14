@@ -4,7 +4,7 @@
 
 using System;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class SuspendEventSource : IDisposable {
 
         protected IEventSource Target { get; private set; }

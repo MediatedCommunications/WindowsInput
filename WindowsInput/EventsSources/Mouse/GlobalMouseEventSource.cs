@@ -5,7 +5,7 @@
 using System;
 using WindowsInput.Native;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class GlobalMouseEventSource : MouseEventSource {
 
         public GlobalMouseEventSource() {

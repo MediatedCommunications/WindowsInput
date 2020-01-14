@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsInput;
+using WindowsInput.Events;
 using WindowsInput.Native;
 
 namespace ConsoleHook
@@ -21,7 +22,7 @@ namespace ConsoleHook
 
         private static async Task Main(string[] args)
         {
-
+            
 
             var selector = new Dictionary<string, Func<Task>>
             {

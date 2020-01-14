@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using WindowsInput.Native;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public interface IEventSource : IDisposable {
         event EventHandler<EnabledChangedEventArgs> EnabledChanged;
 

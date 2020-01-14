@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WindowsInput;
 using WindowsInput.Events;
-using WindowsInput.EventSources;
+using WindowsInput.Events.Sources;
 
 namespace ConsoleHook
 {
@@ -18,7 +18,7 @@ namespace ConsoleHook
         public static Task Do() {
             using (var Keyboard = WindowsInput.Capture.Global.KeyboardAsync()) {
 
-                var Listener = new WindowsInput.EventSources.KeyChordEventSource(Keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.Shift));
+                var Listener = new KeyChordEventSource(Keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.Shift));
                 Listener.Triggered += (x, y) => Listener_Triggered(Keyboard, x, y);
                 Listener.Reset_On_Parent_EnabledChanged = false;
                 Listener.Enabled = true;
@@ -35,7 +35,7 @@ namespace ConsoleHook
 
         }
 
-        private static async void Listener_Triggered(IKeyboardEventSource Keyboard, object sender, WindowsInput.EventSources.KeyChordEventArgs e) {
+        private static async void Listener_Triggered(IKeyboardEventSource Keyboard, object sender, KeyChordEventArgs e) {
             var ToSend = WindowsInput.Simulate.Events();
             
             ToSend.Click("You pressed the magic keys.");

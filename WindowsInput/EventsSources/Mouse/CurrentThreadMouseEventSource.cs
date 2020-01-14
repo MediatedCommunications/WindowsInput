@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using WindowsInput.Events;
 using WindowsInput.Native;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class CurrentThreadMouseEventSource : MouseEventSource {
 
         protected override HookHandle Subscribe() {

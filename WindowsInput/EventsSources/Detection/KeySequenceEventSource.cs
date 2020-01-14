@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     public class KeySequenceEventArgs : EventArgs {
         public EventSourceEventArgs<KeyboardEvent> Input { get; set; }

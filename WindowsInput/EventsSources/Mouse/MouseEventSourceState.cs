@@ -8,7 +8,7 @@ using System.Linq;
 using WindowsInput.Native;
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class MouseEventSourceState {
         public int DragThresholdX { get; private set; } = SystemMetrics.Mouse.Drag.XThreshold.Value;
         public int DragThresholdY { get; private set; } = SystemMetrics.Mouse.Drag.YThreshold.Value;

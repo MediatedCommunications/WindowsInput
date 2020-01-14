@@ -11,7 +11,7 @@ using System.Linq;
 
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     public interface IKeyboardEventSource : IEventSource {
 

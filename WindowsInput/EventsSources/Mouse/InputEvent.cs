@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Text;
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     [DebuggerDisplay(Debugger2.DISPLAY)]
     public abstract class InputEvent {

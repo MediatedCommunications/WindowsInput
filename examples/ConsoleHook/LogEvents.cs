@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WindowsInput;
 using WindowsInput.Events;
-using WindowsInput.EventSources;
+using WindowsInput.Events.Sources;
 
 namespace ConsoleHook
 {
@@ -123,7 +123,7 @@ namespace ConsoleHook
 
         public static async Task Start(bool Keyboard, bool Mouse)
         {
-            var RecordDuration = 10;
+            var RecordDuration = 10000;
             var DelayDuration = 3;
 
             Console.WriteLine($@"For the next {RecordDuration} seconds, the following events will be recorded then played back:");
@@ -140,6 +140,10 @@ namespace ConsoleHook
             Console.WriteLine("------------------------");
             Console.WriteLine();
             Console.WriteLine($@"A total of {Actions.Events.Count} events were record.");
+            Console.WriteLine();
+
+            Console.WriteLine("Press Enter to begin playback...");
+            Console.ReadLine();
             Console.WriteLine();
 
             for (int i = DelayDuration; i >= 0; i--) {

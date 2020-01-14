@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public enum StateMachineResult {
         Rejected,
         Accepted,

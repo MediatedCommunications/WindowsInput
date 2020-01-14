@@ -4,7 +4,7 @@
 
 using System;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public abstract class EventSourceBase : IEventSource {
         public event EventHandler<EnabledChangedEventArgs> EnabledChanged;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class CurrentThreadHookSource : EventSourceFactory {
         protected override IKeyboardEventSource KeyboardInternal() {
             return new CurrentThreadKeyboardEventSource();

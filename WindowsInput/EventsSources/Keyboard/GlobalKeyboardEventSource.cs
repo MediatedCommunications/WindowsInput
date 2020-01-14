@@ -10,7 +10,7 @@ using WindowsInput.Native;
 
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class GlobalKeyboardEventSource : KeyboardEventSource {
 
         protected override HookHandle Subscribe() {
@@ -73,11 +73,17 @@ namespace WindowsInput.EventSources {
 
             var ret = default(TextClick);
 
+            //System.Diagnostics.Debug.WriteLine($@"{Message}: {keyboardHookStruct.ScanCode} => {keyboardHookStruct.KeyCode}" );
+
             if (Message.IsKeyDown()) {
 
                 var virtualKeyCode = keyboardHookStruct.KeyCode;
                 var scanCode = keyboardHookStruct.ScanCode;
                 var fuState = keyboardHookStruct.Flags;
+
+                if(keyboardHookStruct.KeyCode == KeyCode.Y) {
+
+                }
 
                 if (keyboardHookStruct.KeyCode == KeyCode.Packet) {
                     var ch = (char)scanCode;
@@ -85,7 +91,7 @@ namespace WindowsInput.EventSources {
                     ret = new TextClick(new[] { ch });
                 } else {
 
-                    if (KeyboardNativeMethods.TryGetCharFromKeyboardState((int)virtualKeyCode, scanCode, (int)fuState, out var chars)) {
+                    if (State.TryGetCharFromKeyboardState((int)virtualKeyCode, scanCode, (int)fuState, out var chars)) {
                         ret = new TextClick(chars);
                     }
 

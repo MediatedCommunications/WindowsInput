@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows.Threading;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class MessagePumpingObject<T> : IDisposable {
 
         public event EventHandler Shutdown;

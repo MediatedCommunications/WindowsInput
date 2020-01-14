@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WindowsInput.EventSources;
+using WindowsInput.Events.Sources;
 
 namespace WindowsInput {
 

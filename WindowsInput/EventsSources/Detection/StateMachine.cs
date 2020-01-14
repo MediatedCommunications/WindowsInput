@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     public class StateMachine<TInput, TOutput> {
         public StateMachine() {

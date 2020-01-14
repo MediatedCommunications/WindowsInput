@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using WindowsInput.Native;
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     public interface IMouseEventSource : IEventSource {
         event EventHandler<EventSourceEventArgs<MouseEvent>> MouseEvent;

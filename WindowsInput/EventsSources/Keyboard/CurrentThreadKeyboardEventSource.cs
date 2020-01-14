@@ -8,7 +8,7 @@ using System.Text;
 using WindowsInput.Events;
 using WindowsInput.Native;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
     public class CurrentThreadKeyboardEventSource : KeyboardEventSource {
 
         protected override HookHandle Subscribe() {
@@ -53,7 +53,7 @@ namespace WindowsInput.EventSources {
                 ;
 
             var TextClick = default(TextClick);
-            if (KeyboardNativeMethods.TryGetCharFromKeyboardState((int)Key, (int) ScanCode, 0, out var chars)) {
+            if (State.TryGetCharFromKeyboardState((int)Key, (int) ScanCode, 0, out var chars)) {
                 var Text = new StringBuilder();
                 for (int i = 0; i < RepeatCount; i++) {
                     Text.Append(chars);

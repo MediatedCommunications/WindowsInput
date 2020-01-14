@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WindowsInput.Events;
 
-namespace WindowsInput.EventSources {
+namespace WindowsInput.Events.Sources {
 
     public class MouseEvent : InputEvent {
 
