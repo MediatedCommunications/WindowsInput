@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Text;
 using System.Threading.Tasks;
 using WindowsInput.Events;
 namespace WindowsInput.Tests
@@ -15,6 +16,33 @@ namespace WindowsInput.Tests
                 .Invoke()
                 ;
         }
+
+
+        [Test]
+        [Explicit]
+        public async Task HugeInput() {
+            var Text = "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789\n";
+            var SB = new StringBuilder();
+            for (int i = 0; i < 1000; i++) {
+                SB.Append(Text);
+            }
+
+
+            var sim = Simulate.Events()
+               .ClickChord(KeyCode.LWin, KeyCode.R)
+               .Wait(1000)
+               .Click("notepad")
+               .Wait(1000)
+               .Click(KeyCode.Return)
+               .Wait(1000)
+               .Click(SB.ToString())
+               ;
+
+            await sim.Invoke();
+
+        }
+
+
 
         [Test]
         [Explicit]
