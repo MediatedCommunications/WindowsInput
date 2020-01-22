@@ -3,6 +3,7 @@
 // See license.txt or https://mit-license.org/
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using WindowsInput.Events;
@@ -20,21 +21,6 @@ namespace WindowsInput.Events.Sources {
         private bool lastIsDead;
 
 
-        /// <summary>
-        ///     Translates a virtual key to its character equivalent using the current keyboard layout without knowing the
-        ///     scancode in advance.
-        /// </summary>
-        /// <param name="virtualKeyCode"></param>
-        /// <param name="fuState"></param>
-        /// <param name="chars"></param>
-        /// <returns></returns>
-        public void TryGetCharFromKeyboardState(int virtualKeyCode, int fuState, out char[] chars) {
-            var Layout = KeyboardLayout.Current();
-            //var scanCode =  MapVirtualKeyEx(virtualKeyCode, (int)MapType.MAPVK_VK_TO_VSC, Layout);
-            var scanCode = Layout.ToScanCode((KeyCode)virtualKeyCode);
-
-            TryGetCharFromKeyboardState(virtualKeyCode, scanCode, fuState, Layout.Handle, out chars);
-        }
 
         /// <summary>
         ///     Translates a virtual key to its character equivalent using the current keyboard layout
@@ -59,6 +45,9 @@ namespace WindowsInput.Events.Sources {
         /// <param name="chars"></param>
         /// <returns></returns>
         public bool TryGetCharFromKeyboardState(int virtualKeyCode, int scanCode, int fuState, IntPtr dwhkl, out char[] chars) {
+            Debug.WriteLine($@"{virtualKeyCode} {scanCode} {fuState} {dwhkl}");
+            
+            
             var pwszBuff = new StringBuilder(64);
             var keyboardState = KeyboardState.Current();
             var currentKeyboardState = keyboardState.State;
@@ -96,14 +85,11 @@ namespace WindowsInput.Events.Sources {
                     break;
             }
 
-            if (lastVirtualKeyCode != 0 && lastIsDead) {
-                if (chars != null) {
-                    var sbTemp = new StringBuilder(5);
-                    ToUnicodeEx((KeyCode)lastVirtualKeyCode, lastScanCode, lastKeyState.State, sbTemp, sbTemp.Capacity, 0, dwhkl);
-                    lastIsDead = false;
-                    lastVirtualKeyCode = 0;
-                }
-
+            if (lastVirtualKeyCode != 0 && lastIsDead && chars != null) {
+                var sbTemp = new StringBuilder(5);
+                ToUnicodeEx((KeyCode)lastVirtualKeyCode, lastScanCode, lastKeyState.State, sbTemp, sbTemp.Capacity, 0, dwhkl);
+                lastIsDead = false;
+                lastVirtualKeyCode = 0;
             } else {
                 lastScanCode = scanCode;
                 lastVirtualKeyCode = virtualKeyCode;
