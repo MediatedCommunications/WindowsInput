@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WindowsInput.Events {
+﻿namespace WindowsInput.Events {
 
     public class InvokeOptions {
         public InvokeCancellationOptions Cancellation { get; private set; } = new InvokeCancellationOptions();
@@ -9,9 +7,7 @@ namespace WindowsInput.Events {
     }
 
     public class SendInputOptions {
-        public int BatchSize { get; set; } = 5000;
-        public TimeSpan BatchDelay { get; set; } = TimeSpan.FromSeconds(1);
-
+        public bool Aggregate { get; set; } = true;
     }
 
 }

@@ -48,8 +48,9 @@ namespace WindowsInput {
                 EventList.AddRange(IEvents);
             }
 
-            EventList = EventList.SendInput_Flatten(Options.SendInput);
-            
+            if (Options.SendInput.Aggregate) {
+                EventList = EventList.SendInput_Flatten();
+            }
 
 
             foreach (var item in EventList) {
@@ -94,11 +95,7 @@ namespace WindowsInput {
 
 
 
-        private static List<IEvent> SendInput_Flatten(this IEnumerable<IEvent> This, SendInputOptions Options) {
-            var MaxItemsPerBatch = Math.Max(1, Options.BatchSize);
-            var BatchDelay = Options.BatchDelay > TimeSpan.Zero ? Options.BatchDelay : TimeSpan.Zero;
-            var BatchDelayItem = BatchDelay> TimeSpan.Zero ? new Wait(BatchDelay) : default;
-            
+        private static List<IEvent> SendInput_Flatten(this IEnumerable<IEvent> This) {
             var Linear = new List<IEvent>();
 
             var CurrentEvents = new List<IEvent>();
@@ -114,34 +111,19 @@ namespace WindowsInput {
                 }
             }
 
-            foreach (var CurrentEvent in This) {
-                if (CurrentEvent is IEnumerable<IEvent> E) {
+            foreach (var item in This) {
+                if (item is IEnumerable<IEvent> E) {
                     var RecursiveChildren = E.RecursiveChildren().ToList();
                     if (RecursiveChildren.TrueForAll(x=> x is RawInput)) {
-                        CurrentEvents.Add(CurrentEvent);
-
-                        foreach (var RecursiveChild in RecursiveChildren.OfType<RawInput>().Select(x => x.Data)) {
-                            CurrentInputs.Add(RecursiveChild);
-
-                            if(CurrentInputs.Count >= MaxItemsPerBatch) {
-                                WrapUp();
-                                CurrentEvents.Add(CurrentEvent);
-
-                                if(BatchDelayItem is { }) {
-                                    Linear.Add(BatchDelayItem);
-                                }
-
-                            }
-                        }
-                        
-
+                        CurrentEvents.Add(item);
+                        CurrentInputs.AddRange(RecursiveChildren.OfType<RawInput>().Select(x => x.Data));
                     } else {
                         WrapUp();
-                        Linear.Add(CurrentEvent);
+                        Linear.Add(item);
                     }
                 } else {
                     WrapUp();
-                    Linear.Add(CurrentEvent);
+                    Linear.Add(item);
                 }
             }
 
