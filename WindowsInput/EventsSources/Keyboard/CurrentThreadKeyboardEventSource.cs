@@ -53,7 +53,8 @@ namespace WindowsInput.Events.Sources {
                 ;
 
             var TextClick = default(TextClick);
-            if (State.TryGetCharFromKeyboardState((int)Key, (int) ScanCode, 0, out var chars)) {
+            
+            if (State.TryGetCharFromKeyboardState(Key, (int) ScanCode, 0, out var chars)) {
                 var Text = new StringBuilder();
                 for (int i = 0; i < RepeatCount; i++) {
                     Text.Append(chars);

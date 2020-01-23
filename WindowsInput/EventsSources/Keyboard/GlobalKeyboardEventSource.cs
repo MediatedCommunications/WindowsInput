@@ -91,7 +91,7 @@ namespace WindowsInput.Events.Sources {
                     ret = new TextClick(new[] { ch });
                 } else {
 
-                    if (State.TryGetCharFromKeyboardState((int)virtualKeyCode, scanCode, (int)fuState, out var chars)) {
+                    if (State.TryGetCharFromKeyboardState(virtualKeyCode, scanCode, ToUnicodeExFlags.None, out var chars)) {
                         ret = new TextClick(chars);
                     }
 

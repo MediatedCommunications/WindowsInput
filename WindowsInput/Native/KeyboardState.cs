@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 namespace WindowsInput.Native {
 
 
+
+
     /// <summary>
     ///     Contains a snapshot of a keyboard state at certain moment and provides methods
     ///     of querying whether specific keys are pressed or locked.
@@ -65,6 +67,8 @@ namespace WindowsInput.Native {
 
         public static KeyboardState Current() {
             var ret = new KeyboardState();
+            //This call to get Key State is necessary to overcome a windows bug.
+            GetKeyState(KeyCode.None);
 
             var RVal = GetKeyboardState(ret.State);
 
@@ -153,6 +157,12 @@ namespace WindowsInput.Native {
         /// </remarks>
         [DllImport("user32.dll")]
         protected static extern int GetKeyboardState(KeyboardKeyState[] pbKeyState);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        protected static extern KeyboardKeyState GetAsyncKeyState(KeyCode virtualKeyCode);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        protected static extern KeyboardKeyState GetKeyState(KeyCode virtualKeyCode);
 
 
     }

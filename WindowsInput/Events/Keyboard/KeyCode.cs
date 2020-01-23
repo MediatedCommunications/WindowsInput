@@ -84,11 +84,11 @@ namespace WindowsInput.Events {
         //
         // Summary:
         //     The CAPS LOCK key.
-        Capital = 0x14,
+        Capital = CapsLock,
         //
         // Summary:
         //     The CAPS LOCK key.
-        CapsLock = Capital,
+        CapsLock = 0x14,
         //
         // Summary:
         //     The IME Kana mode key.
@@ -131,11 +131,11 @@ namespace WindowsInput.Events {
         IMENonconvert = 0x1D,
         //
         // Summary:
-        //     The IME accept key, replaces System.Windows.Forms.Keys.IMEAceept.
+        //     The IME accept key, replaces System.Windows.Forms.KeyCode.IMEAceept.
         IMEAccept = 0x1E,
         //
         // Summary:
-        //     The IME accept key. Obsolete, use System.Windows.Forms.Keys.IMEAccept instead.
+        //     The IME accept key. Obsolete, use System.Windows.Forms.KeyCode.IMEAccept instead.
         IMEAceept = IMEAccept,
         //
         // Summary:
@@ -164,7 +164,7 @@ namespace WindowsInput.Events {
         // Summary:
         //     The PAGE DOWN key.
         Next = PageDown,
-        
+
         //
         // Summary:
         //     The END key.
@@ -554,18 +554,22 @@ namespace WindowsInput.Events {
         // Summary:
         //     The left SHIFT key.
         LShift = 0xA0,
+        LShiftKey = Shift,
         //
         // Summary:
         //     The right SHIFT key.
         RShift = 0xA1,
+        RShiftKey = Shift,
         //
         // Summary:
         //     The left CTRL key.
         LControl = 0xA2,
+        LControlKey = LControl,
         //
         // Summary:
         //     The right CTRL key.
         RControl = 0xA3,
+        RControlKey = RControl,
         //
         // Summary:
         //     The left ALT key.
@@ -578,8 +582,8 @@ namespace WindowsInput.Events {
         //     The right ALT key.
         RMenu = RAlt,
         RAlt = 0xA5,
-        
-        
+
+
         //
         // Summary:
         //     The browser back key (Windows 2000 or later).
@@ -743,7 +747,7 @@ namespace WindowsInput.Events {
         ProcessKey = 0xE5,
         //
         // Summary:
-        //     Used to pass Unicode characters as if they were keystrokes. The Packet key value
+        //     Used to pass Unicode characters as if they were KeyCodetrokes. The Packet key value
         //     is the low word of a 32-bit virtual-key value used for non-keyboard input methods.
         Packet = 0xE7,
         //

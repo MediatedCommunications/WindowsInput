@@ -14,7 +14,7 @@ namespace WindowsInput.Events.Sources {
         public DateTimeOffset LastInputDate { get; set; } = DateTimeOffset.Now;
 
         //Used to pass Unicode characters as if they were keystrokes. The VK_PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods
-        private int lastVirtualKeyCode;
+        private KeyCode lastVirtualKeyCode;
 
         private int lastScanCode;
         private KeyboardState lastKeyState = KeyboardState.Blank();
@@ -30,9 +30,29 @@ namespace WindowsInput.Events.Sources {
         /// <param name="fuState"></param>
         /// <param name="chars"></param>
         /// <returns></returns>
-        public bool TryGetCharFromKeyboardState(int virtualKeyCode, int scanCode, int fuState, out char[] chars) {
-            var dwhkl = KeyboardLayout.Current(); //get the active keyboard layout
-            return TryGetCharFromKeyboardState(virtualKeyCode, scanCode, fuState, dwhkl.Handle, out chars);
+        public bool TryGetCharFromKeyboardState(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, out string chars) {
+            var Layout = KeyboardLayout.Current(); //get the active keyboard layout
+            return TryGetCharFromKeyboardState(virtualKeyCode, scanCode, fuState, Layout, out chars);
+        }
+
+        public bool TryGetCharFromKeyboardState(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, KeyboardLayout Layout, out string chars) {
+            if (SWITCHES.Windows10_AtLeast_v1607_Enabled) {
+                return TryGetCharFromKeyboardState1(virtualKeyCode, scanCode, fuState, Layout, out chars);
+            } else {
+                return TryGetCharFromKeyboardState2(virtualKeyCode, scanCode, fuState, Layout, out chars);
+            }
+        }
+
+
+        //On Windows 10 v 1607 and above we can do the following because of the "DoNotChangeKeyboardState" member.  This is a lot more reliable when
+        //Dealing with dead keys.
+        private bool TryGetCharFromKeyboardState1(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, KeyboardLayout Layout, out string chars) {
+
+            var Keyboard = KeyboardState.Current();
+            var ConversionStatus = ToUnicodeEx(Layout, Keyboard, ToUnicodeExFlags.DoNotChangeKeyboardState, virtualKeyCode, scanCode, out var Characters);
+            chars = Characters;
+
+            return chars != null;
         }
 
         /// <summary>
@@ -41,137 +61,82 @@ namespace WindowsInput.Events.Sources {
         /// <param name="virtualKeyCode"></param>
         /// <param name="scanCode"></param>
         /// <param name="fuState"></param>
-        /// <param name="dwhkl"></param>
+        /// <param name="Layout"></param>
         /// <param name="chars"></param>
         /// <returns></returns>
-        public bool TryGetCharFromKeyboardState(int virtualKeyCode, int scanCode, int fuState, IntPtr dwhkl, out char[] chars) {
-            Debug.WriteLine($@"{virtualKeyCode} {scanCode} {fuState} {dwhkl}");
-            
-            
-            var pwszBuff = new StringBuilder(64);
-            var keyboardState = KeyboardState.Current();
-            var currentKeyboardState = keyboardState.State;
+        public bool TryGetCharFromKeyboardState2(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, KeyboardLayout Layout, out string chars) {
+            chars = default;
+
+            var Keyboard = KeyboardState.Current();
             var isDead = false;
 
-            if (keyboardState.IsDown(KeyCode.Shift))
-                currentKeyboardState[(byte)KeyCode.Shift] |= KeyboardKeyState.KeyDown;
+            if (Keyboard.IsDown(KeyCode.LShift) || Keyboard.IsDown(KeyCode.RShift))
+                Keyboard[KeyCode.Shift] |= KeyboardKeyState.KeyDown;
 
-            if (keyboardState.IsToggled(KeyCode.CapsLock))
-                currentKeyboardState[(byte)KeyCode.CapsLock] |= KeyboardKeyState.Toggled;
+            if (Keyboard.IsToggled(KeyCode.CapsLock))
+                Keyboard[KeyCode.CapsLock] |= KeyboardKeyState.Toggled;
 
-            var relevantChars = ToUnicodeEx((KeyCode)virtualKeyCode, scanCode, currentKeyboardState, pwszBuff, pwszBuff.Capacity,
-                fuState, dwhkl);
+            //var ConversionStatus = ToUnicodeEx((KeyCode)virtualKeyCode, scanCode, currentKeyboardState, pwszBuff, pwszBuff.Capacity, fuState, Layout.Handle);
 
-            switch (relevantChars) {
-                case -1:
+            var ConversionStatus = ToUnicodeEx(Layout, Keyboard, ToUnicodeExFlags.None, virtualKeyCode, scanCode, out var Characters);
+
+            switch (ConversionStatus) {
+                case ToUnicodeExStatus.DeadKey:
                     isDead = true;
-                    ClearKeyboardBuffer(virtualKeyCode, scanCode, dwhkl);
-                    chars = null;
+                    ClearKeyboardBuffer(virtualKeyCode, scanCode, Layout);
                     break;
 
-                case 0:
-                    chars = null;
+                case ToUnicodeExStatus.NoTranslation:
                     break;
 
-                case 1:
-                    if (pwszBuff.Length > 0) chars = new[] { pwszBuff[0] };
-                    else chars = null;
-                    break;
-
-                // Two or more (only two of them is relevant)
-                default:
-                    if (pwszBuff.Length > 1) chars = new[] { pwszBuff[0], pwszBuff[1] };
-                    else chars = new[] { pwszBuff[0] };
+                case ToUnicodeExStatus.Success:
+                    chars = Characters;
                     break;
             }
 
             if (lastVirtualKeyCode != 0 && lastIsDead && chars != null) {
-                var sbTemp = new StringBuilder(5);
-                ToUnicodeEx((KeyCode)lastVirtualKeyCode, lastScanCode, lastKeyState.State, sbTemp, sbTemp.Capacity, 0, dwhkl);
+                //ToUnicodeEx(lastVirtualKeyCode, lastScanCode, lastKeyState.State, sbTemp, sbTemp.Capacity, 0, Layout.Handle);
+
+                ToUnicodeEx(Layout, lastKeyState, ToUnicodeExFlags.None, lastVirtualKeyCode, lastScanCode, out _ );
+
                 lastIsDead = false;
                 lastVirtualKeyCode = 0;
             } else {
                 lastScanCode = scanCode;
                 lastVirtualKeyCode = virtualKeyCode;
                 lastIsDead = isDead;
-                lastKeyState = keyboardState.Clone();
+                lastKeyState = Keyboard.Clone();
             }
 
             return chars != null;
         }
 
-        private void ClearKeyboardBuffer(int vk, int sc, IntPtr hkl) {
+        private void ClearKeyboardBuffer(KeyCode vk, int sc, KeyboardLayout Layout) {
             var sb = new StringBuilder(10);
 
-            while (ToUnicodeEx((KeyCode)vk, sc, KeyboardState.Blank().State, sb, sb.Capacity, 0, hkl) < 0) {
+            while (ToUnicodeEx(Layout, KeyboardState.Blank(), ToUnicodeExFlags.None, vk, sc, out _) == ToUnicodeExStatus.DeadKey) {
                 //Do nothing.  Just eat through the characters
             }
 
         }
 
 
-        /// <summary>
-        ///     Translates the specified virtual-key code and keyboard state to the corresponding Unicode character or characters.
-        /// </summary>
-        /// <param name="wVirtKey">[in] The virtual-key code to be translated.</param>
-        /// <param name="wScanCode">
-        ///     [in] The hardware scan code of the key to be translated. The high-order bit of this value is
-        ///     set if the key is up.
-        /// </param>
-        /// <param name="lpKeyState">
-        ///     [in, optional] A pointer to a 256-byte array that contains the current keyboard state. Each
-        ///     element (byte) in the array contains the state of one key. If the high-order bit of a byte is set, the key is down.
-        /// </param>
-        /// <param name="pwszBuff">
-        ///     [out] The buffer that receives the translated Unicode character or characters. However, this
-        ///     buffer may be returned without being null-terminated even though the variable name suggests that it is
-        ///     null-terminated.
-        /// </param>
-        /// <param name="cchBuff">[in] The size, in characters, of the buffer pointed to by the pwszBuff parameter.</param>
-        /// <param name="wFlags">
-        ///     [in] The behavior of the function. If bit 0 is set, a menu is active. Bits 1 through 31 are
-        ///     reserved.
-        /// </param>
-        /// <param name="dwhkl">The input locale identifier used to translate the specified code.</param>
-        /// <returns>
-        ///     -1 &lt;= return &lt;= n
-        ///     <list type="bullet">
-        ///         <item>
-        ///             -1    = The specified virtual key is a dead-key character (accent or diacritic). This value is returned
-        ///             regardless of the keyboard layout, even if several characters have been typed and are stored in the
-        ///             keyboard state. If possible, even with Unicode keyboard layouts, the function has written a spacing version
-        ///             of the dead-key character to the buffer specified by pwszBuff. For example, the function writes the
-        ///             character SPACING ACUTE (0x00B4), rather than the character NON_SPACING ACUTE (0x0301).
-        ///         </item>
-        ///         <item>
-        ///             0    = The specified virtual key has no translation for the current state of the keyboard. Nothing was
-        ///             written to the buffer specified by pwszBuff.
-        ///         </item>
-        ///         <item> 1    = One character was written to the buffer specified by pwszBuff.</item>
-        ///         <item>
-        ///             n    = Two or more characters were written to the buffer specified by pwszBuff. The most common cause
-        ///             for this is that a dead-key character (accent or diacritic) stored in the keyboard layout could not be
-        ///             combined with the specified virtual key to form a single character. However, the buffer may contain more
-        ///             characters than the return value specifies. When this happens, any extra characters are invalid and should
-        ///             be ignored.
-        ///         </item>
-        ///     </list>
-        /// </returns>
         [DllImport("user32.dll")]
-        public static extern int ToUnicodeEx(KeyCode wVirtKey,
+        public static extern int ToUnicodeEx(
+            KeyCode wVirtKey,
             int wScanCode,
             KeyboardKeyState[] lpKeyState,
             [Out] [MarshalAs(UnmanagedType.LPWStr, SizeConst = 64)] StringBuilder pwszBuff,
             int cchBuff,
-            int wFlags,
+            ToUnicodeExFlags wFlags,
             IntPtr dwhkl);
 
 
-        public static string ToUnicodeEx(KeyCode VKey, int SKey, IntPtr KeyboardLayout, KeyboardState Keyboard) {
+        public static string ToUnicodeEx(KeyCode VKey, int SKey, KeyboardLayout Layout, KeyboardState Keyboard) {
             var ret = "";
 
             var Buffer = new StringBuilder(64);
-            var K = ToUnicodeEx(VKey, SKey, Keyboard.State, Buffer, Buffer.Capacity, 0, KeyboardLayout);
+            var K = ToUnicodeEx(VKey, SKey, Keyboard.State, Buffer, Buffer.Capacity, 0, Layout.Handle);
             if (K >= 0) {
                 ret = Buffer.ToString().Substring(0, K);
             }
@@ -179,5 +144,40 @@ namespace WindowsInput.Events.Sources {
             return ret;
         }
 
+        public static ToUnicodeExStatus ToUnicodeEx(KeyboardLayout Layout, KeyboardState Keyboard, ToUnicodeExFlags Flags, KeyCode VKey, int SKey, out string Value) {
+            Value = default;
+
+            var Buffer = new StringBuilder(64);
+            var K = ToUnicodeEx(VKey, SKey, Keyboard.State, Buffer, Buffer.Capacity, Flags, Layout.Handle);
+            if (K >= 0) {
+                Value = Buffer.ToString().Substring(0, K);
+            }
+
+            var ret = K switch
+            {
+                -1 => ToUnicodeExStatus.DeadKey,
+                0 => ToUnicodeExStatus.NoTranslation,
+                _ => ToUnicodeExStatus.Success
+            };
+
+            return ret;
+        }
+
     }
+
+    public enum ToUnicodeExFlags : uint {
+        None = 0,
+        Menu = 0x0001,
+        Unknown = 0x0002,
+        //This flag is only present on Windows10 v1607 and above
+        DoNotChangeKeyboardState = 0x0004
+    }
+
+    public enum ToUnicodeExStatus {
+        DeadKey = -1,
+        NoTranslation = 0,
+        Success = 1
+    }
+
+
 }

@@ -33,23 +33,37 @@ namespace ConsoleHook
             var ToShow = new List<IEvent>() {
                 Value.Wait,
                 Value.KeyDown,
+                Value.KeyUp,
                 Value.TextClick,
-                Value.KeyUp
             };
 
             Show(ToShow);
         }
 
         private static void Show(IEnumerable<IEvent> ToShow) {
-            var ShowList = ToShow.Where(x => x != default).ToList();
-            
-            foreach (var item in ShowList) {
-                    Console.WriteLine($@"  {item}");
-            }
 
-            if(ShowList.Count > 0) {
+            var Data = (
+                from x in ToShow
+                let Text = x?.ToString() ?? ""
+                let Parts = Text.Split(new[] { ' ' }, 2)
+                let Part1 = Parts.Length >= 1 ? Parts[0] : ""
+                let Part2 = Parts.Length >= 2 ? Parts[1] : ""
+                select new[] {
+                    Part1,
+                    Part2
+                }).ToList();
+
+            var ColumnWidth = (from x in Data from y in x select y.Length).Max() + 1;
+            var Rows = (from x in Data select x.Length).Max();
+
+            for (int y = 0; y < Rows; y++) {
+                for (int x = 0; x < Data.Count; x++) {
+                    Console.Write($@"{Data[x][y],-20}");
+                }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+
 
             
         }

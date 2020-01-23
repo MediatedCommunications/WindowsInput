@@ -22,7 +22,8 @@ namespace ConsoleHook
 
         private static async Task Main(string[] args)
         {
-            
+            //Make it so we can see special characters.
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
 
             var selector = new Dictionary<string, Func<Task>>
             {
