@@ -20,7 +20,7 @@ namespace WindowsInput.Native {
         /// This function does not reset the keyboard's current state. Any keys that are already pressed when the function is called might interfere with the events that this function generates. To avoid this problem, check the keyboard's state with the GetAsyncKeyState function and correct as necessary.
         /// </remarks>
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern UInt32 SendInput(UInt32 numberOfInputs, INPUT[] inputs, Int32 sizeOfInputStructure);
+        public static extern uint SendInput(UInt32 numberOfInputs, INPUT[] inputs, Int32 sizeOfInputStructure);
 
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace WindowsInput.Native {
         public static uint SendInput(params INPUT[] inputs) {
             var ret = (uint)0;
             if (inputs?.Length > 0) {
-                ret = SendInput((UInt32)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+                ret = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
             }
-
+            
             return ret;
         }
     }
