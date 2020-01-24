@@ -27,6 +27,9 @@ namespace WindowsInput.Events.Sources {
             var Message = (GlobalKeyboardMessage)data.WParam;
             var keyboardHookStruct = Marshal.PtrToStructure<KeyboardHookStruct>(data.LParam);
 
+            //This call is required to work around a bug in Window's 'Get Keyboard State' API.  When the bug occurs, it always returns the same keyboard state.
+            KeyboardState.GetKeyState(KeyCode.None);
+
             var e = GetInputEventArgs(Message, keyboardHookStruct);
 
             var Input = e.Data;
@@ -81,17 +84,18 @@ namespace WindowsInput.Events.Sources {
                 var scanCode = keyboardHookStruct.ScanCode;
                 var fuState = keyboardHookStruct.Flags;
 
-                if(keyboardHookStruct.KeyCode == KeyCode.Y) {
-
-                }
-
                 if (keyboardHookStruct.KeyCode == KeyCode.Packet) {
                     var ch = (char)scanCode;
 
                     ret = new TextClick(new[] { ch });
                 } else {
+                    var UnicodeFlags = ToUnicodeExFlags.None;
+                    
+                    if (fuState.HasFlag(KeyboardHookStructFlags.Extended)) {
+                        UnicodeFlags |= ToUnicodeExFlags.Menu;
+                    }
 
-                    if (State.TryGetCharFromKeyboardState(virtualKeyCode, scanCode, ToUnicodeExFlags.None, out var chars)) {
+                    if (State.TryGetCharFromKeyboardState(virtualKeyCode, scanCode, UnicodeFlags, out var chars)) {
                         ret = new TextClick(chars);
                     }
 

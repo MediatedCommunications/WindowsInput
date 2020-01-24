@@ -41,7 +41,7 @@ namespace ConsoleHook
         }
 
         private static void Show(IEnumerable<IEvent> ToShow) {
-
+            
             var Data = (
                 from x in ToShow
                 let Text = x?.ToString() ?? ""
@@ -138,7 +138,7 @@ namespace ConsoleHook
         public static async Task Start(bool Keyboard, bool Mouse)
         {
             var RecordDuration = 10000;
-            var DelayDuration = 3;
+            var DelayDuration = 1;
 
             Console.WriteLine($@"For the next {RecordDuration} seconds, the following events will be recorded then played back:");
             Console.WriteLine($@"Keyboard: {Keyboard}");

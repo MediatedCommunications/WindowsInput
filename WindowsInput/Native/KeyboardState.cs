@@ -67,9 +67,6 @@ namespace WindowsInput.Native {
 
         public static KeyboardState Current() {
             var ret = new KeyboardState();
-            //This call to get Key State is necessary to overcome a windows bug.
-            GetKeyState(KeyCode.None);
-
             var RVal = GetKeyboardState(ret.State);
 
             return ret;
@@ -159,10 +156,10 @@ namespace WindowsInput.Native {
         protected static extern int GetKeyboardState(KeyboardKeyState[] pbKeyState);
 
         [DllImport("user32.dll", SetLastError = true)]
-        protected static extern KeyboardKeyState GetAsyncKeyState(KeyCode virtualKeyCode);
+        public static extern KeyboardKeyState GetAsyncKeyState(KeyCode virtualKeyCode);
 
         [DllImport("user32.dll", SetLastError = true)]
-        protected static extern KeyboardKeyState GetKeyState(KeyCode virtualKeyCode);
+        public static extern KeyboardKeyState GetKeyState(KeyCode virtualKeyCode);
 
 
     }

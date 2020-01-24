@@ -17,9 +17,6 @@ namespace ConsoleHook
 {
     internal class Program
     {
-
-
-
         private static async Task Main(string[] args)
         {
             //Make it so we can see special characters.
@@ -31,6 +28,7 @@ namespace ConsoleHook
                 {"2. Record and Playback Mouse Events", ()=>LogEvents.Start(false, true)},
                 {"3. Detect key combinations", DetectChord.Do},
                 {"4. Detect key sequences", DetectSequences.Do},
+                {"5. Record Multiples", RecordMultiples.Start},
                 {"Q. Quit", Exit}
             };
 
