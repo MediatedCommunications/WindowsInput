@@ -79,64 +79,6 @@ namespace WindowsInput.Native {
         }
 
 
-        /// <summary>
-        ///     Indicates whether specified key was down at the moment when snapshot was created or not.
-        /// </summary>
-        /// <param name="key">Key (corresponds to the virtual code of the key)</param>
-        /// <returns><b>true</b> if key was down, <b>false</b> - if key was up.</returns>
-        public bool IsDown(KeyCode key) {
-            var ret = KeyState(key)
-                .HasFlag(KeyboardKeyState.KeyDown)
-                ;
-
-            return ret;
-        }
-
-        /// <summary>
-        ///     Indicate weather specified key was toggled at the moment when snapshot was created or not.
-        /// </summary>
-        /// <param name="key">Key (corresponds to the virtual code of the key)</param>
-        /// <returns>
-        ///     <b>true</b> if toggle key like (CapsLock, NumLocke, etc.) was on. <b>false</b> if it was off.
-        ///     Ordinal (non toggle) keys return always false.
-        /// </returns>
-        public bool IsToggled(KeyCode key) {
-            var ret = KeyState(key)
-                .HasFlag(KeyboardKeyState.Toggled)
-                ;
-            return ret;
-        }
-
-        /// <summary>
-        ///     Indicates weather every of specified keys were down at the moment when snapshot was created.
-        ///     The method returns false if even one of them was up.
-        /// </summary>
-        /// <param name="keys">Keys to verify whether they were down or not.</param>
-        /// <returns><b>true</b> - all were down. <b>false</b> - at least one was up.</returns>
-        public bool AreAllDown(IEnumerable<KeyCode> keys) {
-            return keys.All(IsDown);
-        }
-
-        public KeyboardKeyState KeyState(KeyCodeModifiers key) {
-            var ret = KeyboardKeyState.Default;
-
-            if (key == KeyCodeModifiers.AltModifier) {
-                ret = KeyState(KeyCode.LAlt) | KeyState(KeyCode.RAlt);
-            } else if (key == KeyCodeModifiers.ShiftModifier) {
-                ret = KeyState(KeyCode.LShift) | KeyState(KeyCode.RShift);
-            } else if (key == KeyCodeModifiers.ControlModifier) {
-                ret = KeyState(KeyCode.LControl) | KeyState(KeyCode.RControl);
-            }
-
-            return ret;
-        }
-
-        public KeyboardKeyState KeyState(KeyCode key) {
-            var ret = State[(int)key];
-
-
-            return ret;
-        }
 
         /// <summary>
         ///     The GetKeyboardState function copies the status of the 256 virtual keys to the
@@ -156,10 +98,13 @@ namespace WindowsInput.Native {
         protected static extern int GetKeyboardState(KeyboardKeyState[] pbKeyState);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern KeyboardKeyState GetAsyncKeyState(KeyCode virtualKeyCode);
+        public static extern KeyboardKeyState GetAsyncKeyState(int virtualKeyCode);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern KeyboardKeyState GetKeyState(KeyCode virtualKeyCode);
+        public static extern KeyboardKeyState GetKeyState(int virtualKeyCode);
+
+        public static KeyboardKeyState GetAsyncKeyState(KeyCode Key) => GetAsyncKeyState((int) Key);
+        public static KeyboardKeyState GetKeyState(KeyCode Key) => GetKeyState((int)Key);
 
 
     }
@@ -169,6 +114,28 @@ namespace WindowsInput.Native {
         Default = 0b_0000_0000,
         KeyDown = 0b_1000_0000,
         Toggled = 0b_0000_0001,
+    }
+
+    public static class KeyboardKeyStateExtensions {
+        public static bool IsDown(this KeyboardKeyState This) {
+            var ret = This.HasFlag(KeyboardKeyState.KeyDown)
+                ;
+            return ret;
+        }
+
+        public static bool IsUp(this KeyboardKeyState This) {
+            var ret = !This.IsDown()
+                ;
+            return ret;
+        }
+
+        public static bool IsToggled(this KeyboardKeyState This) {
+            var ret = This.HasFlag(KeyboardKeyState.Toggled)
+                ;
+            return ret;
+        }
+
+
     }
 
 }

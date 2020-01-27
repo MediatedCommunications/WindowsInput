@@ -35,11 +35,11 @@ namespace WindowsInput.Events.Sources {
             var Keyboard = KeyboardState.Current();
             var isDead   = false;
 
-            if (Keyboard.IsDown(KeyCode.LShift) || Keyboard.IsDown(KeyCode.RShift)) {
+            if (Keyboard[KeyCode.LShift].IsDown() || Keyboard[KeyCode.RShift].IsDown()) {
                 Keyboard[KeyCode.Shift] |= KeyboardKeyState.KeyDown;
             }
 
-            if (Keyboard.IsToggled(KeyCode.CapsLock)) {
+            if (Keyboard[KeyCode.CapsLock].IsToggled()) {
                 Keyboard[KeyCode.CapsLock] |= KeyboardKeyState.Toggled;
             }
 

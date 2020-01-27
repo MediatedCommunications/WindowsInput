@@ -4,11 +4,11 @@
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/TonyValenti/WindowsInput</PackageProjectUrl>
-    <AssemblyVersion>6.1.0.0</AssemblyVersion>
-    <FileVersion>6.1.0.0</FileVersion>
-    <Authors>Tony Valenti, George Mamaladze, Michael Noonan</Authors>
+    <AssemblyVersion>6.1.1.0</AssemblyVersion>
+    <FileVersion>6.1.1.0</FileVersion>
+    <Authors>Tony Valenti</Authors>
     <Company />
-    <Version>6.1.0</Version>
+    <Version>6.1.1</Version>
     <Copyright>(c) 2000-2020 - Multiple Holders</Copyright>
     <RepositoryUrl>https://github.com/TonyValenti/WindowsInput</RepositoryUrl>
     <PackageReleaseNotes>Added many performance and optimizations tweaks</PackageReleaseNotes>
