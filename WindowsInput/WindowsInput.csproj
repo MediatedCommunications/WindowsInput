@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/TonyValenti/WindowsInput</PackageProjectUrl>
-    <AssemblyVersion>6.1.1.0</AssemblyVersion>
-    <FileVersion>6.1.1.0</FileVersion>
+    <AssemblyVersion>6.2.1.0</AssemblyVersion>
+    <FileVersion>6.2.1.0</FileVersion>
     <Authors>Tony Valenti</Authors>
     <Company />
-    <Version>6.1.1</Version>
+    <Version>6.2.1</Version>
     <Copyright>(c) 2000-2020 - Multiple Holders</Copyright>
     <RepositoryUrl>https://github.com/TonyValenti/WindowsInput</RepositoryUrl>
-    <PackageReleaseNotes>Added many performance and optimizations tweaks</PackageReleaseNotes>
+    <PackageReleaseNotes>Added many performance and optimizations tweaks, added support .NET CORE</PackageReleaseNotes>
     <Description>Capture and simulate Window's Keyboard and Mouse events across any application such as:
 * Mouse ButtonUp / ButtonDown / Click / DoubleClick
 * Keyboard KeyUp / KeyDown / KeyPress</Description>
