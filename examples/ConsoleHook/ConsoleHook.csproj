@@ -49,6 +49,7 @@
     <Compile Include="LogEvents.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DisallowKeys.cs" />
     <Compile Include="RecordMultiples.cs" />
     <None Include="QuickStart.cs" />
   </ItemGroup>

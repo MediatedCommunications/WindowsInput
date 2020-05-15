@@ -29,6 +29,7 @@ namespace ConsoleHook
                 {"3. Detect key combinations", DetectChord.Do},
                 {"4. Detect key sequences", DetectSequences.Do},
                 {"5. Record Multiples", RecordMultiples.Start},
+                {"6. Disallow Key", DisallowKeys.Start},
                 {"Q. Quit", Exit}
             };
 

@@ -122,8 +122,12 @@ namespace WindowsInput.Events.Sources {
 
             var Buffer = new StringBuilder(64);
             var K      = ToUnicodeEx(VKey, SKey, Keyboard.State, Buffer, Buffer.Capacity, Flags, Layout.Handle);
-            if (K >= 0) {
-                Value = Buffer.ToString().Substring(0, K);
+            if (K > 0) {
+                var Content = Buffer.ToString();
+
+                var Length = Math.Min(K, Content.Length);
+
+                Value = Content.Substring(0, Length);
             }
 
             var ret = K switch

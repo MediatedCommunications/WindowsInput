@@ -8,22 +8,23 @@ namespace WindowsInput.Events.Sources {
         public event EventHandler Shutdown;
 
         public MessagePumpingObject(Func<T> Creator) {
-            var Created = new ManualResetEventSlim(false);
+            using (var Created = new ManualResetEventSlim(false)) {
 
-            Thread = new System.Threading.Thread(() => {
-                Thread.Name = $@"{nameof(MessagePumpingObject<T>)}";
-                this.Dispatcher = Dispatcher.CurrentDispatcher;
-                this.Instance = Creator();
-                Created.Set();
-                Dispatcher.Run();
+                Thread = new System.Threading.Thread(() => {
+                    Thread.Name = $@"{nameof(MessagePumpingObject<T>)}";
+                    this.Dispatcher = Dispatcher.CurrentDispatcher;
+                    this.Instance = Creator();
+                    Created.Set();
+                    Dispatcher.Run();
 
-                Shutdown?.Invoke(this, null);
-            });
+                    Shutdown?.Invoke(this, null);
+                });
 
-            Thread.SetApartmentState(ApartmentState.STA);
-            Thread.Start();
+                Thread.SetApartmentState(ApartmentState.STA);
+                Thread.Start();
 
-            Created.Wait();
+                Created.Wait();
+            }
 
             if(this.Dispatcher == default) {
                 throw new InvalidOperationException();
