@@ -1,0 +1,68 @@
+name: WindowsInput-CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+        
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+        
+    - name: Clean
+      run: dotnet clean ./WindowsInput.sln --configuration Release && dotnet nuget locals all --clear
+
+    - name: Test .NET 4.6.1
+      if: startsWith(matrix.os, 'windows-')
+      shell: pwsh
+      run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net461
+
+    - name: Test .NET Core 3.1
+      shell: pwsh
+      run: dotnet test --logger:"console;verbosity=detailed" -c Release -f netcoreapp3.1
+
+  build:
+    name: Push nuget packages if a new tag is pushed
+    needs: test
+    runs-on: windows-latest
+    env:
+      ProjectName: WindowsInput
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Clean
+      run: dotnet clean ./${{ env.ProjectName }}.sln --configuration Release && dotnet nuget locals all --clear
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build only WindowsInput.csproj
+      shell: pwsh
+      run: dotnet build .\${{ env.ProjectName }}\ --no-restore -c Release
+      
+    - name: Push nuget packages
+      shell: pwsh
+      run: |
+        dotnet nuget push ${{ env.ProjectName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGet_APIKey }} --skip-duplicate
