@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WindowsInput.Events;
 using WindowsInput.Events.Sources;
@@ -16,18 +17,31 @@ namespace WindowsInput.Native {
         public IntPtr LParam { get; }
     }
 
+    public struct GlobalKeyboardEventSourceCallbackData {
+        public GlobalKeyboardMessage Message { get; set; }
+        public KeyboardHookStruct Data { get; set; }
+    }
+
+    public struct CurrentThreadMouseEventSourceCallbackData {
+        public WindowMessage Message { get; set; }
+        public MOUSEHOOKSTRUCTEX Data { get; set; }
+    }
+
+    public struct GlobalMouseEventSourceCallbackData {
+        public WindowMessage Message { get; set; }
+        public MouseStruct Data { get; set; }
+    }
+
     public static class MouseCallbackDataExtensions {
 
 
+
+
         internal static EventSourceEventArgs<MouseInput> ToGlobalMouseEventArgs(this CallbackData data) {
-            var wParam = data.WParam;
-            var lParam = data.LParam;
 
-            var marshalledMouseStruct = Marshal.PtrToStructure<MouseStruct>(lParam);
+            var Data = data.ToGlobalMouseEventSourceCallbackData();
 
-            var TM = Marshal.PtrToStructure<MOUSEINPUT>(lParam);
-
-            return ToMouseEventArgs(wParam, marshalledMouseStruct);
+            return ToMouseEventArgs(Data);
         }
 
         /// <summary>
@@ -36,14 +50,14 @@ namespace WindowsInput.Native {
         /// <param name="wParam">First Windows Message parameter.</param>
         /// <param name="mouseInfo">A MouseStruct containing information from which to construct MouseEventExtArgs.</param>
         /// <returns>A new MouseEventExtArgs object.</returns>
-        private static EventSourceEventArgs<MouseInput> ToMouseEventArgs(IntPtr wParam, MouseStruct mouseInfo) {
+        private static EventSourceEventArgs<MouseInput> ToMouseEventArgs(GlobalMouseEventSourceCallbackData data) {
             var button = ButtonCode.None;
             short mouseDelta = 0;
 
             var isMouseButtonDown = false;
             var isMouseButtonUp = false;
 
-            switch ((WindowMessage)wParam) {
+            switch (data.Message) {
                 case WindowMessage.WM_LBUTTONDOWN:
                     isMouseButtonDown = true;
                     button = ButtonCode.Left;
@@ -82,17 +96,17 @@ namespace WindowsInput.Native {
                     break;
                 case WindowMessage.WM_MOUSEWHEEL_V:
                     button = ButtonCode.VScroll;
-                    mouseDelta = mouseInfo.MouseDataValue;
+                    mouseDelta = data.Data.MouseDataValue;
                     break;
                 case WindowMessage.WM_XBUTTONDOWN:
-                    button = mouseInfo.MouseData == MouseData.XButton1_Click
+                    button = data.Data.MouseData == MouseData.XButton1_Click
                         ? ButtonCode.XButton1
                         : ButtonCode.XButton2;
                     isMouseButtonDown = true;
                     break;
 
                 case WindowMessage.WM_XBUTTONUP:
-                    button = mouseInfo.MouseData == MouseData.XButton1_Click
+                    button = data.Data.MouseData == MouseData.XButton1_Click
                         ? ButtonCode.XButton1
                         : ButtonCode.XButton2;
                     isMouseButtonUp = true;
@@ -100,20 +114,20 @@ namespace WindowsInput.Native {
 
                 case WindowMessage.WM_XBUTTONDBLCLK:
                     isMouseButtonDown = true;
-                    button = mouseInfo.MouseData == MouseData.XButton1_Click
+                    button = data.Data.MouseData == MouseData.XButton1_Click
                         ? ButtonCode.XButton1
                         : ButtonCode.XButton2;
                     break;
 
                 case WindowMessage.WM_MOUSEWHEEL_H:
                     button = ButtonCode.HScroll;
-                    mouseDelta = mouseInfo.MouseDataValue;
+                    mouseDelta = data.Data.MouseDataValue;
                     break;
             }
 
             var Status = ButtonStatusValue.Compute(isMouseButtonDown, isMouseButtonUp, mouseDelta);
 
-            var ret = EventSourceEventArgs.Create(mouseInfo.Timestamp, new MouseInput(button, mouseInfo.Point, mouseDelta, Status));
+            var ret = EventSourceEventArgs.Create(data.Data.Timestamp, new MouseInput(button, data.Data.Point, mouseDelta, Status), data);
 
             return ret;
         }

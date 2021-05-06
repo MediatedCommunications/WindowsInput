@@ -170,7 +170,7 @@ namespace WindowsInput.Events.Sources {
 
             var Data = new MouseEvent(Wait, Move, Scroll, Down, Up, Click, ClickHold, DoubleClick, DragStarted, DragFinished);
 
-            var ret = new EventSourceEventArgs<MouseEvent>(e.Timestamp, Data);
+            var ret = new EventSourceEventArgs<MouseEvent>(e.Timestamp, Data, e.RawData);
 
             return ret;
         }

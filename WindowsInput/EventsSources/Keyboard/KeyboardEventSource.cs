@@ -31,26 +31,26 @@ namespace WindowsInput.Events.Sources {
            
         }
 
-        protected EventSourceEventArgs InvokeMany(KeyboardEvent Event, DateTimeOffset Timestamp) {
+        protected EventSourceEventArgs InvokeMany(KeyboardEvent Event, object RawData, DateTimeOffset Timestamp) {
             var ret = InvokeMany(
-                x => InvokeEvent(x, Event, Timestamp),
+                x => InvokeEvent(x, Event, RawData, Timestamp),
 
-                x => InvokeEvent(x, Event.Wait, Timestamp),
+                x => InvokeEvent(x, Event.Wait, RawData, Timestamp),
 
-                x => InvokeEvent(x, Event.KeyDown, Timestamp),
-                x => InvokeEvent(x, Event.TextClick, Timestamp),
-                x => InvokeEvent(x, Event.KeyUp, Timestamp)
+                x => InvokeEvent(x, Event.KeyDown, RawData, Timestamp),
+                x => InvokeEvent(x, Event.TextClick, RawData, Timestamp),
+                x => InvokeEvent(x, Event.KeyUp, RawData, Timestamp)
             );
 
             return ret;
 
         }
 
-        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, KeyboardEvent Data, DateTimeOffset Timestamp) => InvokeEvent(args, KeyEvent, Data, Timestamp);
-        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, Wait Data, DateTimeOffset Timestamp) => InvokeEvent(args, Wait, Data, Timestamp);
-        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, KeyDown Data, DateTimeOffset Timestamp) => InvokeEvent(args, KeyDown, Data, Timestamp);
-        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, TextClick Data, DateTimeOffset Timestamp) => InvokeEvent(args, TextClick, Data, Timestamp);
-        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, KeyUp Data, DateTimeOffset Timestamp) => InvokeEvent(args, KeyUp, Data, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, KeyboardEvent Data, object RawData, DateTimeOffset Timestamp) => InvokeEvent(args, KeyEvent, Data, RawData, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, Wait Data, object RawData, DateTimeOffset Timestamp) => InvokeEvent(args, Wait, Data, RawData, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, KeyDown Data, object RawData, DateTimeOffset Timestamp) => InvokeEvent(args, KeyDown, Data, RawData, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, TextClick Data, object RawData, DateTimeOffset Timestamp) => InvokeEvent(args, TextClick, Data, RawData, Timestamp);
+        protected EventSourceEventArgs InvokeEvent(EventSourceEventArgs args, KeyUp Data, object RawData, DateTimeOffset Timestamp) => InvokeEvent(args, KeyUp, Data, RawData, Timestamp);
 
 
     }

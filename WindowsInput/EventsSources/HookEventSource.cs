@@ -69,13 +69,13 @@ namespace WindowsInput.Events.Sources {
             return ret;
         }
 
-        protected EventSourceEventArgs InvokeEvent<T>(EventSourceEventArgs args, EventHandler<EventSourceEventArgs<T>> Event, T Data, DateTimeOffset Timestamp) {
+        protected EventSourceEventArgs InvokeEvent<T>(EventSourceEventArgs args, EventHandler<EventSourceEventArgs<T>> Event, T Data, object RawData, DateTimeOffset Timestamp) {
             var ret = new EventSourceEventArgs(Timestamp);
             ret.Next_Event_Enabled = args.Next_Event_Enabled;
             ret.Next_Hook_Enabled = args.Next_Hook_Enabled;
 
             if (!EqualityComparer<T>.Default.Equals(Data, default)) {
-                var Args = new EventSourceEventArgs<T>(Timestamp, Data) {
+                var Args = new EventSourceEventArgs<T>(Timestamp, Data, RawData) {
                     Next_Event_Enabled = args.Next_Event_Enabled,
                     Next_Hook_Enabled = args.Next_Hook_Enabled,
                 };

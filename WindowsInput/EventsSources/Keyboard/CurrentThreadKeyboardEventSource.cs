@@ -72,7 +72,7 @@ namespace WindowsInput.Events.Sources {
             var Data = new KeyboardEvent(Wait, KeyDown, TextClick, KeyUp);
 
 
-            var ret = InvokeMany(Data, timestamp);
+            var ret = InvokeMany(Data, data, timestamp);
 
             return ret.Next_Hook_Enabled; 
         }

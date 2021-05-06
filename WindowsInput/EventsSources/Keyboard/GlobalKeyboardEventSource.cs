@@ -24,13 +24,13 @@ namespace WindowsInput.Events.Sources {
         }
 
         protected override bool Callback(CallbackData data) {
-            var Message = (GlobalKeyboardMessage)data.WParam;
-            var keyboardHookStruct = Marshal.PtrToStructure<KeyboardHookStruct>(data.LParam);
+            
+            var NewData = data.ToGlobalKeyboardEventSourceCallbackData();
 
             //This call is required to work around a bug in Window's 'Get Keyboard State' API.  When the bug occurs, it always returns the same keyboard state.
             KeyboardState.GetKeyState(KeyCode.None);
 
-            var e = GetInputEventArgs(Message, keyboardHookStruct);
+            var e = GetInputEventArgs(NewData.Message, NewData);
 
             var Input = e.Data;
             var Wait = new Wait(e.Timestamp - State.LastInputDate);
@@ -46,33 +46,33 @@ namespace WindowsInput.Events.Sources {
                 : null
                 ;
 
-            var TextClick = GetTextClick(Message, keyboardHookStruct);
+            var TextClick = GetTextClick(NewData.Message, NewData);
 
             var KeyEvent = new KeyboardEvent(Wait, KeyDown, TextClick, KeyUp);
 
-            var ret = InvokeMany(KeyEvent, e.Timestamp);
+            var ret = InvokeMany(KeyEvent, NewData, e.Timestamp);
 
             return ret.Next_Hook_Enabled;
         }
 
-        protected EventSourceEventArgs<KeyInput> GetInputEventArgs(GlobalKeyboardMessage Message, KeyboardHookStruct keyboardHookStruct) {
+        protected EventSourceEventArgs<KeyInput> GetInputEventArgs(GlobalKeyboardMessage Message, GlobalKeyboardEventSourceCallbackData keyboardHookStruct) {
 
-            var keyData = keyboardHookStruct.KeyCode;
+            var keyData = keyboardHookStruct.Data.KeyCode;
 
             var isKeyDown = Message.IsKeyDown();
             var isKeyUp = Message.IsKeyUp();
 
-            var isExtendedKey = keyboardHookStruct.Flags.HasFlag(KeyboardHookStructFlags.Extended);
+            var isExtendedKey = keyboardHookStruct.Data.Flags.HasFlag(KeyboardHookStructFlags.Extended);
 
             var Status = KeyStatusValue.Compute(isKeyDown, isKeyUp);
 
-            var Data = new KeyInput(keyData, isExtendedKey, keyboardHookStruct.ScanCode, Status);
-            var ret = EventSourceEventArgs.Create(keyboardHookStruct.Time, Data);
+            var Data = new KeyInput(keyData, isExtendedKey, keyboardHookStruct.Data.ScanCode, Status);
+            var ret = EventSourceEventArgs.Create(keyboardHookStruct.Data.Time, Data, keyboardHookStruct);
 
             return ret;
         }
 
-        protected TextClick GetTextClick(GlobalKeyboardMessage Message, KeyboardHookStruct keyboardHookStruct) {
+        protected TextClick GetTextClick(GlobalKeyboardMessage Message, GlobalKeyboardEventSourceCallbackData keyboardHookStruct) {
 
             var ret = default(TextClick);
 
@@ -80,11 +80,11 @@ namespace WindowsInput.Events.Sources {
 
             if (Message.IsKeyDown()) {
 
-                var virtualKeyCode = keyboardHookStruct.KeyCode;
-                var scanCode = keyboardHookStruct.ScanCode;
-                var fuState = keyboardHookStruct.Flags;
+                var virtualKeyCode = keyboardHookStruct.Data.KeyCode;
+                var scanCode = keyboardHookStruct.Data.ScanCode;
+                var fuState = keyboardHookStruct.Data.Flags;
 
-                if (keyboardHookStruct.KeyCode == KeyCode.Packet) {
+                if (keyboardHookStruct.Data.KeyCode == KeyCode.Packet) {
                     var ch = (char)scanCode;
 
                     ret = new TextClick(new[] { ch });

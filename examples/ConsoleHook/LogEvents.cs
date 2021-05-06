@@ -137,7 +137,7 @@ namespace ConsoleHook
 
         public static async Task Start(bool Keyboard, bool Mouse)
         {
-            var RecordDuration = 10000;
+            var RecordDuration = 30;
             var DelayDuration = 1;
 
             Console.WriteLine($@"For the next {RecordDuration} seconds, the following events will be recorded then played back:");
@@ -164,6 +164,9 @@ namespace ConsoleHook
                 Console.WriteLine($@"Playback starts in {i} seconds...");
                 await Task.Delay(1000);
             }
+
+            _ = Task.Run(() => CollectActionsFor(RecordDuration, Keyboard, Mouse));
+            
 
             await Actions.Invoke();
 

@@ -20,12 +20,12 @@ namespace WindowsInput.Events.Sources {
             this.Timestamp = BootTime.Value.AddMilliseconds(Timestamp);
         }
 
-        public static EventSourceEventArgs<TData> Create<TData>(DateTimeOffset Timestamp, TData Data) {
-            return new EventSourceEventArgs<TData>(Timestamp, Data);
+        public static EventSourceEventArgs<TData> Create<TData>(DateTimeOffset Timestamp, TData Data, object RawData) {
+            return new EventSourceEventArgs<TData>(Timestamp, Data, RawData);
         }
 
-        public static EventSourceEventArgs<TData> Create<TData>(int Timestamp, TData Data) {
-            return new EventSourceEventArgs<TData>(Timestamp, Data);
+        public static EventSourceEventArgs<TData> Create<TData>(int Timestamp, TData Data, object RawData) {
+            return new EventSourceEventArgs<TData>(Timestamp, Data, RawData);
         }
 
     }
@@ -33,15 +33,17 @@ namespace WindowsInput.Events.Sources {
     public class EventSourceEventArgs<TData> : EventSourceEventArgs { 
     
         public TData Data { get; private set; }
+        public object RawData { get; private set; }
 
-        public EventSourceEventArgs(DateTimeOffset Timestamp, TData Data) : base(Timestamp) {
+        public EventSourceEventArgs(DateTimeOffset Timestamp, TData Data, object RawData) : base(Timestamp) {
             this.Data = Data;
+            this.RawData = RawData;
         }
 
-        public EventSourceEventArgs(int Timestamp, TData Data) : base(Timestamp) {
+        public EventSourceEventArgs(int Timestamp, TData Data, object RawData) : base(Timestamp) {
             this.Data = Data;
+            this.RawData = RawData;
         }
-
 
     }
 
