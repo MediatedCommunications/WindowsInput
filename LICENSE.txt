@@ -1,194 +1,22 @@
-Developer Terms of Service
-This Supplemental API Licence And Developer Services Agreement (the "Agreement") is an agreement between the person accessing, downloading, or using (the terms "use" and "using" will refer to any of the foregoing) the API (such person, herein referred to as "you" and "your") and Mediated Communications, Inc (such entity, "MC", "us", "we", or "our", and together with you, the "Parties" and each, individually, a "Party"), and is entered into the earlier of: (a) the date you first use any part of the API; or (b) the date you agree to be bound by this Agreement (the "Effective Date").
+The MIT License (MIT)
+
+Copyright Â© 2021 Mediated Communications, Tony Valenti, and Contributing Authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-By using the API, you acknowledge that you have read, accepted and agree to be bound by and comply with the terms and conditions set out in this agreement, as may be amended from time to time in accordance with section 17(k). If you do not accept and agree to be bound by this agreement, you will immediately cease any further use of the API. You represent and warrant to us that you have the capacity to enter into this legally binding agreement. If you are using the API on behalf of another person, you hereby represent and warrant to us that you have the authority to bind such person to this agreement.
-
-1. Definitions
-Whenever used in this Agreement, the following words and terms have the meanings set out below:
-"API" means the software application programming interface, compiled binaries, distributed source code, and all other API programming, made available by us for building a Software and Interface application to access specific functions in the API, and includes the Developer Services.
-
-"Claim" means any claim, demand, action, cause of action, damage, loss, costs, liability or expense, including reasonable professional fees and all costs incurred in investigating or pursuing any of the foregoing or any proceeding relating to any of the foregoing.
-
-"Confidential Information" has the meaning given in Section 5.
-
-"Developer Services" means the content, tools, and resources made available to our developer community, including any materials related to the API, the User Guides, as well as developer versions of our online, web-based, applications, source codes, compiled binaries, and platforms.
-
-"Intellectual Property Rights" means worldwide: (i) patents and patent applications and industrial designs and other governmental grants for the protection of inventions or industrial design; (ii) patentable inventions; (iii) copyrights, copyright registrations and applications for copyright registration, moral rights, rights of publicity and privacy, and mask work rights and rights of attribution and integrity; (iv) trade secrets; (v) trade-marks, trade names, logos, service marks, designs, trade dress, emblems, signs, insignia, slogans, other similar designations of source or origin and general intangibles of like nature; (vi) any registrations or applications for registration for any of the foregoing, including any provisionals, divisions, continuations, continuations-in-part, renewals, reissuances, re-examinations and extensions (as applicable); (vii) analogous rights to those set forth above and any other intellectual property rights in any jurisdiction; and (viii) rights to sue for infringement of the rights set forth above.
-
-"MC IP" has the meaning given in Section 4.
-
-"MC Services" means any software or services provided by us to you pursuant to the User License Agreement.
-
-"User Guide" means the online user guide for the Developer Services available online or such other link made available by us to you from time to time.
-
-"User Licence Agreement" means this agreement or the most recent version available online or such other link made available by us to you from time to time.
-
-"Your Application" means any software created by you, which does not modify the MC Services, and which is not a part of, based upon or a derivative work or adaptation of the MC Services, but is intended to interface with the MC Services through the API.
-
-2. Use of API (including the Developer Services)
-(a) Subject to compliance with all limitations and obligations set out in this Agreement, we grant to you a non-exclusive, non-sublicensable, revocable, non-transferable and limited licence to use and make calls to the API (which, for greater clarity, includes the Developer Services) solely for the purpose of developing Your Application.
-
-(b) At our sole discretion, we reserve the right to suspend or revoke your rights under Section 2(a) at any time without notice, including if Your Application exceeds any limitations we place on your use of the API such as if Your Application makes an excessive number of calls using the API. Any such limitation may be set out in the User Guide.
-
-3. Responsibilities, Restrictions and Acknowledgements
-(a) You are responsible for any employees or contractors who use the API on your behalf and you will ensure all such employees or contractors use the API in accordance with the User Guide.
-
-(b) You will not, and will not permit any employees or contractors who use the API on your behalf to:
-
-     (i) use the API for any illegal purpose, including in a manner that infringes the rights (including intellectual property rights) of any third party;
-
-     (ii) use the API to transmit malicious code;
-
-     (iii) use the API if you are a competitor of ours or for any benchmarking or competitive purposes;
-
-     (iv) interfere with the performance of the API including any activity that, disrupts, harms, damages, or accesses in an unauthorized manner the servers, security, networks, data, applications or other properties or services of ours or any third party;
-
-     (v) interact with or modify the MC Service separate from the API as documented in the User Guide;
-
-     (vi) attempt to gain unauthorized access to the API or our systems or networks;
-
-     (vii) request more than the minimum amount of data from the API than is needed by your Application for the sole purpose of the intended Application;
-
-     (viii) monitor the availability, performance or functionality of the API;
-
-     (ix) distribute, lease, licence, transfer, sublicence or otherwise disseminate the API to any third party;  or
-
-     (x) modify, enhance, create derivative works, translations or adaptations from, reverse engineer or decompile the API.
-
-(c) You acknowledge that we do not guarantee support for the API or Your Applications created using the API.
-
-4. Ownership
-You acknowledge and agree that the API (which, for greater clarity, includes the Developer Services) and any content or material available thereon, and any derivative works, adaptations, or translations of the foregoing (collectively, the "MC IP"), will be owned by us or our licensors. You will not acquire any right (including Intellectual Property Rights), title or interest in or to the MC IP.
-
-5. Confidential Information
-(a) Definition of Confidential Information: "Confidential Information" means information marked or otherwise identified in writing by us as proprietary or confidential, or information that, under the circumstances surrounding the disclosure, you should recognize as being confidential; provided that our Confidential Information does not include, except with respect to Personal Information: (i) information already known or independently developed by you without access to our Confidential Information; (ii) information that is publicly available through no wrongful act of you; or (iii) information received by you from a third party who was free to disclose it without confidentiality obligations. For greater certainty, you acknowledge that the API, all data obtained through use of the API (including data related to users of the MC Services) and any additional information disclosed by us, our licensors, employees, contractors or agents with respect to the API, will be our Confidential Information and subject to the terms of Section 5(b)of this Agreement.
-
-(b) Confidentiality Covenants: You hereby agree that during the Term and at all times thereafter you will not: (i) disclose our Confidential Information to any person, except to your own personnel or affiliates having a "need to know" and that have entered into written agreements no less protective of such Confidential Information than this Agreement and the User Licence Agreement, and only to such other recipients as we may approve in writing; (ii) use our Confidential Information except to exercise your license rights or perform your obligations under this Agreement; or (iii) alter or remove any of our Confidential Information from the proprietary legend. You will take reasonable precautions to safeguard our Confidential Information. Those precautions will be at least as great as the precautions that you take to protect your own Confidential Information of a similar type.
-
-(c) Exceptions to Confidentiality: Notwithstanding Section (b), you may disclose our Confidential Information: (i) to the extent that such disclosure is required by applicable law or by the order of a court or similar judicial or administrative body, provided that, except to the extent prohibited by law, you promptly notify us in writing of such required disclosure and cooperate with us to seek an appropriate protective order; or (ii) to your legal counsel and other professional advisors if and to the extent such persons need to know such Confidential Information in order to provide applicable professional advisory services in connection with your business.
-
-6. Feedback
-You acknowledge that we may use any comments or suggestions relating to the API provided by you. Nothing in this Agreement will prevent us from developing applications or programs similar to your applications or programs, including for any applications we may develop pursuant to Section 9, provided that we do not disclose any Confidential Information of yours to third parties contrary to Section 5.
-
-7. Fees
-While we currently make the API available to you at no charge, we reserve the right to change our pricing policy at any time pursuant to Section 17(k) and will provide you with reasonable notice of any such changes.
-
-8. Marketing Rights
-You grant us a perpetual, worldwide, royalty-free, transferrable, sublicensable, license and right to use and display your trademarks and logos, including any screenshots, descriptions or images, associated with Your Application for the purposes of marketing, advertising, promotion of Your Application, the API or the MC Services.
-
-Subject to your compliance with these Terms and the requirements set forth in the User Guide,  we grant you a limited, non-exclusive, non-assignable, non-transferable, worldwide, revocable right to use the MC Trademarks (as outlined in the Brand Guidelines) solely in connection with an Application connected to our API in accordance with this Agreement.
-
-9. Competitive Application
-You acknowledge and agree that we may develop and make available products and services that are the same as, or similar to, or otherwise compete with, your products and services, including Your Application.
-
-10. Collection and Storage of Data
-(a) Consent and Authority. Prior to any use, disclosure, collection or storage of any data through the API, you will ensure that you have obtained all applicable consents and authority from the applicable person or entity in compliance with all applicable laws, including privacy laws.
-
-(b) Secure Storage Measures. You will ensure that any data transmitted to or obtained through the API in transit or at rest is encrypted using strong industry approved algorithms (e.g., AES-128, RSA 2048). You will comply with key management best practices and industry standards for the protection and storage of any data obtained through the API. You will only store the minimum necessary data and will keep access tokens or secret keys private.
-
-(c) Deletion of Data. You will delete all data you have collected through the MC Services: (i) upon request from the person or entity from whom you have collected such data or from us; (ii) if such data is no longer required; (iii) if Your Application is longer authorized to use the API or MC Services; or (iv) if the person or entity from whom you have collected such data is longer a user of the MC Services. The restrictions of this Section do not apply to data that users of the MC Services provides directly to you and that is separate from any data provided to you through the use of Your Application.
-
-(d) Deletion at Termination. Upon termination or expiration of this Agreement, you will permanently delete all data and any other information that you have stored pursuant to your use of the API, except if doing so would cause you to violate any applicable law or obligation imposed by a governmental authority.
-
-(e) No Other Storing. You may not copy or store any data obtained or made available through the API, except to the extent permitted by this Agreement.
-
-11. Advertising
-You may place advertisements on Your Application provided that you do not: (a) use data or any content you have obtained from the API in any advertisements, including targeted advertisements; (b) use contact information obtained from the API (including email addresses) to contact any user of the MC Services without their express consent; or (c) breach any applicable laws, including privacy laws.
-
-12. Representations and Warranties
-You represent and warrant that:
-
-(a) you have agreed to and accepted the User Licence Agreement and acknowledge that this Agreement is in addition to your obligations under the User Licence Agreement;
-
-(b) you have obtained all applicable consents and authority from all Subscribers (as defined in the User Licence Agreement) and Registered Users (as defined in the User Licence Agreement), including for all applicable use, disclosure, collection and storage, prior to your use of the API; and
-
-(c) you will comply with all applicable laws, including privacy laws, while engaged in any activity that makes use of the API.
-
-13. Disclaimer
-(a) The API is provided on an "as is" and "as available" basis, without any representation, condition or warranty of any sort being made by us or otherwise being relied upon by you. Without limiting the generality of the foregoing, we disclaim all representations, warranties and conditions, express, implied or collateral, including the implied warranties or conditions of merchantability, merchantable quality, compatibility, security, reliability, integration, fitness for a particular purpose, infringement and those arising by statute or otherwise in law or from the course of dealing or usage of trade.
-
-(b) The Developer Services may contain features that interoperate with third-party services. We do not endorse the use of third-party services or guarantee their quality, accuracy, reliability, completeness, currency, timeliness, non-infringement, merchantability or fitness for any purpose. The content and operation of any third party service is not under our control, and if you choose to access any such service, you do so entirely at your own risk.
-
-(c) Without limiting the foregoing, we do not represent or warrant that the API will meet any or all of your requirements, that the operation of the API will be error-free or uninterrupted or that programming errors in the API can be found or corrected.
-
-14. Limitation of Liability
-Subject to Section 10 (Limitation of Liability) of the User Licence Agreement:
-
-(a) To the maximum extent permitted by applicable law, the total liability of us to you for all Claims, suits, actions and proceedings howsoever arising, directly or indirectly, under or relating to this Agreement or its subject matter, including those based on breach or rescission of contract (including fundamental breach or breach of fundamental term), restitution, tort (including negligence), breach of trust or fiduciary duty or otherwise, will not exceed $500 CAD.
-
-(b) In no event will we or our directors, officers, employees or shareholders be liable for any Claims for punitive, exemplary, aggravated, indirect, incidental, consequential or special damages under or relating to this Agreement for its subject matter, or for business interruption, lost revenue, failure to collect donations, lost profits, failure to realize expected savings, loss of data, or loss of business opportunity, whether based on breach or rescission of contract (including fundamental breach or breach of fundamental term), restitution, tort (including negligence), breach of trust or fiduciary or otherwise, even if we have been advised of the possibility of such damages.
-
-15. Indemnity
-You agree to indemnify and hold us and our affiliates and their respective directors, officers and employees harmless from and against any loss, cost, expense or damage arising out of any Claim, suit, action or judgment brought against us by any customer of yours or any other third party in connection with:
-
-(a) your use of the API contrary to the terms of this Agreement or applicable laws, or if your use of the API violates or infringes the rights of any third person;
-
-(b) your breach of any of your obligations, conditions, representations, or warranties under this Agreement;
-
-(c) your collection, use, disclosure or storage (any of the foregoing, "Use") of any data (including any personal information contained therein) obtained on or through the API or the Developer Services, including:
-
-(i) any security breach (including unauthorized access) in connection with such data;(ii) any corruption to, or loss of, such data;
-
-(iii) any Use of such data in breach of your agreements with persons or entities in connection with Use of such data;
-
-(iv) any Use of such data contrary to the reasonable expectations of the person or entity that provided you with applicable consents or authority to Use such data;
-
-(v) any Use of such data that is inconsistent with your privacy policy (if applicable); and
-
-(vi) any Use of such data in breach of applicable laws, including privacy laws.
-
-16. Term and Termination
-(a) Term: This Agreement will be effective as of the Effective Date and will continue in perpetuity unless terminated in accordance with Section 16(b).
-
-(b) Termination for Cause: We may, by giving you notice, terminate this Agreement with immediate effect if:
-
-(i) the User Licence Agreement between the Parties is terminated in accordance with its terms;
-
-(ii) you breach a provision of this Agreement and such breach is, in our reasonable opinion, capable of being cured, and you fail to cure such breach within fifteen (15) days of receiving notice of the breach from us;
-
-(iii) you breach a provision of this Agreement and such breach is, in our reasonable opinion, not capable of being cured; or
-
-(iv) you become insolvent, make an assignment for the general benefit of creditors, any proceedings are commenced by or against you under any bankruptcy or insolvency laws or proceedings are commenced for the appointment of a receiver, a receiver-manager or any other official with similar powers for you, or you cease to carry on business.
-
-(c) Termination for Convenience: Either Party may terminate this Agreement at any time by providing advance written notice of not less than 30 days to the other Party.
-
-(d) Further Rights and Remedies: Our termination of this Agreement is without prejudice to any other right or remedy that may be available to us.
-
-(e) Your Obligations Upon Termination: Upon termination of this Agreement you will immediately:
-
-(i) cease to use the API;
-
-(ii) destroy all data and information obtained through your use of the API; and
-
-(iii) return or destroy all copies of the API to us, and provide us with a written confirmation certifying such return or destruction, and that no copies of the API, or any part of the API, in any form remain in your possession or control.
-
-17. General Provisions
-(a) Notices: Notices sent to either Party will be effective when delivered in person or by email, one day after being sent by overnight courier, or five days after being sent by first class mail postage prepaid to the official contact designated by the Party to whom a notice is being given. Notices must be in writing and sent: (i) if to us, to the following address:
-
-Mediated Communications Inc.
-12359 South 81st Street
-Papillion, NE 68046
-
-and (ii) if to you, to the current postal or email address that we have on file with respect to you. We may change our contact information by giving notice thereof to you. You are solely responsible for keeping your contact information on file with us current at all times during the Term.
-
-(b) Assignment: You will not assign this Agreement to any third party without our prior written consent. We may assign this Agreement or any rights under this Agreement to any third party without your consent. Any assignment in violation of this Section will be void. This Agreement will inure to the benefit of and be binding upon the Parties, their permitted successors and permitted assignees.
-
-(c) Choice of Law: Except as restricted by applicable law (including applicable laws of Quebec), this Agreement and any action related thereto will be governed by and construed in accordance with the substantive laws of the Province of British Columbia and the federal laws of Canada applicable therein, without regard to conflicts of law principles. The Parties will initiate any lawsuits in connection with this Agreement in Vancouver, British Columbia, Canada, and irrevocably attorn to the exclusive personal jurisdiction and venue of the courts sitting therein. For greater clarity, nothing in this Agreement will be construed to prohibit us from seeking an injunction against you in any jurisdiction worldwide for any actual or alleged breach of any intellectual property, privacy or criminal law. The U.N. Convention on Contracts for the International Sale of Goods will not apply to this Agreement. This choice of jurisdiction does not prevent us from seeking injunctive relief with respect to a violation of intellectual property rights or confidentiality obligations in any appropriate jurisdiction.
-
-(d) Export Restrictions: You will comply with all export laws and regulations that may apply to your use of the API.
-
-(e) Construction: Except as otherwise provided in this Agreement, the Parties’ rights and remedies under this Agreement are cumulative. The terms "include" and "including" mean, respectively, "include without limitation" and "including without limitation." The headings of sections of this Agreement are for reference purposes only and have no substantive effect. The terms "consent" or "discretion", when used in respect to us in this Agreement means our right to withhold such consent or exercise such discretion, as applicable, arbitrarily and without any implied obligation to act reasonably or explain our decision to you.
-
-(f) Force Majeure: Neither Party will be liable for delays caused by any event or circumstances beyond our reasonable control, including acts of God, acts of government, flood, fire, earthquakes, civil unrest, acts of terror, strikes or other labour problems (other than those involving our employees), Internet service failures or delays, or the unavailability or Modification by third parties of telecommunications or hosting infrastructure or third party websites.
-
-(g) Severability: Any provision of this Agreement found by a tribunal or court of competent jurisdiction to be illegal or unenforceable will be severed from this Agreement and all other provisions of this Agreement will remain in full force and effect.
-
-(h) Waiver: A waiver of any provision of this Agreement must be in writing and a waiver in one instance will not preclude enforcement of such provision on other occasions.
-
-(i) Independent Contractors: Our relationship with you is that of an independent contractor, and neither Party is an agent or partner of the other. Neither Party will have, and will not represent to any third party that it has, any authority to act on behalf of the other Party.
-
-(j) Entire Agreement: This Agreement constitutes the entire agreement between the Parties with respect to the subject matter of this Agreement and supersedes all prior or contemporaneous agreements, representations or other communications, whether written or oral.
-
-(k) Amendments: Except where prohibited by applicable law (including applicable laws of Quebec), we may unilaterally amend this agreement, in whole or in part (each, an "amendment"), by: (i) giving you prior notice of such amendment; or (ii) posting notice of such amendment on the website. Unless otherwise indicated by us, any such amendment will become effective as of the date the notice of such amendment is provided to you or is posted on the website (whichever is the earlier).
-
-(l) English Language: It is the express wish of the Parties that this Agreement and all related documents be drawn up in English.
