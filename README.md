@@ -23,7 +23,7 @@ Install-Package WindowsInput
 ### Run Notepad using the Keyboard...
 ````csharp
 public async Task RunNotepad() {
-    await Windowsinput.Simulate.Events()
+    await WindowsInput.Simulate.Events()
         //Hold Windows Key+R
         .ClickChord(KeyCode.LWin, KeyCode.R).Wait(1000)
 
