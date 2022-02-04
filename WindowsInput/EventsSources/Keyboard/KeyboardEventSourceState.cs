@@ -33,7 +33,7 @@ namespace WindowsInput.Events.Sources {
             chars = default;
 
             var Keyboard = KeyboardState.Current();
-            var isDead   = false;
+            var isDead = false;
 
             if (Keyboard[KeyCode.LShift].IsDown() || Keyboard[KeyCode.RShift].IsDown()) {
                 Keyboard[KeyCode.Shift] |= KeyboardKeyState.KeyDown;

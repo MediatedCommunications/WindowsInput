@@ -18,8 +18,11 @@ namespace WindowsInput.Native
             }
 
             public static class Virtual {
-                public static CachedMetric<int> Width { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_X);
-                public static CachedMetric<int> Height { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Y);
+                public static CachedMetric<int> Left { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Left);
+                public static CachedMetric<int> Top { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Top);
+
+                public static CachedMetric<int> Height { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Height);
+                public static CachedMetric<int> Width { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Width);
             }
 
         }
@@ -100,8 +103,11 @@ namespace WindowsInput.Native
         Drag_X = 68,
         Drag_Y = 69,
 
-        VirtualScreen_X = 76,
-        VirtualScreen_Y = 77,
+        VirtualScreen_Left = 76,
+        VirtualScreen_Top = 77,
+
+        VirtualScreen_Width = 78,
+        VirtualScreen_Height = 79,
 
     }
 

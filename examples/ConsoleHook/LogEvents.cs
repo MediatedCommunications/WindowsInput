@@ -108,13 +108,17 @@ namespace ConsoleHook
             
             if(Keyboard) {
                 var GlobalKeyboard = Capture.Global.KeyboardAsync();
-                GlobalKeyboard.KeyEvent += (x, y) => QueueAndLog(ret, y.Data);
+                GlobalKeyboard.KeyEvent += (x, y) => {
+                    QueueAndLog(ret, y.Data);
+                };
                 ToDispose.Add(GlobalKeyboard);
             }
 
             if(Mouse) {
                 var GlobalMouse = Capture.Global.MouseAsync();
-                GlobalMouse.MouseEvent += (x, y) => QueueAndLog(ret, y.Data);
+                GlobalMouse.MouseEvent += (x, y) => {
+                    QueueAndLog(ret, y.Data);
+                };
                 ToDispose.Add(GlobalMouse);
             }
 
