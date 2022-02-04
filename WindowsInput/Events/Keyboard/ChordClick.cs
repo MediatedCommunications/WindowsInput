@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 namespace WindowsInput.Events {
     public class ChordClick : AggregateEvent {
 
-        public IReadOnlyCollection<KeyCode> Keys { get; private set; }
+        public IReadOnlyCollection<KeyCode> Keys { get; }
 
-        protected override string DebuggerDisplay => $@"{this.GetType().Name}: {String.Join("+", Keys)}";
+        protected override string GetDebuggerDisplay() {
+            var ret = $@"{this.GetType().Name}: {String.Join("+", Keys)}";
+            return ret;
+        }
 
         public ChordClick(IEnumerable<KeyCode> Keys) {
             var NewKeys = new List<KeyCode>();
-            if (Keys != default) {
+            if (Keys is { }) {
                 NewKeys.AddRange(Keys);
             }
             this.Keys = NewKeys;

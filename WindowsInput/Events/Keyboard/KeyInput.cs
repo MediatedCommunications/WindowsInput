@@ -10,10 +10,10 @@ namespace WindowsInput.Events {
         public int ScanCode { get; }
         public KeyStatus Status { get; }
 
-        protected override string DebuggerDisplay {
-            get {
-                return base.DebuggerDisplay;
-            }
+        protected override string GetDebuggerDisplay() {
+            var ret = base.GetDebuggerDisplay();
+
+            return ret;
         }
 
         public KeyInput(KeyCode RawKey, bool? Extended, int ScanCode, KeyStatus Status)  : base(RawKey, Extended){

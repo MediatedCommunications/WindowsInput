@@ -10,27 +10,28 @@ using WindowsInput.Events;
 
 namespace WindowsInput.Events.Sources {
     public class MouseEventSourceState {
-        public int DragThresholdX { get; private set; } = SystemMetrics.Mouse.Drag.XThreshold.Value;
-        public int DragThresholdY { get; private set; } = SystemMetrics.Mouse.Drag.YThreshold.Value;
-        public TimeSpan DoubleClickDuration { get; private set; } = SystemMetrics.Mouse.DoubleClick.Duration.Value;
+        public int DragThresholdX { get; } = SystemMetrics.Mouse.Drag.XThreshold.Value;
+        public int DragThresholdY { get; } = SystemMetrics.Mouse.Drag.YThreshold.Value;
+        public TimeSpan DoubleClickDuration { get; } = SystemMetrics.Mouse.DoubleClick.Duration.Value;
 
 
-        public EventSourceEventArgs<MouseInput> LastInput { get; private set; }
+        public EventSourceEventArgs<MouseInput>? LastInput { get; private set; }
+        public MouseMoveAbsolute? CurrentPosition { get; private set; }
 
-        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> LastButtonDownInput { get; private set; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
-        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> LastButtonClickInput { get; private set; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
+        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> LastButtonDownInput { get; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
+        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> LastButtonClickInput { get; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
         
-        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> ButtonsDownInput { get; private set; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
-        public Dictionary<ButtonCode, MouseMoveAbsolute> ButtonsDownPosition { get; private set; } = new Dictionary<ButtonCode, MouseMoveAbsolute>();
-        public Dictionary<ButtonCode, ButtonDown> ButtonsDownData { get; private set; } = new Dictionary<ButtonCode, ButtonDown>();
-        public Dictionary<ButtonCode, DragStart> ButtonsDragging { get; private set; } = new Dictionary<ButtonCode, DragStart>();
+        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> ButtonsDownInput { get; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
+        public Dictionary<ButtonCode, MouseMoveAbsolute> ButtonsDownPosition { get; } = new Dictionary<ButtonCode, MouseMoveAbsolute>();
+        public Dictionary<ButtonCode, ButtonDown> ButtonsDownData { get; } = new Dictionary<ButtonCode, ButtonDown>();
+        public Dictionary<ButtonCode, DragStart> ButtonsDragging { get; } = new Dictionary<ButtonCode, DragStart>();
 
-        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> ButtonsDraggingInput { get; private set; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
+        public Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>> ButtonsDraggingInput { get; } = new Dictionary<ButtonCode, EventSourceEventArgs<MouseInput>>();
 
-        public MouseMoveAbsolute CurrentPosition { get; private set; }
+        
 
         public EventSourceEventArgs<MouseEvent> GetEventArgs(EventSourceEventArgs<MouseInput> e) {
-            var Wait = LastInput != default && e.Timestamp - LastInput.Timestamp is var Duration && Duration > TimeSpan.Zero
+            var Wait = LastInput is { } && e.Timestamp - LastInput.Timestamp is var Duration && Duration > TimeSpan.Zero
                 ? new Wait(Duration)
                 : null
                 ;
@@ -56,10 +57,13 @@ namespace WindowsInput.Events.Sources {
             if(Down is { }) {
                 ButtonsDownInput[Down.Button] = e;
                 ButtonsDownData[Down.Button] = Down;
-                ButtonsDownPosition[Down.Button] = CurrentPosition;
+
+                if (CurrentPosition is { }) {
+                    ButtonsDownPosition[Down.Button] = CurrentPosition;
+                }
             }
 
-            var DragStarted = default(IReadOnlyCollection<DragStart>);
+            var DragStarted = default(IReadOnlyList<DragStart>);
             {
                 var DragStartedInternal = new List<DragStart>();
 
@@ -91,8 +95,8 @@ namespace WindowsInput.Events.Sources {
                 : null
                 ;
 
-            var DragFinished = default(IReadOnlyCollection<DragDrop>);
-            if(Up is { }) {
+            var DragFinished = default(IReadOnlyList<DragDrop>);
+            if(Up is { } && CurrentPosition is { }) {
                 var DragFinishedInternal = new List<DragDrop>();
 
                 if (ButtonsDragging.TryGetValue(Up.Button, out var DragStart)) {
@@ -119,7 +123,7 @@ namespace WindowsInput.Events.Sources {
             }
 
             var Click = true
-                && Up != default 
+                && Up is { }
                 && LastButtonDownInput.TryGetValue(Up.Button, out var LastUp) 
                 && Math.Abs(LastUp.Data.X - e.Data.X) < DragThresholdX 
                 && Math.Abs(LastUp.Data.Y - e.Data.Y) < DragThresholdY
@@ -128,7 +132,7 @@ namespace WindowsInput.Events.Sources {
                 ;
 
             var ClickHold = true
-                && Down != default
+                && Down is { }
                 && LastButtonClickInput.TryGetValue(Down.Button, out var LastClick_ClickHold)
                 && e.Timestamp - LastClick_ClickHold.Timestamp <= DoubleClickDuration
                 && Math.Abs(LastClick_ClickHold.Data.X - e.Data.X) < DragThresholdX
@@ -138,7 +142,8 @@ namespace WindowsInput.Events.Sources {
                 ;
 
             var DoubleClick = true
-                && Click != default 
+                && Click is { }
+                && Up is { }
                 && LastButtonClickInput.TryGetValue(Up.Button, out var LastClick_DoubleClick) 
                 && e.Timestamp - LastClick_DoubleClick.Timestamp <= DoubleClickDuration 
                 && Math.Abs(LastClick_DoubleClick.Data.X - e.Data.X) < DragThresholdX 

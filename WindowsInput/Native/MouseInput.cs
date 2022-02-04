@@ -36,7 +36,7 @@ namespace WindowsInput.Native
         //
         // Returns:
         //     One of the System.Windows.Forms.MouseButtons values.
-        public ButtonCode Button { get; private set; }
+        public ButtonCode Button { get; }
 
         //
         // Summary:
@@ -44,7 +44,7 @@ namespace WindowsInput.Native
         //
         // Returns:
         //     The x-coordinate of the mouse, in pixels.
-        public int X { get; private set; }
+        public int X { get; }
 
         //
         // Summary:
@@ -52,7 +52,7 @@ namespace WindowsInput.Native
         //
         // Returns:
         //     The y-coordinate of the mouse, in pixels.
-        public int Y { get; private set; }
+        public int Y { get; }
 
 
         //
@@ -63,7 +63,7 @@ namespace WindowsInput.Native
         // Returns:
         //     A signed count of the number of detents the mouse wheel has rotated, multiplied
         //     by the WHEEL_DELTA constant.
-        public int ScrollOffset { get; private set; }
+        public int ScrollOffset { get; }
 
 
         public ButtonStatus ButtonStatus { get; }

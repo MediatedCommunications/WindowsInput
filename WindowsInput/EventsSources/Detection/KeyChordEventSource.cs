@@ -5,18 +5,25 @@ using WindowsInput.Events;
 namespace WindowsInput.Events.Sources {
 
     public class KeyChordEventArgs : EventArgs {
-        public EventSourceEventArgs<KeyboardEvent> Input { get; set; }
-        public ChordClick Chord { get; set; }
+        public EventSourceEventArgs<KeyboardEvent> Input { get; }
+        public ChordClick Chord { get; }
+
+        public KeyChordEventArgs(EventSourceEventArgs<KeyboardEvent> Input, ChordClick Chord) { 
+            this.Input = Input;
+            this.Chord = Chord;
+        }
+
     }
 
 
     public class KeyChordEventSource : KeyboardMonitoringEventSource {
-        public event EventHandler<KeyChordEventArgs> Triggered;
+        public event EventHandler<KeyChordEventArgs>? Triggered;
 
-        public ChordClick Chord { get; private set; }
+        public ChordClick Chord { get; }
 
         public KeyChordEventSource(IKeyboardEventSource Monitor, ChordClick Chord) : base(Monitor) {
             this.Chord = Chord;
+            
         }
 
         protected override void Enable() {
@@ -30,26 +37,23 @@ namespace WindowsInput.Events.Sources {
             
         }
 
-        private ChordEventSourceStateMachine State;
+        private ChordEventSourceStateMachine? State;
         protected override void Reset() {
             base.Reset();
             State = new ChordEventSourceStateMachine(Chord);
         }
 
-        private void Monitor_KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e) {
-            if (State.Next(e.Data) == StateMachineResult.Complete) {
-                var args = new KeyChordEventArgs() {
-                    Input = e,
-                    Chord = Chord
-                };
+        private void Monitor_KeyEvent(object? sender, EventSourceEventArgs<KeyboardEvent> e) {
+            if(State is { } && State.TryNext(e.Data, out var Status) && Status == StateMachineResult.Complete) {
+                var args = new KeyChordEventArgs(e, Chord);
                 Triggered?.Invoke(this, args);
             }
         }
     }
 
     public class ChordEventSourceStateMachine : StateMachine<KeyboardEvent, StateMachineResult> {
-        public ChordClick Chord { get; private set; }
-        public int MaxSequentialTriggers { get; private set; }
+        public ChordClick Chord { get; }
+        public int MaxSequentialTriggers { get; }
 
         public ChordEventSourceStateMachine(ChordClick Chord) : this(Chord, 1) {
 
@@ -60,7 +64,7 @@ namespace WindowsInput.Events.Sources {
             this.MaxSequentialTriggers = MaxSequentialTriggers;
         }
 
-        protected override IEnumerable<StateMachineResult> Next(Value Input) {
+        protected override IEnumerable<StateMachineResult> Next(State Input) {
             var Expected = new HashSet<KeyCode>(Chord.Keys);
 
             var SequentialTriggers = 0;

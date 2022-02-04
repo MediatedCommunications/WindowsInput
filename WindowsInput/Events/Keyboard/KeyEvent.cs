@@ -2,10 +2,14 @@
 
 namespace WindowsInput.Events {
     public abstract class KeyEvent : AggregateEvent {
-        public KeyCode Key { get; private set; }
-        public bool Extended { get; private set; }
+        public KeyCode Key { get; }
+        public bool Extended { get; }
 
-        protected override string DebuggerDisplay => $@"{this.GetType().Name}: {Key}" + (Extended ? "(Extended)" : "");
+        protected override string GetDebuggerDisplay() {
+            var ret = $@"{this.GetType().Name}: {Key}" + (Extended ? "(Extended)" : "");
+
+            return ret;
+        }
 
         protected KeyEvent(KeyCode Key, bool? Extended = default) {
             this.Key = Key;

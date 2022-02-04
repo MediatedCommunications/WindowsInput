@@ -5,7 +5,7 @@ using WindowsInput.Events;
 namespace WindowsInput.Events.Sources {
     public class AsyncKeyboardEventSource : IKeyboardEventSource {
 
-        private MessagePumpingObject<IKeyboardEventSource> AsyncObject;
+        private readonly MessagePumpingObject<IKeyboardEventSource> AsyncObject;
         public AsyncKeyboardEventSource(Func<IKeyboardEventSource> Creator) {
             this.AsyncObject = new MessagePumpingObject<IKeyboardEventSource>(Creator);
 
@@ -15,7 +15,7 @@ namespace WindowsInput.Events.Sources {
             AsyncObject?.Dispose();
         }
 
-        public event EventHandler<EnabledChangedEventArgs> EnabledChanged {
+        public event EventHandler<EnabledChangedEventArgs>? EnabledChanged {
             add => AsyncObject.Instance.EnabledChanged += value;
             remove => AsyncObject.Instance.EnabledChanged -= value;
         }
@@ -26,27 +26,27 @@ namespace WindowsInput.Events.Sources {
         }
 
 
-        public event EventHandler<EventSourceEventArgs<KeyboardEvent>> KeyEvent {
+        public event EventHandler<EventSourceEventArgs<KeyboardEvent>>? KeyEvent {
             add => AsyncObject.Instance.KeyEvent += value;
             remove => AsyncObject.Instance.KeyEvent -= value;
         }
 
-        public event EventHandler<EventSourceEventArgs<Wait>> Wait {
+        public event EventHandler<EventSourceEventArgs<Wait>>? Wait {
             add => AsyncObject.Instance.Wait += value;
             remove => AsyncObject.Instance.Wait -= value;
         }
 
-        public event EventHandler<EventSourceEventArgs<KeyDown>> KeyDown {
+        public event EventHandler<EventSourceEventArgs<KeyDown>>? KeyDown {
             add => AsyncObject.Instance.KeyDown += value;
             remove => AsyncObject.Instance.KeyDown -= value;
         }
 
-        public event EventHandler<EventSourceEventArgs<KeyUp>> KeyUp {
+        public event EventHandler<EventSourceEventArgs<KeyUp>>? KeyUp {
             add => AsyncObject.Instance.KeyUp += value;
             remove => AsyncObject.Instance.KeyUp -= value;
         }
 
-        public event EventHandler<EventSourceEventArgs<TextClick>> TextClick {
+        public event EventHandler<EventSourceEventArgs<TextClick>>? TextClick {
             add => AsyncObject.Instance.TextClick += value;
             remove => AsyncObject.Instance.TextClick -= value;
         }

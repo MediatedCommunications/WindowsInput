@@ -24,9 +24,9 @@ namespace WindowsInput {
 
         }
 
-        public static long ReleaseId { get; private set; }
+        public static long ReleaseId { get; }
 
-        public static bool Windows10_AtLeast_v1607_Enabled { get; private set; }
+        public static bool Windows10_AtLeast_v1607_Enabled { get; }
 
 
         

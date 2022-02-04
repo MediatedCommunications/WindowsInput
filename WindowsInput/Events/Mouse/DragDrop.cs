@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace WindowsInput.Events {
     public class DragDrop : AggregateEvent {
-        public DragStart Start { get; private set; }
-        public DragStop Stop { get; private set; }
+        public DragStart Start { get; }
+        public DragStop Stop { get; }
 
-        protected override string DebuggerDisplay {
-            get {
-                var ret = base.DebuggerDisplay;
+        protected override string GetDebuggerDisplay() {
 
-                if (Start?.PositionDown is { } && Stop?.PositionUp is { } && Start?.ButtonDown?.Button == Stop?.ButtonUp?.Button && Start?.ButtonDown is { }) {
-                    ret = $@"{this.GetType().Name}: Drag {Start.ButtonDown.Button} from {Start.PositionDown.Offset}({Start.PositionDown.X},{Start.PositionDown.Y}) to {Stop.PositionUp.Offset}({Stop.PositionUp.X},{Stop.PositionUp.Y})";
-                }
+            var ret = base.GetDebuggerDisplay();
 
-                return ret;
+            if (Start.PositionDown is { } && Stop.PositionUp is { } && Start.ButtonDown?.Button == Stop.ButtonUp?.Button && Start.ButtonDown is { }) {
+                ret = $@"{this.GetType().Name}: Drag {Start.ButtonDown.Button} from {Start.PositionDown.Offset}({Start.PositionDown.X},{Start.PositionDown.Y}) to {Stop.PositionUp.Offset}({Stop.PositionUp.X},{Stop.PositionUp.Y})";
             }
+
+            return ret;
+
         }
 
 
-        public DragDrop(MouseMove Start, ButtonCode Button, MouseMove Stop) {
+        public DragDrop(MouseMove Start, MouseMove Stop, ButtonCode Button) {
             this.Start = new DragStart(Start, new ButtonDown(Button));
             this.Stop = new DragStop(Stop, new ButtonUp(Button));
 

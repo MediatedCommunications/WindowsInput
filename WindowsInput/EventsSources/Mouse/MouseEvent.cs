@@ -11,7 +11,30 @@ namespace WindowsInput.Events.Sources {
     public class MouseEvent : InputEvent {
 
 
-        public MouseEvent(Wait Wait, MouseMove Move, ButtonScroll ButtonScroll, ButtonDown ButtonDown, ButtonUp ButtonUp, ButtonClick ButtonClick, ButtonClickHold ButtonClickHold, ButtonDoubleClick ButtonDoubleClick, IReadOnlyCollection<DragStart> DragStarted, IReadOnlyCollection<DragDrop> DragFinished) {
+        public MouseEvent(
+            Wait? Wait, 
+            MouseMove? Move, 
+            ButtonScroll? ButtonScroll, 
+            ButtonDown? ButtonDown, 
+            ButtonUp? ButtonUp, 
+            ButtonClick? ButtonClick, 
+            ButtonClickHold? ButtonClickHold, 
+            ButtonDoubleClick? ButtonDoubleClick, 
+            IReadOnlyList<DragStart>? DragStart, 
+            IReadOnlyList<DragDrop>? DragStop) : base(
+                new List<IEvent?>() {
+                    Wait,
+                    Move,
+                    ButtonScroll,
+                    ButtonDown,
+                    ButtonUp,
+                    ButtonClick,
+                    ButtonClickHold,
+                    ButtonDoubleClick,
+                    DragStart,
+                    DragStop,
+                }) {
+            
             this.Wait = Wait;
             this.Move = Move;
             this.ButtonScroll = ButtonScroll;
@@ -21,48 +44,23 @@ namespace WindowsInput.Events.Sources {
             this.ButtonClickHold = ButtonClickHold;
             this.ButtonDoubleClick = ButtonDoubleClick;
 
-            this.DragStart = DragStarted;
-            this.DragStop = DragFinished;
+            this.DragStart = DragStart;
+            this.DragStop = DragStop;
 
-            {
-                var PotentialEvents = new List<IEvent>();
-                PotentialEvents.Add(Wait);
-                PotentialEvents.Add(Move);
-                PotentialEvents.Add(ButtonScroll);
-                PotentialEvents.Add(ButtonDown);
-                PotentialEvents.Add(ButtonUp);
-                PotentialEvents.Add(ButtonClick);
-                PotentialEvents.Add(ButtonClickHold);
-                PotentialEvents.Add(ButtonDoubleClick);
-                if (DragStart is { }) {
-                    foreach (var item in DragStart) {
-                        PotentialEvents.Add(item);
-                    }
-                }
-
-                if (DragStop is { }) {
-                    foreach (var item in DragStop) {
-                        PotentialEvents.Add(item);
-                    }
-                }
-                PotentialEvents = PotentialEvents.Where(x => x is { }).ToList();
-                this.Events = PotentialEvents.AsReadOnly();
-
-            }
 
         }
 
-        public Wait Wait { get; private set; }
-        public MouseMove Move { get; private set; }
-        public ButtonDown ButtonDown { get; private set; }
-        public ButtonUp ButtonUp { get; private set; }
-        public ButtonClick ButtonClick { get; private set; }
-        public ButtonClickHold ButtonClickHold { get; private set; }
-        public ButtonDoubleClick ButtonDoubleClick { get; private set; }
-        public ButtonScroll ButtonScroll { get; private set; }
+        public Wait? Wait { get; }
+        public MouseMove? Move { get; }
+        public ButtonDown? ButtonDown { get; }
+        public ButtonUp? ButtonUp { get; }
+        public ButtonClick? ButtonClick { get; }
+        public ButtonClickHold? ButtonClickHold { get; }
+        public ButtonDoubleClick? ButtonDoubleClick { get; }
+        public ButtonScroll? ButtonScroll { get; }
 
-        public IReadOnlyCollection<DragStart> DragStart { get; private set; }
-        public IReadOnlyCollection<DragDrop> DragStop { get; private set; }
+        public IReadOnlyList<DragStart>? DragStart { get; }
+        public IReadOnlyList<DragDrop>? DragStop { get; }
 
     }
 }

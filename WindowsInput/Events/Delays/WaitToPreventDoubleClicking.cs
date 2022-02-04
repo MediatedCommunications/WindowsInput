@@ -10,7 +10,11 @@ namespace WindowsInput.Events {
     public class WaitToPreventDoubleClicking : Wait {
         private static readonly TimeSpan ExtraDurationBecauseOfWindowsBug = TimeSpan.FromMilliseconds(13);
 
-        protected override string DebuggerDisplay => $@"{base.DebuggerDisplay} (to prevent double-clicking)";
+        protected override string GetDebuggerDisplay() {
+            var ret = $@"{base.GetDebuggerDisplay()} (to prevent double-clicking)";
+
+            return ret;
+        }
 
         public WaitToPreventDoubleClicking() : base(SystemMetrics.Mouse.DoubleClick.Duration.Value + ExtraDurationBecauseOfWindowsBug) { 
         

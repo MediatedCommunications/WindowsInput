@@ -10,7 +10,7 @@ namespace WindowsInput.Events.Sources {
     public class EventSourceEventArgs {
         public bool Next_Hook_Enabled { get; set; } = true;
         public bool Next_Event_Enabled { get; set; } = true;
-        public DateTimeOffset Timestamp { get; private set; }
+        public DateTimeOffset Timestamp { get; }
 
         public EventSourceEventArgs(DateTimeOffset Timestamp) {
             this.Timestamp = Timestamp;
@@ -32,8 +32,8 @@ namespace WindowsInput.Events.Sources {
 
     public class EventSourceEventArgs<TData> : EventSourceEventArgs { 
     
-        public TData Data { get; private set; }
-        public object RawData { get; private set; }
+        public TData Data { get; }
+        public object RawData { get; }
 
         public EventSourceEventArgs(DateTimeOffset Timestamp, TData Data, object RawData) : base(Timestamp) {
             this.Data = Data;

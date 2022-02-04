@@ -8,14 +8,14 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 
 namespace WindowsInput.Native {
-    [DebuggerDisplay(Debugger2.DISPLAY)]
+    [DebuggerDisplay(Debugger2.GetDebuggerDisplay)]
     public class KeyboardLayout {
         public IntPtr Handle { get; private set; }
 
-        protected virtual string DebuggerDisplay {
-            get {
-                return $@"Handle: {Handle}";
-            }
+        protected virtual string GetDebuggerDisplay() {
+            var ret = $@"Handle: {Handle}";
+
+            return ret;
         }
 
         /// <summary>
@@ -58,12 +58,11 @@ namespace WindowsInput.Native {
 
 
         public CharInfo ToChar(KeyCode Value) {
-            var tret = ToChar(Value, out var Dead);
+            var value = ToChar(Value, out var DeadKey);
 
-            return new CharInfo() {
-                Value = tret,
-                DeadKey = Dead,
-            };
+            var ret = new CharInfo(value, DeadKey);
+
+            return ret;
         }
 
         public char? ToChar(KeyCode Value, out bool DeadKey) {
@@ -79,24 +78,27 @@ namespace WindowsInput.Native {
         }
 
 
-        [DebuggerDisplay(Debugger2.DISPLAY)]
+        [DebuggerDisplay(Debugger2.GetDebuggerDisplay)]
         public class CharInfo {
-            public char? Value { get; set; }
-            public bool DeadKey { get; set; }
+            public char? Value { get; }
+            public bool DeadKey { get; }
 
-            protected virtual string DebuggerDisplay {
-                get {
-                    var ret = $@"(null)";
-                    if(Value is { } V1) {
-                        ret = $@"{V1}";
+            public CharInfo(char? Value, bool DeadKey) {
+                this.Value = Value;
+                this.DeadKey = DeadKey;
+            }
 
-                        if (DeadKey) {
-                            ret += " (Dead)";
-                        }
+            protected virtual string GetDebuggerDisplay() {
+                var ret = $@"(null)";
+                if (Value is { } V1) {
+                    ret = $@"{V1}";
+
+                    if (DeadKey) {
+                        ret += " (Dead)";
                     }
-
-                    return ret;
                 }
+
+                return ret;
             }
         }
 

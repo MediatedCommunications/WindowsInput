@@ -9,25 +9,25 @@ namespace WindowsInput.Native
         public static class Screen {
 
             //This value is a constant.  I just like it here.
-            public static CachedMetric<int> ScaleFactor { get; private set; } = CachedMetric.Create(() => 65536);
+            public static CachedMetric<int> ScaleFactor { get; } = CachedMetric.Create(() => 65536);
 
             public static class Primary {
-                public static CachedMetric<int> Width { get; private set; } = CachedMetric.Create(SYSTEMMETRIC.PrimaryScreen_X);
-                public static CachedMetric<int> Height { get; private set; } = CachedMetric.Create(SYSTEMMETRIC.PrimaryScreen_Y);
+                public static CachedMetric<int> Width { get; } = CachedMetric.Create(SYSTEMMETRIC.PrimaryScreen_X);
+                public static CachedMetric<int> Height { get; } = CachedMetric.Create(SYSTEMMETRIC.PrimaryScreen_Y);
 
             }
 
             public static class Virtual {
-                public static CachedMetric<int> Width { get; private set; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_X);
-                public static CachedMetric<int> Height { get; private set; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Y);
+                public static CachedMetric<int> Width { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_X);
+                public static CachedMetric<int> Height { get; } = CachedMetric.Create(SYSTEMMETRIC.VirtualScreen_Y);
             }
 
         }
 
         public static class Mouse {
             public static class Drag {
-                public static CachedMetric<int> XThreshold { get; private set; } = CachedMetric.Create(SYSTEMMETRIC.Drag_X);
-                public static CachedMetric<int> YThreshold { get; private set; } = CachedMetric.Create(SYSTEMMETRIC.Drag_Y);
+                public static CachedMetric<int> XThreshold { get; } = CachedMetric.Create(SYSTEMMETRIC.Drag_X);
+                public static CachedMetric<int> YThreshold { get; } = CachedMetric.Create(SYSTEMMETRIC.Drag_Y);
             }
 
 
@@ -40,7 +40,7 @@ namespace WindowsInput.Native
                     return TimeSpan.FromMilliseconds(GetDoubleClickTime());
                 }
 
-                public static CachedMetric<TimeSpan> Duration { get; private set; } = CachedMetric.Create(() => GetDoubleClickDuration());
+                public static CachedMetric<TimeSpan> Duration { get; } = CachedMetric.Create(() => GetDoubleClickDuration());
             }
         }
 
@@ -87,7 +87,7 @@ namespace WindowsInput.Native
         }
 
 
-        protected Func<T> GetValue { get; private set; }
+        protected Func<T> GetValue { get; }
     }
 
     public enum SYSTEMMETRIC : int {

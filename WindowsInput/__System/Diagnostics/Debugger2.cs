@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Diagnostics {
     internal static class Debugger2 {
-        public const string DISPLAY = "{DebuggerDisplay,nq}";
+        public const string GetDebuggerDisplay = "{GetDebuggerDisplay(),nq}";
 
     }
 }

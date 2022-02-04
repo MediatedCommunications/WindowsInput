@@ -24,11 +24,11 @@ namespace WindowsInput {
 
         /// <inheritdoc cref="Events(InvokeOptions, IEnumerable{IEvent})"/>
         public static Task<bool> Events(IEnumerable<IEvent> IEvents) {
-            return Events(null, IEvents);
+            return Events(default, IEvents);
         }
 
         /// <inheritdoc cref="Events(InvokeOptions, IEnumerable{IEvent})"/>
-        public static Task<bool> Events(InvokeOptions Options, params IEvent[] IEvents) {
+        public static Task<bool> Events(InvokeOptions? Options, params IEvent[] IEvents) {
             return Events(Options, (IEnumerable<IEvent>)IEvents);
         }
 
@@ -38,13 +38,13 @@ namespace WindowsInput {
         /// <param name="Options">Options that control the execution of the simulation</param>
         /// <param name="IEvents">The list of input events to simulate.</param>
         /// <returns></returns>
-        public static async Task<bool> Events(InvokeOptions Options, IEnumerable<IEvent> IEvents) {
-            Options = Options ?? new InvokeOptions();
+        public static async Task<bool> Events(InvokeOptions? Options, IEnumerable<IEvent> IEvents) {
+            Options ??= new InvokeOptions();
             var ret = true;
 
             var EventList = new List<IEvent>();
 
-            if(IEvents != default) {
+            if (IEvents is { }) {
                 EventList.AddRange(IEvents);
             }
 
@@ -61,7 +61,7 @@ namespace WindowsInput {
                     }
                 }
 
-                if (item != default) {
+                if (item is { }) {
 
                     try {
                         var tret = await item.Invoke(Options)

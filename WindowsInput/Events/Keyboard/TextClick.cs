@@ -5,20 +5,20 @@ using System.Text;
 
 namespace WindowsInput.Events {
     public class TextClick : AggregateEvent {
-        public string Text { get; private set; }
-        public IReadOnlyCollection<string> NewLines { get; private set; }
+        public string Text { get; }
+        public IReadOnlyCollection<string> NewLines { get; }
 
-        private static string[] DefaultNewLines = new[] {
+        private static readonly string[] DefaultNewLines = new[] {
             "\r\n",
             "\r",
             "\n",
         };
 
-        public TextClick(IEnumerable<char> Keys) : this(Keys, DefaultNewLines) {
+        public TextClick(IEnumerable<char>? Keys) : this(Keys, DefaultNewLines) {
 
         }
 
-        public TextClick(IEnumerable<char> Keys, params string[] NewLines) {
+        public TextClick(IEnumerable<char>? Keys, params string[] NewLines) {
             var Value = "";
             {
                 
@@ -58,7 +58,11 @@ namespace WindowsInput.Events {
 
         }
 
-        protected override string DebuggerDisplay => $@"{this.GetType().Name}: {Text}";
+        protected override string GetDebuggerDisplay() {
+            var ret = $@"{this.GetType().Name}: {Text}";
+
+            return ret;
+        }
 
     }
 

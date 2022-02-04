@@ -1,6 +1,6 @@
 ﻿namespace WindowsInput.Events.Sources {
     public abstract class MonitoringEventSource<TMonitor> : EventSourceBase where TMonitor : IEventSource {
-        protected TMonitor Monitor { get; private set; }
+        protected TMonitor Monitor { get; }
 
         public bool Reset_On_EnabledChanged { get; set; } = true;
         public bool Reset_On_Parent_EnabledChanged { get; set; } = true;
@@ -23,7 +23,7 @@
             Monitor.EnabledChanged -= Monitor_EnabledChanged;
         }
 
-        private void Monitor_EnabledChanged(object sender, EnabledChangedEventArgs e) {
+        private void Monitor_EnabledChanged(object? sender, EnabledChangedEventArgs e) {
             if (Reset_On_Parent_EnabledChanged) {
                 Reset();
             }

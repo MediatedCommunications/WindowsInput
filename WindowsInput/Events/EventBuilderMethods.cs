@@ -216,11 +216,11 @@ namespace WindowsInput.Events {
         /// Simulate a drag and drop operation between two locations.
         /// </summary>
         /// <param name="Start">The initial location the cursor should be positioned.</param>
-        /// <param name="Button">The button to perfom the drag with.</param>
         /// <param name="Stop">The final location of the cursor where the button should be released.</param>
+        /// <param name="Button">The button to perfom the drag with.</param>
         /// <returns></returns>
-        public EventBuilder DragDrop(MouseMove Start, ButtonCode Button, MouseMove Stop) {
-            return Add(new DragDrop(Start, Button, Stop));
+        public EventBuilder DragDrop(MouseMove Start, MouseMove Stop, ButtonCode Button = ButtonCode.Left) {
+            return Add(new DragDrop(Start, Stop, Button));
         }
 
 

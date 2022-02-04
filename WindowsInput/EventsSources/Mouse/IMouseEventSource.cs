@@ -12,19 +12,19 @@ using WindowsInput.Events;
 namespace WindowsInput.Events.Sources {
 
     public interface IMouseEventSource : IEventSource {
-        event EventHandler<EventSourceEventArgs<MouseEvent>> MouseEvent;
-        event EventHandler<EventSourceEventArgs<Wait>> Wait;
+        event EventHandler<EventSourceEventArgs<MouseEvent>>? MouseEvent;
+        event EventHandler<EventSourceEventArgs<Wait>>? Wait;
 
-        event EventHandler<EventSourceEventArgs<MouseMove>> MouseMove;
-        event EventHandler<EventSourceEventArgs<ButtonClick>> ButtonClick;
-        event EventHandler<EventSourceEventArgs<ButtonDown>> ButtonDown;
-        event EventHandler<EventSourceEventArgs<ButtonUp>> ButtonUp;
-        event EventHandler<EventSourceEventArgs<ButtonScroll>> ButtonScroll;
-        event EventHandler<EventSourceEventArgs<ButtonClickHold>> ButtonClickHold;
-        event EventHandler<EventSourceEventArgs<ButtonDoubleClick>> ButtonDoubleClick;
+        event EventHandler<EventSourceEventArgs<MouseMove>>? MouseMove;
+        event EventHandler<EventSourceEventArgs<ButtonClick>>? ButtonClick;
+        event EventHandler<EventSourceEventArgs<ButtonDown>>? ButtonDown;
+        event EventHandler<EventSourceEventArgs<ButtonUp>>? ButtonUp;
+        event EventHandler<EventSourceEventArgs<ButtonScroll>>? ButtonScroll;
+        event EventHandler<EventSourceEventArgs<ButtonClickHold>>? ButtonClickHold;
+        event EventHandler<EventSourceEventArgs<ButtonDoubleClick>>? ButtonDoubleClick;
 
-        event EventHandler<EventSourceEventArgs<IReadOnlyCollection<DragStart>>> DragStarted;
-        event EventHandler<EventSourceEventArgs<IReadOnlyCollection<DragDrop>>> DragFinished;
+        event EventHandler<EventSourceEventArgs<IReadOnlyList<DragStart>>>? DragStarted;
+        event EventHandler<EventSourceEventArgs<IReadOnlyList<DragDrop>>>? DragFinished;
 
 
     }

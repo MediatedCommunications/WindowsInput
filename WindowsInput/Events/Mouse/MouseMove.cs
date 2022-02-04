@@ -5,12 +5,12 @@ using WindowsInput.Native;
 namespace WindowsInput.Events {
 
     public abstract class MouseMove : AggregateEvent {
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public MouseOffset Offset { get; private set; }
+        public int X { get; }
+        public int Y { get; }
+        public MouseOffset Offset { get; }
 
-        public static MouseMove Create(int X, int Y, MouseOffset Offset) {
-            MouseMove ret = Offset switch {
+        public static MouseMove? Create(int X, int Y, MouseOffset Offset) {
+            MouseMove? ret = Offset switch {
                 MouseOffset.None => null,
                 MouseOffset.Absolute => new MouseMoveAbsolute(X, Y),
                 MouseOffset.Relative => new MouseMoveRelative(X, Y),
@@ -47,7 +47,11 @@ namespace WindowsInput.Events {
             });
         }
 
-        protected override string DebuggerDisplay => $@"{this.GetType().Name}: {Offset}({X},{Y})";
+        protected override string GetDebuggerDisplay() {
+            var ret = $@"{this.GetType().Name}: {Offset}({X},{Y})";
+
+            return ret;
+        }
 
     }
 

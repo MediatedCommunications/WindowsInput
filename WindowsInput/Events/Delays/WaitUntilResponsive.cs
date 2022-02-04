@@ -8,10 +8,14 @@ using WindowsInput.Native;
 
 namespace WindowsInput.Events {
     public class WaitUntilResponsive : EventBase {
-        public IntPtr HWnd { get; private set; }
-        public TimeSpan Timeout { get; private set; }
+        public IntPtr HWnd { get; }
+        public TimeSpan Timeout { get; }
 
-        protected override string DebuggerDisplay => $@"{base.DebuggerDisplay}: Wait up to {Timeout} for {HWnd} to become responsive.";
+        protected override string GetDebuggerDisplay() { 
+            var ret = $@"{base.GetDebuggerDisplay()}: Wait up to {Timeout} for {HWnd} to become responsive.";
+
+            return ret;
+        }
 
         public WaitUntilResponsive(IntPtr HWnd, TimeSpan Timeout) {
             this.HWnd = HWnd;

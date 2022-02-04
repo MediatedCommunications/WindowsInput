@@ -6,7 +6,7 @@ using System;
 
 namespace WindowsInput.Events.Sources {
     public abstract class EventSourceBase : IEventSource {
-        public event EventHandler<EnabledChangedEventArgs> EnabledChanged;
+        public event EventHandler<EnabledChangedEventArgs>? EnabledChanged;
 
         private bool __Enabled;
         public bool Enabled {

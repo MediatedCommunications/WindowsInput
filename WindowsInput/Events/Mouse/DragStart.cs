@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 
 namespace WindowsInput.Events {
     public class DragStart : AggregateEvent {
-        public MouseMove PositionDown { get; private set; }
-        public ButtonDown ButtonDown { get; private set; }
+        public MouseMove PositionDown { get; }
+        public ButtonDown ButtonDown { get; }
 
-        protected override string DebuggerDisplay {
-            get {
-                var ret = base.DebuggerDisplay;
+        protected override string GetDebuggerDisplay() {
+            var ret = base.GetDebuggerDisplay();
 
-                if(PositionDown is { } && ButtonDown is { }) {
-                    ret = $@"{this.GetType().Name}: Drag {ButtonDown.Button} from {PositionDown.Offset}({PositionDown.X},{PositionDown.Y})";
-                }
-
-
-                return ret;
+            if (PositionDown is { } && ButtonDown is { }) {
+                ret = $@"{this.GetType().Name}: Drag {ButtonDown.Button} from {PositionDown.Offset}({PositionDown.X},{PositionDown.Y})";
             }
+
+            return ret;
         }
 
         public DragStart(MouseMove PositionDown, ButtonDown ButtonDown) {

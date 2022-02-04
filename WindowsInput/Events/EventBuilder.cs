@@ -9,7 +9,7 @@ namespace WindowsInput.Events {
 
 
     public partial class EventBuilder : IEvent, IEnumerable<IEvent> {
-        public List<IEvent> Events { get; private set; } = new List<IEvent>();
+        public List<IEvent> Events { get; } = new List<IEvent>();
 
         public static EventBuilder Create() {
             return new EventBuilder();
@@ -20,13 +20,8 @@ namespace WindowsInput.Events {
         /// </summary>
         /// <param name="Options">Options that control the flow of these events</param>
         /// <returns></returns>
-        public Task<bool> Invoke(InvokeOptions Options) {
+        public Task<bool> Invoke(InvokeOptions? Options = default) {
             return Simulate.Events(Options, Events.ToList());
-        }
-
-        /// <inheritdoc cref="Invoke(InvokeOptions)"/>
-        public Task<bool> Invoke() {
-            return Invoke(null);
         }
 
         public IEnumerator<IEvent> GetEnumerator() {

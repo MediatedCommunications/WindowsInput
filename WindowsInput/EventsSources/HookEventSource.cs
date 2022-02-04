@@ -21,15 +21,15 @@ namespace WindowsInput.Events.Sources {
         }
 
         protected override void Disable() {
-            if (Handle != default) {
-                Handle?.Dispose();
+            if (Handle is { }) {
+                Handle.Dispose();
                 Handle = null;
             }
         }
 
 
 
-        protected HookHandle Handle { get; set; }
+        protected HookHandle? Handle { get; set; }
 
         protected IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam) {
             var ret = new IntPtr(-1);
@@ -57,7 +57,8 @@ namespace WindowsInput.Events.Sources {
 
 
         protected EventSourceEventArgs InvokeMany(params Func<EventSourceEventArgs, EventSourceEventArgs>[] Actions) {
-            var ret = new EventSourceEventArgs(DateTimeOffset.UtcNow); ;
+            var ret = new EventSourceEventArgs(DateTimeOffset.UtcNow);
+
             foreach (var item in Actions) {
                 if (ret.Next_Event_Enabled) {
                     var tret = item(ret);
@@ -69,12 +70,20 @@ namespace WindowsInput.Events.Sources {
             return ret;
         }
 
-        protected EventSourceEventArgs InvokeEvent<T>(EventSourceEventArgs args, EventHandler<EventSourceEventArgs<T>> Event, T Data, object RawData, DateTimeOffset Timestamp) {
-            var ret = new EventSourceEventArgs(Timestamp);
-            ret.Next_Event_Enabled = args.Next_Event_Enabled;
-            ret.Next_Hook_Enabled = args.Next_Hook_Enabled;
+        protected EventSourceEventArgs InvokeEvent<T>(
+            EventSourceEventArgs args, 
+            EventHandler<EventSourceEventArgs<T>>? Event, 
+            T? Data, 
+            object RawData, 
+            DateTimeOffset Timestamp
+            
+            ) {
+            var ret = new EventSourceEventArgs(Timestamp) {
+                Next_Event_Enabled = args.Next_Event_Enabled,
+                Next_Hook_Enabled = args.Next_Hook_Enabled
+            };
 
-            if (!EqualityComparer<T>.Default.Equals(Data, default)) {
+            if (Data is { }) {
                 var Args = new EventSourceEventArgs<T>(Timestamp, Data, RawData) {
                     Next_Event_Enabled = args.Next_Event_Enabled,
                     Next_Hook_Enabled = args.Next_Hook_Enabled,

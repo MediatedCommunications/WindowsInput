@@ -4,15 +4,20 @@ using WindowsInput.Events;
 
 namespace WindowsInput.Events.Sources {
     public class TextSequenceEventArgs : EventArgs {
-        public EventSourceEventArgs<KeyboardEvent> Input { get; set; }
-        public TextClick Sequence { get; set; }
+        public EventSourceEventArgs<KeyboardEvent> Input { get; }
+        public TextClick Sequence { get; }
+
+        public TextSequenceEventArgs(EventSourceEventArgs<KeyboardEvent> Input, TextClick Sequence) {
+            this.Input = Input;
+            this.Sequence = Sequence;
+        }
     }
 
     public class TextSequenceEventSource : KeyboardMonitoringEventSource {
-        public event EventHandler<TextSequenceEventArgs> Triggered;
+        public event EventHandler<TextSequenceEventArgs>? Triggered;
 
-        public TextClick Sequence { get; private set; }
-        public StringComparison Comparison { get; private set; }
+        public TextClick Sequence { get; }
+        public StringComparison Comparison { get; }
 
         public TextSequenceEventSource(IKeyboardEventSource Monitor, TextClick Sequence) : this(Monitor, Sequence, StringComparison.InvariantCultureIgnoreCase) {
         
@@ -33,26 +38,25 @@ namespace WindowsInput.Events.Sources {
             Monitor.KeyEvent -= Monitor_KeyEvent;
         }
 
-        private TextSequenceStateMachine State;
+        private TextSequenceStateMachine? State;
         protected override void Reset() {
             base.Reset();
             State = new TextSequenceStateMachine(Sequence, Comparison);
         }
 
-        private void Monitor_KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e) {
-            if (State.Next(e.Data) == StateMachineResult.Complete) {
-                var args = new TextSequenceEventArgs() {
-                    Input = e,
-                    Sequence = Sequence
-                };
+        private void Monitor_KeyEvent(object? sender, EventSourceEventArgs<KeyboardEvent> e) {
+
+            if (State is { } && State.TryNext(e.Data, out var Status) && Status == StateMachineResult.Complete) {
+                var args = new TextSequenceEventArgs(e, Sequence);
                 Triggered?.Invoke(this, args);
             }
+
         }
     }
 
     public class TextSequenceStateMachine : StateMachine<KeyboardEvent, StateMachineResult> {
-        public TextClick Sequence { get; private set; }
-        public StringComparison Comparison { get; private set; }
+        public TextClick Sequence { get; }
+        public StringComparison Comparison { get; }
         
         public TextSequenceStateMachine(TextClick Sequence, StringComparison Comparison) {
             this.Sequence = Sequence;
@@ -60,7 +64,7 @@ namespace WindowsInput.Events.Sources {
         }
 
 
-        protected override IEnumerable<StateMachineResult> Next(Value Input) {
+        protected override IEnumerable<StateMachineResult> Next(State Input) {
             while (true) {
                 var Start = Sequence.Text.GetEnumerator();
                 Start.MoveNext();

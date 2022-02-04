@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WindowsInput.Events {
 
     public class Wait : EventBase {
-        public TimeSpan Duration { get; private set; }
+        public TimeSpan Duration { get; }
 
         public Wait(TimeSpan Duration) {
             this.Duration = Duration;
@@ -16,7 +16,11 @@ namespace WindowsInput.Events {
             this.Duration = TimeSpan.FromMilliseconds(DurationInMs);
         }
 
-        protected override string DebuggerDisplay => $@"{base.DebuggerDisplay}: {Duration}";
+        protected override string GetDebuggerDisplay() { 
+            var ret = $@"{base.GetDebuggerDisplay()}: {Duration}";
+
+            return ret;
+        }
 
         protected override async Task<bool> Invoke(InvokeOptions Options) {
             var ret = true;

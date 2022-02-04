@@ -8,47 +8,65 @@ using WindowsInput.Events;
 
 namespace WindowsInput.Events.Sources {
 
-    public class StateMachine<TInput, TOutput> {
+    public abstract class StateMachine<TInput, TOutput> {
         public StateMachine() {
-            Init(x => Next(x));
-        }
-
-        public StateMachine(Func<Value, IEnumerable<TOutput>> NextSource) {
-            Init(NextSource);
-        }
-
-        private void Init(Func<Value, IEnumerable<TOutput>> NextSource) {
-            this.NextSource = NextSource;
             Reset();
         }
-        private Func<Value, IEnumerable<TOutput>> NextSource;
 
-
-
-        private Value Adder;
-        private IEnumerator<TOutput> Elements;
+        private State? CurrentState;
+        private Action<TInput>? CurrentStateSetter;
+        private IEnumerator<TOutput>? Elements;
 
         public void Reset() {
-            Adder = new Value();
-            Elements = NextSource(Adder).GetEnumerator();
+            CurrentState = new State(out CurrentStateSetter);
+            Elements = Next(CurrentState).GetEnumerator();
         }
 
-        public TOutput Next(TInput Input) {
-            Adder.Current = Input;
-            Elements.MoveNext();
+        public bool TryNext(TInput Input, out TOutput? Value) {
+            var ret = false;
+            Value = default;
+            
+            if (Elements is { }) {
+                CurrentStateSetter?.Invoke(Input);
 
-            var ret = Elements.Current;
+                if (Elements.MoveNext()) {
+                    Value = Elements.Current;
+                    ret = true;
+                } else {
+                    Elements = default;
+                    CurrentState = default;
+                    CurrentStateSetter = default;
+                }
+            }
 
             return ret;
         }
 
-        public class Value {
-            public TInput Current { get; set; }
+        public TOutput? Next(TInput Input) {
+            var ret = default(TOutput?);
+
+            if (TryNext(Input, out var tret)) {
+                ret = tret;
+            }
+
+            return ret;
         }
 
-        protected virtual IEnumerable<TOutput> Next(Value Item) {
-            yield break;
+        public class State {
+            public TInput? Current { get; private set; }
+
+            public State(out Action<TInput> Setter) {
+                Setter = x => Current = x;
+            }
+
+            public State() { 
+            
+            }
+           
+
         }
+
+        protected abstract IEnumerable<TOutput> Next(State Item);
 
 
     }

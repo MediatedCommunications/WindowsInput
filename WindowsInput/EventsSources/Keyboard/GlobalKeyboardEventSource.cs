@@ -72,9 +72,9 @@ namespace WindowsInput.Events.Sources {
             return ret;
         }
 
-        protected TextClick GetTextClick(GlobalKeyboardMessage Message, GlobalKeyboardEventSourceCallbackData keyboardHookStruct) {
+        protected TextClick? GetTextClick(GlobalKeyboardMessage Message, GlobalKeyboardEventSourceCallbackData keyboardHookStruct) {
 
-            var ret = default(TextClick);
+            var ret = default(TextClick?);
 
             //System.Diagnostics.Debug.WriteLine($@"{Message}: {keyboardHookStruct.ScanCode} => {keyboardHookStruct.KeyCode}" );
 
@@ -96,7 +96,9 @@ namespace WindowsInput.Events.Sources {
                     }
 
                     if (State.TryGetCharFromKeyboardState(virtualKeyCode, scanCode, UnicodeFlags, out var chars)) {
-                        ret = new TextClick(chars);
+                        if (chars is { } V1 && V1.Length > 0) {
+                            ret = new TextClick(V1);
+                        }
                     }
 
                 }

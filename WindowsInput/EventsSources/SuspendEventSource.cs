@@ -7,8 +7,8 @@ using System;
 namespace WindowsInput.Events.Sources {
     public class SuspendEventSource : IDisposable {
 
-        protected IEventSource Target { get; private set; }
-        protected bool Original { get; private set; }
+        protected IEventSource Target { get; }
+        protected bool Original { get; }
 
         public SuspendEventSource(IEventSource Target) {
             this.Target = Target;

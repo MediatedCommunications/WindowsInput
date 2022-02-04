@@ -4,30 +4,34 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using WindowsInput.Events;
 
 namespace WindowsInput.Events.Sources {
 
-    [DebuggerDisplay(Debugger2.DISPLAY)]
+    [DebuggerDisplay(Debugger2.GetDebuggerDisplay)]
     public abstract class InputEvent {
-        public IReadOnlyCollection<IEvent> Events { get; protected set; }
+        public IReadOnlyList<IEvent> Events { get; }
 
-        public override string ToString() {
-            return DebuggerDisplay;
+        public InputEvent(IEnumerable<IEvent?> Events) {
+            this.Events = Events.OfType<IEvent>().ToList().AsReadOnly();
         }
 
-        protected virtual string DebuggerDisplay {
-            get {
-                var ret = new StringBuilder();
+        public override string ToString() {
+            return GetDebuggerDisplay();
+        }
 
-                ret.AppendLine($@"{this.GetType()}");
-                foreach (var item in this.Events) {
-                    ret.AppendLine($@"  {item}");
-                }
+        protected virtual string GetDebuggerDisplay() {
+            var ret = new StringBuilder();
 
-                return ret.ToString();
+            ret.AppendLine($@"{this.GetType()}");
+            foreach (var item in this.Events) {
+                ret.AppendLine($@"  {item}");
             }
+
+            return ret.ToString();
+
         }
 
     }

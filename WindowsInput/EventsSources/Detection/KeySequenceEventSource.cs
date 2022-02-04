@@ -5,15 +5,21 @@ using WindowsInput.Events;
 namespace WindowsInput.Events.Sources {
 
     public class KeySequenceEventArgs : EventArgs {
-        public EventSourceEventArgs<KeyboardEvent> Input { get; set; }
-        public SequenceClick Sequence { get; set; }
+        public EventSourceEventArgs<KeyboardEvent> Input { get; }
+        public SequenceClick Sequence { get; }
+
+        public KeySequenceEventArgs(EventSourceEventArgs<KeyboardEvent> Input, SequenceClick Sequence) {
+            this.Input = Input;
+            this.Sequence = Sequence;
+        }
+
     }
 
 
     public class KeySequenceEventSource : KeyboardMonitoringEventSource {
-        public event EventHandler<KeySequenceEventArgs> Triggered;
+        public event EventHandler<KeySequenceEventArgs>? Triggered;
 
-        public SequenceClick Sequence { get; private set; }
+        public SequenceClick Sequence { get; }
 
         public KeySequenceEventSource(IKeyboardEventSource Monitor, SequenceClick Sequence) : base(Monitor) {
             this.Sequence = Sequence;
@@ -30,32 +36,31 @@ namespace WindowsInput.Events.Sources {
             
         }
 
-        private KeyEventSourceStateMachine State;
+        private KeyEventSourceStateMachine? State;
         protected override void Reset() {
             base.Reset();
             State = new KeyEventSourceStateMachine(Sequence);
         }
 
-        private void Monitor_KeyEvent(object sender, EventSourceEventArgs<KeyboardEvent> e) {
-            if (State.Next(e.Data) == StateMachineResult.Complete) {
-                var args = new KeySequenceEventArgs() {
-                    Input = e,
-                    Sequence = Sequence
-                };
+        private void Monitor_KeyEvent(object? sender, EventSourceEventArgs<KeyboardEvent> e) {
+
+            if (State is { } && State.TryNext(e.Data, out var Status) && Status == StateMachineResult.Complete) {
+                var args = new KeySequenceEventArgs(e, Sequence);
                 Triggered?.Invoke(this, args);
             }
+
         }
     }
 
     public class KeyEventSourceStateMachine : StateMachine<KeyboardEvent, StateMachineResult> {
 
-        public SequenceClick Sequence { get; private set; }
+        public SequenceClick Sequence { get; }
 
         public KeyEventSourceStateMachine(SequenceClick Sequence) {
             this.Sequence = Sequence;
         }
 
-        protected override IEnumerable<StateMachineResult> Next(Value Input) {
+        protected override IEnumerable<StateMachineResult> Next(State Input) {
 
             while (true) {
                 var Start = Sequence.Keys.GetEnumerator();

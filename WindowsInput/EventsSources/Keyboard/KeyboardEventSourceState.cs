@@ -24,12 +24,12 @@ namespace WindowsInput.Events.Sources {
         /// <param name="fuState"></param>
         /// <param name="chars"></param>
         /// <returns></returns>
-        public bool TryGetCharFromKeyboardState(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, out string chars) {
+        public bool TryGetCharFromKeyboardState(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, out string? chars) {
             var Layout = KeyboardLayout.Current(); //get the active keyboard layout
             return TryGetCharFromKeyboardState(virtualKeyCode, scanCode, fuState, Layout, out chars);
         }
 
-        public bool TryGetCharFromKeyboardState(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, KeyboardLayout Layout, out string chars) {
+        public bool TryGetCharFromKeyboardState(KeyCode virtualKeyCode, int scanCode, ToUnicodeExFlags fuState, KeyboardLayout Layout, out string? chars) {
             chars = default;
 
             var Keyboard = KeyboardState.Current();
@@ -117,7 +117,7 @@ namespace WindowsInput.Events.Sources {
 
 
 
-        public static ToUnicodeExStatus ToUnicodeEx(KeyboardLayout Layout, KeyboardState Keyboard, ToUnicodeExFlags Flags, KeyCode VKey, int SKey, out string Value) {
+        public static ToUnicodeExStatus ToUnicodeEx(KeyboardLayout Layout, KeyboardState Keyboard, ToUnicodeExFlags Flags, KeyCode VKey, int SKey, out string? Value) {
             Value = default;
 
             var Buffer = new StringBuilder(64);

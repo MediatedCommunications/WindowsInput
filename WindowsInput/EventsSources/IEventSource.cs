@@ -10,7 +10,7 @@ using WindowsInput.Native;
 
 namespace WindowsInput.Events.Sources {
     public interface IEventSource : IDisposable {
-        event EventHandler<EnabledChangedEventArgs> EnabledChanged;
+        event EventHandler<EnabledChangedEventArgs>? EnabledChanged;
 
         bool Enabled { get; set; }
 
@@ -28,7 +28,7 @@ namespace WindowsInput.Events.Sources {
             this.NewValue = NewValue;
         }
 
-        public bool NewValue { get; private set; }
+        public bool NewValue { get; }
     }
 
 }

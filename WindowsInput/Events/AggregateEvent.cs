@@ -1,47 +1,44 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WindowsInput.Events {
-    [DebuggerDisplay(Debugger2.DISPLAY)]
+    [DebuggerDisplay(Debugger2.GetDebuggerDisplay)]
     public abstract class AggregateEvent : EventBase, IEnumerable<IEvent> {
 
-        protected override string DebuggerDisplay {
-            get {
-                var ret = base.DebuggerDisplay;
+        protected override string GetDebuggerDisplay() {
+            var ret = base.GetDebuggerDisplay();
 
-                if(this.Children.Count == 1) {
-                    ret = $@"{ret} ({this.Children.FirstOrDefault()})";
-                }
-
-                return ret;
+            if(this.Children.Count == 1) {
+                ret = $@"{ret} ({this.Children.FirstOrDefault()})";
             }
+
+            return ret;
         }
 
-        public AggregateEvent() {
-            Initialize(new IEvent[] { });
+        public AggregateEvent(params IEvent[] Children) : this(Children.AsEnumerable())   {
+            
         }
 
-        public AggregateEvent(params IEvent[] Children)  {
+        public AggregateEvent(IEnumerable<IEvent> Children) {
+            this.Children = Array.Empty<IEvent>();
+
             Initialize(Children);
         }
 
 
         protected void Initialize(params IEvent[] Children) {
-            Initialize((IEnumerable<IEvent>)Children);
-        }
-
-        public AggregateEvent(IEnumerable<IEvent> Children) {
-            Initialize(Children);
+            Initialize(Children.AsEnumerable());
         }
 
         protected void Initialize(IEnumerable<IEvent> Children) {
             var SubCommands = new List<IEvent>();
             if (Children != null) {
                 foreach (var item in Children) {
-                    if(item != default) {
+                    if(item is { }) {
                         SubCommands.Add(item);
                     }
                 }
@@ -56,14 +53,14 @@ namespace WindowsInput.Events {
         }
 
         public IEnumerator<IEvent> GetEnumerator() {
-            return ((IEnumerable<IEvent>)this.Children).GetEnumerator();
+            return Children.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return ((IEnumerable<IEvent>)this.Children).GetEnumerator();
+            return Children.GetEnumerator();
         }
 
-        public System.Collections.ObjectModel.ReadOnlyCollection<IEvent> Children { get; private set; }
+        public IReadOnlyList<IEvent> Children { get; private set; }
 
 
     }

@@ -16,6 +16,7 @@
 * Mouse ButtonUp / ButtonDown / Click / DoubleClick
 * Keyboard KeyUp / KeyDown / KeyPress</Description>
     <LangVersion>latest</LangVersion>
+	<Nullable>enable</Nullable>
     <PackageIcon>mouse-keyboard-hook-logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

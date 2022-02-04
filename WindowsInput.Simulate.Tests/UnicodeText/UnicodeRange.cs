@@ -5,9 +5,9 @@ namespace WindowsInput.Tests.UnicodeText
 {
     public class UnicodeRange
     {
-        public string Name { get; set; }
-        public int Low { get; set; }
-        public int High { get; set; }
+        public string Name { get; }
+        public int Low { get; }
+        public int High { get; }
 
         public string Characters
         {

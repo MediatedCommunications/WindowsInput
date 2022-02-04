@@ -11,12 +11,12 @@ namespace WindowsInput {
         /// <summary>
         /// Listen to global mouse and keyboard events
         /// </summary>
-        public static GlobalEventSourceFactory Global { get; private set; } = new GlobalEventSourceFactory();
+        public static GlobalEventSourceFactory Global { get; } = new GlobalEventSourceFactory();
 
         /// <summary>
         /// Listen to mouse and keyboard events for the current application
         /// </summary>
-        public static CurrentThreadHookSource CurrentThread { get; private set; } = new CurrentThreadHookSource();
+        public static CurrentThreadHookSource CurrentThread { get; } = new CurrentThreadHookSource();
 
     }
 

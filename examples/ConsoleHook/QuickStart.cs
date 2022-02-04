@@ -9,8 +9,8 @@ using WindowsInput;
 namespace ConsoleHook {
 
     public static class Hook {
-        public static IKeyboardEvents GlobalKeyboard { get; private set; } = WindowsInput.Capture.Global.Keyboard();
-        public static IMouseEvents GlobalMouse { get; private set; } = WindowsInput.Capture.Global.Mouse();
+        public static IKeyboardEvents GlobalKeyboard { get; } = WindowsInput.Capture.Global.Keyboard();
+        public static IMouseEvents GlobalMouse { get; } = WindowsInput.Capture.Global.Mouse();
     }
 
     internal class QuickStart {

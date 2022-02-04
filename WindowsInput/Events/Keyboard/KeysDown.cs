@@ -5,7 +5,7 @@ using System.Linq;
 namespace WindowsInput.Events {
     public class KeysDown : AggregateEvent {
 
-        public IReadOnlyCollection<KeyCode> Keys { get; private set; }
+        public IReadOnlyCollection<KeyCode> Keys { get; }
 
         public KeysDown(IEnumerable<KeyCode> Keys) {
             this.Keys = Keys.ToList().AsReadOnly();

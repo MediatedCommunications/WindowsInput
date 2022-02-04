@@ -15,13 +15,13 @@ namespace WindowsInput.Events.Sources {
 
     public interface IKeyboardEventSource : IEventSource {
 
-        event EventHandler<EventSourceEventArgs<KeyboardEvent>> KeyEvent;
+        event EventHandler<EventSourceEventArgs<KeyboardEvent>>? KeyEvent;
 
-        event EventHandler<EventSourceEventArgs<Wait>> Wait;
+        event EventHandler<EventSourceEventArgs<Wait>>? Wait;
 
-        event EventHandler<EventSourceEventArgs<KeyDown>> KeyDown;
-        event EventHandler<EventSourceEventArgs<TextClick>> TextClick;
-        event EventHandler<EventSourceEventArgs<KeyUp>> KeyUp;
+        event EventHandler<EventSourceEventArgs<KeyDown>>? KeyDown;
+        event EventHandler<EventSourceEventArgs<TextClick>>? TextClick;
+        event EventHandler<EventSourceEventArgs<KeyUp>>? KeyUp;
 
     }
 }

@@ -9,30 +9,31 @@ using WindowsInput.Native;
 namespace WindowsInput.Events {
 
     public class RawInputAggregate : RawInput {
-        public IReadOnlyCollection<IEvent> Sources { get; private set; }
+        public IReadOnlyCollection<IEvent> Sources { get; }
 
         public RawInputAggregate(IList<IEvent> Sources, IList<INPUT> Data) : base(Data) {
             this.Sources = new System.Collections.ObjectModel.ReadOnlyCollection<IEvent>(Sources);
         }
 
-        protected override string DebuggerDisplay {
-            get {
-                var ret = $@"{base.DebuggerDisplay} ({Sources.Count} Children)";
+        protected override string GetDebuggerDisplay() {
+            var ret = $@"{base.GetDebuggerDisplay()} ({Sources.Count} Children)";
 
-                if(Sources.Count == 1) {
-                    ret = Sources.FirstOrDefault().ToString();
-                }
-
-
-                return ret;
+            if (Sources.Count == 1) {
+                ret = $@"{Sources.First()}";
             }
+
+            return ret;
         }
     }
 
     public class RawInput : EventBase {
-        public IReadOnlyCollection<INPUT> Data { get; private set; }
+        public IReadOnlyCollection<INPUT> Data { get; }
 
-        protected override string DebuggerDisplay => $@"{base.DebuggerDisplay}: See '{nameof(Data)}' Property";
+        protected override string GetDebuggerDisplay() { 
+            var ret = $@"{base.GetDebuggerDisplay()}: See '{nameof(Data)}' Property";
+
+            return ret;
+        }
 
         public RawInput(params INPUT[] Data) {
             this.Data = Data;

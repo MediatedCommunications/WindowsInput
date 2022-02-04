@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WindowsInput.Events {
     public class KeyPressData {
 
-        public char KeyChar { get; private set; }
+        public char KeyChar { get; }
 
         public KeyPressData(char Key) {
             this.KeyChar = Key;
