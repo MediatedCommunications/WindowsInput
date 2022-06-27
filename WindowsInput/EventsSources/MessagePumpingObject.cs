@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace WindowsInput.Events.Sources {
+    public static class MessagePumpingObjects {
+        
+    }
+
     public class MessagePumpingObject<T> : IDisposable {
 
         public event EventHandler<object?>? Shutdown;
@@ -34,6 +39,7 @@ namespace WindowsInput.Events.Sources {
                 this.Instance = LocalInstance ?? throw new InvalidOperationException();
             } catch {
                 Thread?.Abort();
+                
                 throw;
             }
         }
