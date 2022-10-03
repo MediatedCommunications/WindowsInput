@@ -14,21 +14,26 @@ namespace WindowsInput.Events.Sources {
                 return __Enabled;
             }
             set {
-                if(value != Enabled) {
-                    if (value) {
-                        Enable();
+                var NewValue = value;
+                if(NewValue != Enabled) {
+                    if (NewValue) {
+                        NewValue = Enable();
                     } else {
                         Disable();
                     }
-                    __Enabled = value;
 
-                    EnabledChanged?.Invoke(this, new EnabledChangedEventArgs(Enabled));
+                    if (__Enabled != NewValue) {
+                        __Enabled = NewValue;
+
+                        EnabledChanged?.Invoke(this, new EnabledChangedEventArgs(Enabled));
+                    }
 
                 }
             }
         }
 
-        protected virtual void Enable() { 
+        protected virtual bool Enable() {
+            return false;
         }
 
 

@@ -12,14 +12,18 @@ namespace WindowsInput.Events.Sources {
 
         }
 
-        protected override HookHandle Subscribe() {
+        protected override HookHandle? Subscribe() {
+            var ret = default(HookHandle?);
 
-            return HookHandle.Create(
-               HookType.GlobalMouse,
-               HookProcedure,
-               System.Diagnostics.Process.GetCurrentProcess().MainModule.BaseAddress,
-               0);
+            if (System.Diagnostics.Process.GetCurrentProcess().MainModule?.BaseAddress is { } Handle) {
+                ret = HookHandle.Create(
+                    HookType.GlobalMouse,
+                    HookProcedure,
+                    Handle,
+                    0);
+            };
 
+            return ret;
         }
 
         protected override bool Callback(CallbackData data) {

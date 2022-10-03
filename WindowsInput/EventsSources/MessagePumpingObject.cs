@@ -38,7 +38,7 @@ namespace WindowsInput.Events.Sources {
                 this.Dispatcher = LocalDispatcher ?? throw new InvalidOperationException();
                 this.Instance = LocalInstance ?? throw new InvalidOperationException();
             } catch {
-                Thread?.Abort();
+                //Thread?.Abort();
                 
                 throw;
             }

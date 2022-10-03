@@ -9,12 +9,13 @@
             this.Monitor = Monitor;
         }
 
-        protected override void Enable() {
+        protected override bool Enable() {
             if (Reset_On_EnabledChanged) {
                 Reset();
             }
             Monitor.EnabledChanged += Monitor_EnabledChanged;
-            
+
+            return true;
         }
         protected override void Disable() {
             if (Reset_On_EnabledChanged) {

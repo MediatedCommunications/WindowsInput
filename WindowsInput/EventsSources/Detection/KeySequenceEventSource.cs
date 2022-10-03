@@ -25,9 +25,12 @@ namespace WindowsInput.Events.Sources {
             this.Sequence = Sequence;
         }
 
-        protected override void Enable() {
-            base.Enable();
+        protected override bool Enable() {
             Monitor.KeyEvent += this.Monitor_KeyEvent;
+
+            var ret = base.Enable();
+
+            return ret;
         }
 
         protected override void Disable() {

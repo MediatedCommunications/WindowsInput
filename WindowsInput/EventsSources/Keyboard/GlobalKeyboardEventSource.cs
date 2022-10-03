@@ -13,14 +13,22 @@ using WindowsInput.Events;
 namespace WindowsInput.Events.Sources {
     public class GlobalKeyboardEventSource : KeyboardEventSource {
 
-        protected override HookHandle Subscribe() {
+        protected override HookHandle? Subscribe() {
 
-            return HookHandle.Create(
-               HookType.GlobalKeyboard,
-               HookProcedure,
-               System.Diagnostics.Process.GetCurrentProcess().MainModule.BaseAddress,
-               0);
+            var ret = default(HookHandle?);
 
+            if(System.Diagnostics.Process.GetCurrentProcess().MainModule?.BaseAddress is { } Handle) {
+                ret = HookHandle.Create(
+                    HookType.GlobalKeyboard,
+                    HookProcedure,
+                    Handle,
+                    0);
+            }
+
+            
+
+
+            return ret;
         }
 
         protected override bool Callback(CallbackData data) {

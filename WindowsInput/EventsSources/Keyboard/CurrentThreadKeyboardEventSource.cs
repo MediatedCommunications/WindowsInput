@@ -11,7 +11,7 @@ using WindowsInput.Native;
 namespace WindowsInput.Events.Sources {
     public class CurrentThreadKeyboardEventSource : KeyboardEventSource {
 
-        protected override HookHandle Subscribe() {
+        protected override HookHandle? Subscribe() {
 
             return HookHandle.Create(
                 HookType.AppKeyboard,

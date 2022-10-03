@@ -12,12 +12,16 @@ namespace WindowsInput.Events.Sources {
     public abstract class HookEventSource : EventSourceBase {
 
 
-        protected abstract HookHandle Subscribe();
+        protected abstract HookHandle? Subscribe();
         protected abstract bool Callback(CallbackData data);
 
 
-        protected override void Enable() {
-            Handle = Subscribe();
+        protected override bool Enable() {
+            Handle ??= Subscribe();
+
+            var ret = Handle is { };
+
+            return ret;
         }
 
         protected override void Disable() {
