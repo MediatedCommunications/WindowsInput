@@ -21,6 +21,7 @@
     <PackageIcon>mouse-keyboard-hook-logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".nuget\mouse-keyboard-hook-logo.png" />
@@ -34,6 +35,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    
+	<None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

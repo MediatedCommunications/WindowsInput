@@ -6,7 +6,7 @@ using WindowsInput.Events;
 using WindowsInput.Events.Sources;
 
 namespace WindowsInput.Native {
-    public struct CallbackData {
+    public readonly struct CallbackData {
         public CallbackData(IntPtr wParam, IntPtr lParam) {
             WParam = wParam;
             LParam = lParam;
