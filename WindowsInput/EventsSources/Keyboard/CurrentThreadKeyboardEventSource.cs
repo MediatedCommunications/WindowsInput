@@ -22,6 +22,7 @@ namespace WindowsInput.Events.Sources {
         }
 
         protected override bool Callback(CallbackData data) {
+
             var timestamp = DateTimeOffset.UtcNow;
             var Wait = new Wait(timestamp - State.LastInputDate);
             State.LastInputDate = DateTimeOffset.UtcNow;
@@ -29,22 +30,22 @@ namespace WindowsInput.Events.Sources {
 
             var Key = (KeyCode)data.WParam;
 
-            var lparam = (uint)data.LParam;
+            var lParam = (long)data.LParam;
 
             const uint maskScanCode = 0xFF_0000; // for bit 23-16
-            var ScanCode = (lparam & maskScanCode) >> 16;
+            var ScanCode = (lParam & maskScanCode) >> 16;
 
             const uint ExtendedMask = 0b_1_00000000_00000000_00000000;
-            var IsExtended = (lparam & ExtendedMask) != 0;
+            var IsExtended = (lParam & ExtendedMask) != 0;
 
             const uint RepeatMask = 0xFF;
-            var RepeatCount = lparam & RepeatMask;
+            var RepeatCount = lParam & RepeatMask;
 
             const uint WasDownMask = 0b_01000000_00000000_00000000_00000000;
-            var WasDown = (lparam & WasDownMask) != 0;
+            var WasDown = (lParam & WasDownMask) != 0;
 
             const uint NowReleasedMask = 0b_10000000_00000000_00000000_00000000;
-            var NowReleased = (lparam & NowReleasedMask) != 0;
+            var NowReleased = (lParam & NowReleasedMask) != 0;
 
 
             var KeyDown = !NowReleased

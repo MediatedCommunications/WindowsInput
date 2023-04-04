@@ -33,8 +33,6 @@ namespace WindowsInput.Events.Sources {
 
         protected override bool Callback(CallbackData data) {
 
-            var SW = System.Diagnostics.Stopwatch.StartNew();
-
             var NewData = data.ToGlobalKeyboardEventSourceCallbackData();
 
             //This call is required to work around a bug in Window's 'Get Keyboard State' API.  When the bug occurs, it always returns the same keyboard state.
@@ -61,8 +59,6 @@ namespace WindowsInput.Events.Sources {
             var KeyEvent = new KeyboardEvent(Wait, KeyDown, TextClick, KeyUp);
 
             var ret = InvokeMany(KeyEvent, NewData, e.Timestamp);
-
-            Console.WriteLine(SW.Elapsed);
 
             return ret.Next_Hook_Enabled;
         }
